@@ -30,8 +30,6 @@ public class BattleRunnable implements Runnable {
         String results2 = "Results:   ";
         Character rightside = btl.getRightside();
         Character leftside = btl.getLeftside();
-        if(!battling) {
-            battling = true;
             Random rng = new Random();
             int dmgtoboss = 0;
             int dmgtoplayer = 0;
@@ -43,7 +41,7 @@ public class BattleRunnable implements Runnable {
                 dmgtoboss += (rng.nextInt(2) == 0 ? -1 : 1) * rng.nextInt(leftside.getMax_dmg()) + leftside.getMin_dmg();
 
 
-                 if(hitcount % 23 == 0) {
+                if(hitcount % 13 == 0) {
                     rightside.applyDamageOrHealth(dmgtoplayer);
                     leftside.applyDamageOrHealth(dmgtoboss);
                     final List<Integer> chunk = new ArrayList<Integer>();
@@ -102,7 +100,7 @@ public class BattleRunnable implements Runnable {
 
             });
             System.out.println(results2 + "\r\nhits: " + hitcount);
-        }
+
         //return resultString;
     }
 

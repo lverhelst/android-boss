@@ -1,8 +1,5 @@
 package verhelst.rngfight;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import java.util.Random;
 
 /**
@@ -13,25 +10,50 @@ public class DamageNumber {
     private float y;
     private float angle;
     private float alpha;
-    private int value, render_iterations;
-    private final SpriteBatch spritebatch;
+    private int value;
+    private int render_iterations;
     private CharSequence cs;
-    private BitmapFont bf;
     private boolean isRemoveable;
     private Random random;
+    private double rand_force;
+    private float red;
+    private float green;
+    private float blue;
 
-    public DamageNumber(int amount, int screenx, int screeny, SpriteBatch sb){
+
+
+    public DamageNumber(int amount, int screenx, int screeny){
         this.value = amount;
         this.x= screenx;
         this.y=screeny;
         this.render_iterations = 0;
         this.alpha = 1.0f;
-        this.spritebatch = sb;
+
         this.isRemoveable = false;
-        bf = new BitmapFont();
-        cs = "" +  Math.abs(this.value);
+        cs = "" +  Math.abs(value);
+        this.random = new Random();
+        this.rand_force = 1 + random.nextDouble() + random.nextDouble();
         //set angle in degrees, convert to radians
-        this.angle = (float)Math.toRadians(new Random().nextInt(120) + 30);//+ 30;
+        this.angle = (float)Math.toRadians(random.nextInt(120) + 30);//+ 30;
+
+        //Damage done = red colour
+        if(this.value > 0){
+            this.red = 1.0f;
+            this.green = 0.0f;
+            this.blue = 0.0f;
+        }
+        //healing done = green colour
+        else if(this.value < 0){
+            this.red = 0.0f;
+            this.green = 1.0f;
+            this.blue = 0.0f;
+        }
+        //0 done = white color
+        else{
+            this.red = 1.0f;
+            this.green = 1.0f;
+            this.blue = 1.0f;
+        }
     }
 
     public void update(){
@@ -39,31 +61,13 @@ public class DamageNumber {
         this.x += Math.cos(this.angle);  //CAH
         //use the alpha value to pull the number down, this gives a nice curve without complicated computations
         //the * 1.1 is just to adjust the intensity of the (-1 + alpha) portion
-        this.y += (Math.sin(this.angle) + (-1 + this.alpha) * 1.1); //SOH
+        this.y += (Math.sin(this.angle) + (-1 + this.alpha) + 1/(value == 0? 1: value) + rand_force); //SOH
         this.alpha += -0.01f;
         //at an alpha < 0, the random number can be removed from where it is displayed
         //since it will be invisible
         if(this.alpha <= 0){
             this.isRemoveable = true;
         }
-    }
-
-    public void render(){
-        //Damage done = red colour
-        if(this.value > 0){
-            bf.setColor(1.0f, 0.0f, 0.0f, this.alpha);
-        }
-        //healing done = green colour
-        else if(this.value < 0){
-            bf.setColor(0.0f, 1.0f, 0.0f, this.alpha);
-        }
-        //0 done = white color
-        else{
-            bf.setColor(1.0f, 1.0f, 1.0f, this.alpha);
-        }
-        bf.draw(spritebatch, cs, getX(), getY());
-        //calculate next location for next render
-        this.update();
     }
 
     public int getRender_iterations(){
@@ -80,5 +84,29 @@ public class DamageNumber {
 
     public float getY() {
         return y;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public CharSequence getCs() {
+        return cs;
+    }
+
+    public float getRed() {
+        return red;
+    }
+
+    public float getGreen() {
+        return green;
+    }
+
+    public float getBlue() {
+        return blue;
+    }
+
+    public float getAlpha(){
+        return this.alpha;
     }
 }
