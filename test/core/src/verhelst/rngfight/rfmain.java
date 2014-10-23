@@ -5,6 +5,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -63,19 +64,19 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
     private Sprite sprite;
     private Sprite sprite2;
 
-
+    TextureAtlas ta;
     @Override
     public void create () {
         batch = new SpriteBatch();
 
 
-       // TextureAtlas ta = new TextureAtlas(Gdx.files.getFileHandle("rpgportraits.png", Files.FileType.Local));
-       // TextureAtlas.AtlasRegion region = ta.findRegion("0001");
-       // Sprite sp = new Sprite(region);
+        ta = new TextureAtlas(Gdx.files.internal("testsprite.asset"));
+        //TextureAtlas.AtlasRegion region = ta.findRegion("sprite_a1");
+       /// Sprite sp = new Sprite(region);
 
 
-        img = new Texture("boss_sprite.png");
-        img2 = new Texture("player_sprite.png");
+        //img = region.getTexture();// new Texture(region);
+       // img2 = new Texture("player_sprite.png");
        // img.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
        // img2.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
@@ -108,18 +109,20 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
         System.out.println(xA + " " + xB);
 
-        sprite = new Sprite(img);
+        sprite = new Sprite(ta.findRegion("sprite_a2"));
         sprite.setOrigin(0,0);
-        sprite.setSize(img.getWidth(), img.getWidth());
+        //sprite.setSize(img.getWidth(), img.getWidth());
         sprite.setSize(128,128);
         sprite.setPosition(xA - sprite.getWidth()/2 ,yB - sprite.getHeight()/2);
 
-        sprite2 = new Sprite(img2);
+        sprite2 = new Sprite(ta.findRegion("sprite_a2"));
 
         sprite2.setOrigin(0,0);
-        sprite2.setSize(img.getHeight(), img.getWidth());
+        //sprite2.setSize(img.getHeight(), img.getWidth());
         sprite2.setSize(128,128);
         sprite2.setPosition(xB - sprite2.getWidth()/2, yB - sprite2.getHeight()/2);
+        sprite2.setColor(Color.RED);
+
 
         Gdx.input.setInputProcessor(this);
     }
@@ -250,7 +253,28 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         text_height_adjust = (int)bf.getBounds("1000").height;
 
         bf.draw(batch, "" + Math.max(aH,0) , 0, Gdx.graphics.getHeight() -(health_bar_height + (2 * health_bar_padding)));
+        if (aH <= 0){
+            sprite.setRegion(ta.findRegion("sprite_a4"));
+        }else if(aH/10 < 51){
+            sprite.setRegion(ta.findRegion("sprite_a1"));
+        }else if(aH/10 < 101){
+            sprite.setRegion(ta.findRegion("sprite_a2"));
+        }else {
+            sprite.setRegion(ta.findRegion("sprite_a3"));
+        }
+
+
+
         bf.draw(batch, "" + Math.max(bH,0) , 0, Gdx.graphics.getHeight() - ((health_bar_height + (2 * health_bar_padding)) * 2 + text_height_adjust));
+        if (bH <= 0){
+            sprite2.setRegion(ta.findRegion("sprite_a4"));
+        }else if(bH < 51){
+            sprite2.setRegion(ta.findRegion("sprite_a1"));
+        }else if(bH < 101){
+            sprite2.setRegion(ta.findRegion("sprite_a2"));
+        }else {
+            sprite2.setRegion(ta.findRegion("sprite_a3"));
+        }
         bf.draw(batch, "Hits: " + hits, Gdx.graphics.getWidth() - (50 + bf.getBounds("Hits: " + hits).width), 10 + text_height_adjust);
 
 
