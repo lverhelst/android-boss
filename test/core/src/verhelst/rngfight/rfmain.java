@@ -15,7 +15,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
@@ -37,7 +39,9 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
     ArrayList<DamageNumber> dnListB = new ArrayList<DamageNumber>();
     ConcurrentLinkedQueue<List<Integer>> bswNumList = new ConcurrentLinkedQueue<List<Integer>>();
 
+
     BitmapFont bf;
+    BitmapFont dmgNumFnt;
     Character a  = new Character("Boss", 1000);
     Character b = new Character("NotBoss", 100);
     Battle btl;
@@ -77,17 +81,24 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
         float h = Gdx.graphics.getHeight();
         float w = Gdx.graphics.getWidth();
+
+
+
         camera = new OrthographicCamera(w,h);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
+        viewport = new ScalingViewport(Scaling.stretch,w,h,camera);
 
         rng = new Random();
         sr = new ShapeRenderer();
 
         FreeTypeFontGenerator ftfg = new FreeTypeFontGenerator(Gdx.files.internal("Mecha_Bold.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter ftfp = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        ftfp.size = 40;
+        ftfp.size = Math.round(40 * Gdx.graphics.getDensity() );
         bf = ftfg.generateFont(ftfp);
+        ftfp.size = Math.round(20 * Gdx.graphics.getDensity());
+        dmgNumFnt = ftfg.generateFont(ftfp);
+
         ftfg.dispose();
         xA = (int)w/3;
         xB = (int)w/3 * 2;
@@ -98,13 +109,17 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         System.out.println(xA + " " + xB);
 
         sprite = new Sprite(img);
-        sprite.setOrigin(sprite.getWidth()/2,sprite.getHeight()/2);
-        sprite.setPosition(xA,yB);
+        sprite.setOrigin(0,0);
+        sprite.setSize(img.getWidth(), img.getWidth());
+        sprite.setSize(128,128);
+        sprite.setPosition(xA - sprite.getWidth()/2 ,yB - sprite.getHeight()/2);
 
         sprite2 = new Sprite(img2);
 
-        sprite2.setPosition(xB, yB);
-        sprite.setOrigin(sprite.getWidth()/2,sprite.getHeight()/2);
+        sprite2.setOrigin(0,0);
+        sprite2.setSize(img.getHeight(), img.getWidth());
+        sprite2.setSize(128,128);
+        sprite2.setPosition(xB - sprite2.getWidth()/2, yB - sprite2.getHeight()/2);
 
         Gdx.input.setInputProcessor(this);
     }
@@ -175,8 +190,8 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
                             lst = bswNumList.poll();
 
-                            addDmgNum(lst.get(0), (int)sprite.getX() + rng.nextInt(img.getWidth()), (int)sprite.getY() + 20, 1);
-                            addDmgNum(lst.get(1), (int)sprite2.getX() + rng.nextInt(img2.getWidth()), (int)sprite2.getY() + 20, 2);
+                            addDmgNum(lst.get(0), (int)sprite.getX() + rng.nextInt((int)sprite.getWidth()), (int)sprite.getY() + (int)sprite.getHeight() * (int)sprite.getScaleY() - rng.nextInt(20), 1);
+                            addDmgNum(lst.get(1), (int)sprite2.getX() + rng.nextInt((int)sprite2.getWidth()), (int)sprite2.getY() + (int)sprite2.getHeight() * (int)sprite2.getScaleY() - rng.nextInt(20), 2);
 
                             aH = lst.get(2);
                             bH = lst.get(3);
@@ -215,25 +230,34 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
     }
 
 
+    int health_bar_height = 12;
+    int text_height_adjust = 0;
+    int health_bar_padding = 2;
+
+
     @Override
     public void render() {
         //Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-
+        health_bar_height = (int)( Gdx.graphics.getHeight()/480) * 12;
 
         Matrix4 normalProjection = new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(),  Gdx.graphics.getHeight());
         batch.setProjectionMatrix(normalProjection);
         batch.begin();
         bf.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        bf.draw(batch, "" + Math.max(aH,0) , 0, Gdx.graphics.getHeight() - 15);
-        bf.draw(batch, "" + Math.max(bH,0) , 0, Gdx.graphics.getHeight() - 65);
-        bf.draw(batch, "Hits: " + hits, Gdx.graphics.getWidth() - 250, 50);
+
+        text_height_adjust = (int)bf.getBounds("1000").height;
+
+        bf.draw(batch, "" + Math.max(aH,0) , 0, Gdx.graphics.getHeight() -(health_bar_height + (2 * health_bar_padding)));
+        bf.draw(batch, "" + Math.max(bH,0) , 0, Gdx.graphics.getHeight() - ((health_bar_height + (2 * health_bar_padding)) * 2 + text_height_adjust));
+        bf.draw(batch, "Hits: " + hits, Gdx.graphics.getWidth() - (50 + bf.getBounds("Hits: " + hits).width), 10 + text_height_adjust);
+
+
 
         if(!battling && endmessage[0] != null){
 
-            bf.draw(batch, endmessage[0], Gdx.graphics.getWidth()/2 - bf.getBounds(endmessage[0]).width/2, Gdx.graphics.getHeight()/4);
+            bf.drawWrapped(batch, endmessage[0], Gdx.graphics.getWidth()/2 - bf.getWrappedBounds(endmessage[0],Gdx.graphics.getWidth() - 10).width/2, Gdx.graphics.getHeight()/4, Gdx.graphics.getWidth() - 10);
         }
 
         synchronized (dnListA) {
@@ -243,8 +267,8 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                 if (dn.isRemoveable()) {
                     i.remove();
                 } else {
-                    bf.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
-                    bf.draw(batch, dn.getCs(), dn.getX(), dn.getY());
+                    dmgNumFnt.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
+                    dmgNumFnt.draw(batch, dn.getCs(), dn.getX(), dn.getY() +  bf.getBounds(dn.getCs()).height);
                     dn.update();
                 }
             }
@@ -257,33 +281,35 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                 if (dn.isRemoveable()) {
                     i.remove();
                 } else {
-                    bf.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
-                    bf.draw(batch, dn.getCs(), dn.getX(), dn.getY());
+                    dmgNumFnt.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
+                    dmgNumFnt.draw(batch, dn.getCs(), dn.getX(), dn.getY() + bf.getBounds(dn.getCs()).height);
                     dn.update();
                 }
 
             }
         }
 
+
         sprite.draw(batch);
         sprite2.draw(batch);
+
 //        batch.draw(sprite, Gdx.graphics.getWidth()/3,Gdx.graphics.getHeight() / 2 - img.getHeight());
   //      batch.draw(sprite2, Gdx.graphics.getWidth()/3 * 2, Gdx.graphics.getHeight() / 2 - img.getHeight());
 
         batch.end();
 
 
+        sr.setProjectionMatrix(normalProjection);
         sr.begin(ShapeRenderer.ShapeType.Filled);
         sr.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        System.out.println(Gdx.graphics.getHeight() - 12);
-        sr.rect(0, Gdx.graphics.getHeight() - 12, 100, 12);
+        sr.rect(0, Gdx.graphics.getHeight() - health_bar_height - health_bar_padding, 100, health_bar_height );
         sr.setColor(1.0f, 0.0f, 0.0f, 1.0f);
-        sr.rect(1, Gdx.graphics.getHeight() - 10, Math.min(aH/10, 1000) , 8);
+        sr.rect(1, Gdx.graphics.getHeight() - health_bar_height, aH/10 /*Math.min(aH/10, 1000)*/ , health_bar_height - 4);
 
         sr.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-        sr.rect(0, Gdx.graphics.getHeight() - 62, 100, 12);
+        sr.rect(0, Gdx.graphics.getHeight() - (text_height_adjust + ((health_bar_height + health_bar_padding) * 2) + health_bar_padding), 100, health_bar_height);
         sr.setColor(1.0f, 0.0f, 0.0f, 1.0f);
-        sr.rect(1, Gdx.graphics.getHeight() - 60, Math.min(bH, 1000), 8);
+        sr.rect(1, Gdx.graphics.getHeight() - (text_height_adjust + (health_bar_height + health_bar_padding) * 2), bH /* Math.min(bH, 1000)*/,  health_bar_height - 4);
         sr.end();
 
     }
@@ -297,16 +323,13 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         xB = (int)w/3 * 2;
         yA = (int)h / 2;
         yB = (int)h / 2;
-
-        sprite.setPosition(xA,yB);
-
-        sprite2.setPosition(xB, yB);
-
-
+        sprite.setPosition(xA - sprite.getWidth()/2 ,yB - sprite.getHeight()/2);
+        sprite2.setPosition(xB - sprite2.getWidth()/2, yB - sprite2.getHeight()/2);
         System.out.println(width + " " + height);
+
         camera.viewportWidth = Gdx.graphics.getWidth();
         camera.viewportHeight = Gdx.graphics.getHeight();
         camera.update();
-
+        viewport.update((int)w,(int)h,true);
     }
 }

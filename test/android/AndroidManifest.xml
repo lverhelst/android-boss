@@ -14,7 +14,7 @@
         <activity
             android:name="verhelst.rngfight.android.AndroidLauncher"
             android:label="@string/app_name" 
-            android:screenOrientation="portrait"
+            android:screenOrientation="fullUser"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
