@@ -76,6 +76,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
     private int boss_level = 1;
     private int win_streak = 0;
+    private int lose_streak = 0;
     float h;
     float w;
 
@@ -208,15 +209,23 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         }
         if(!battling) {
             Weapon boss_wep = null;
-            if(win_streak % 3 == 2){
+            if(win_streak % 4 == 3){
                 boss_level++;
                 win_streak = 0;
+
                 if(a.isWeaponEquipped())
                     boss_wep = a.getEquipped_weapon();
                 a = null;
             }
 
+            if(lose_streak % 4 == 3){
+                boss_level--;
+                lose_streak = 0;
 
+                if(a.isWeaponEquipped())
+                    boss_wep = a.getEquipped_weapon();
+                a = null;
+            }
             showloot = false;
             battling = true;
             if (a == null) {
@@ -262,6 +271,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                                 battling = false;
                                 if(aH <= 0 && bH <= 0){
                                     win_streak = 0;
+                                    lose_streak = 0;
                                 }else {
 
                                     //generate weapon
@@ -271,9 +281,11 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                                             loot = new Weapon(0, rng.nextInt(2 * boss_level), (float) 0.1, swurd);
                                             showloot = true;
                                         }
+                                        lose_streak = 0;
                                     }
                                     if (aH > 0 && bH < 0) {
                                         win_streak = 0;
+                                        lose_streak++;
                                         if (hits % 3 == 0) {
                                             loot = new Weapon(0, rng.nextInt(2 * boss_level - 1), (float) 0.1, swurd);
                                             if (!a.isWeaponEquipped() || loot.getMax_damage() > a.getEquipped_weapon().getMax_damage())
