@@ -27,7 +27,7 @@ public class BattleRunnable implements Runnable {
 
     @Override
     public void run() {
-        String results2 = "Results:   ";
+        String results2 = "";
         Character rightside = btl.getRightside();
         Character leftside = btl.getLeftside();
             Random rng = new Random();
@@ -36,14 +36,10 @@ public class BattleRunnable implements Runnable {
             int hitcount = 0;
 
             do {
-                dmgtoplayer += (rng.nextInt(2) == 0 ? -1 : 1) * rng.nextInt(rightside.getMax_dmg()) + rightside.getMin_dmg();
-
-                dmgtoboss += (rng.nextInt(2) == 0 ? -1 : 1) * rng.nextInt(leftside.getMax_dmg()) + leftside.getMin_dmg();
-
+                dmgtoplayer += leftside.attack(rightside);
+                dmgtoboss += rightside.attack(leftside);
 
                 if(hitcount % 13 == 0) {
-                    rightside.applyDamageOrHealth(dmgtoplayer);
-                    leftside.applyDamageOrHealth(dmgtoboss);
                     final List<Integer> chunk = new ArrayList<Integer>();
                     chunk.add(dmgtoboss);
                     chunk.add(dmgtoplayer);
@@ -81,11 +77,13 @@ public class BattleRunnable implements Runnable {
 
 
 
-
-            if (leftside.getHealth() < 0) {
-                results2 += "\r\n" + "VICTORY! Boss defeated";
+            if(leftside.getHealth() <= 0 && rightside.getHealth() <= 0){
+                results2 = "D-D-D-DOUBLE KILL!!!";
+            }
+            else if (leftside.getHealth() <= 0) {
+                results2 += "VICTORY! " + leftside.getName() + " defeated";
             } else {
-                results2 +=  "\r\n" + "You died, too bad.";
+                results2 +=  "You died, too bad.";
             }
 
 
