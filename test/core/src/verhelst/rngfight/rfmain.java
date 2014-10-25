@@ -36,7 +36,8 @@ import java.util.concurrent.ExecutionException;
 public class rfmain extends ApplicationAdapter implements InputProcessor, ApplicationListener {
     SpriteBatch batch;
     Texture img;
-    Texture img2;
+    Texture wepdataicon;
+    Sprite wdi;
     Random rng;
     ArrayList<DamageNumber> dnListA = new ArrayList<DamageNumber>();
     ArrayList<DamageNumber> dnListB = new ArrayList<DamageNumber>();
@@ -45,6 +46,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
     BitmapFont bf;
     BitmapFont dmgNumFnt;
+    BitmapFont wepNumFnt;
     Character a  = new Character("Enemy", 200);
     Character b = new Character("You", 200);
     Battle btl;
@@ -100,9 +102,9 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         //img = region.getTexture();// new Texture(region);
         img = new Texture("swurd.png");
         img.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-       // img2.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-
+       // wepdataicon.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        wepdataicon = new Texture("wepdataicon.png");
+        wdi = new Sprite(wepdataicon);
 
 
 
@@ -120,6 +122,8 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         bf = ftfg.generateFont(ftfp);
         ftfp.size = Math.round(20 * Gdx.graphics.getDensity());
         dmgNumFnt = ftfg.generateFont(ftfp);
+        ftfp.size = Math.round(28 * Gdx.graphics.getDensity());
+        wepNumFnt = ftfg.generateFont(ftfp);
 
         ftfg.dispose();
         xA = (int)w/3;
@@ -220,6 +224,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
             if(lose_streak % 4 == 3){
                 boss_level--;
+                boss_level = Math.max(boss_level, 1);
                 lose_streak = 0;
 
                 if(a.isWeaponEquipped())
@@ -275,19 +280,19 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                                 }else {
 
                                     //generate weapon
-                                    if (aH <= 0 && bH > 0) {
+                                    if (aH <= 0 && bH > 0 ) {
                                         win_streak++;
-                                        if (hits % 3 == 0) {
-                                            loot = new Weapon(0, rng.nextInt(2 * boss_level), (float) 0.1, swurd);
+                                        if (hits % 3 == 0 ) {
+                                            loot = Weapon.generateRandomWeapon(boss_level,swurd);
                                             showloot = true;
                                         }
                                         lose_streak = 0;
                                     }
-                                    if (aH > 0 && bH < 0) {
+                                    if (aH > 0 && bH < 0 ) {
                                         win_streak = 0;
                                         lose_streak++;
-                                        if (hits % 3 == 0) {
-                                            loot = new Weapon(0, rng.nextInt(2 * boss_level - 1), (float) 0.1, swurd);
+                                        if (hits % 3 == 0 ) {
+                                            loot = Weapon.generateRandomWeapon(boss_level,swurd);
                                             if (!a.isWeaponEquipped() || loot.getMax_damage() > a.getEquipped_weapon().getMax_damage())
                                                 a.setEquipped_weapon(loot);
                                         }
@@ -422,20 +427,10 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         }
 
         if(a.isWeaponEquipped()){
-            Sprite awep =  a.getEquipped_weapon().getSprite();
-            awep.setPosition(sprite.getX() - 20-  awep.getWidth(), sprite.getY() + sprite.getHeight()/2 - awep.getHeight()/2);
-            awep.draw(batch);
-
-            bf.draw(batch, "" + a.getEquipped_weapon().getMin_damage(), awep.getX() - 20 * scale, awep.getY() + awep.getHeight() - 10 + text_height_adjust);
-            bf.draw(batch, "" + a.getEquipped_weapon().getMax_damage(), awep.getX() - 20 * scale, awep.getY() + awep.getHeight() - 40 - text_height_adjust);
+            renderWeapon(a.getEquipped_weapon(),(int)(sprite.getX() - sprite.getWidth()/2),(int)(sprite.getY()+ sprite.getHeight()/2), false);
         }
         if(b.isWeaponEquipped()){
-            Sprite bwep =  b.getEquipped_weapon().getSprite();
-            bwep.setPosition(sprite2.getX() + sprite2.getWidth() + 20, sprite2.getY() + sprite2.getHeight()/2 - bwep.getHeight()/2);
-            bwep.draw(batch);
-
-            bf.draw(batch, "" + b.getEquipped_weapon().getMin_damage(), bwep.getX() + bwep.getWidth() + 10, bwep.getY() + bwep.getHeight() - 10 + text_height_adjust);
-            bf.draw(batch, "" + b.getEquipped_weapon().getMax_damage(), bwep.getX() + bwep.getWidth() + 10, bwep.getY() + bwep.getHeight() - 40 - text_height_adjust);
+            renderWeapon(b.getEquipped_weapon(),(int)(sprite2.getX() + sprite2.getWidth()),(int)(sprite2.getY()+ sprite2.getHeight()/2), true);
         }
 
         if(!battling && endmessage[0] != null){
@@ -444,7 +439,11 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
         }
         bf.draw(batch, "Win Streak: " + win_streak, 0, text_height_adjust*3 + 15);
-        bf.draw(batch, "Boss Level: " + boss_level, 0, text_height_adjust*2 + 10);
+        bf.draw(batch, a.getName() + " Level: " + boss_level, 0, text_height_adjust*2 + 10);
+
+        bf.draw(batch, a.getName() + "BHP: " + a.getBase_health(), w - 140, text_height_adjust *2 + 10);
+
+        bf.draw(batch, b.getName() + "BHP: " + b.getBase_health(), w - 140, text_height_adjust + 5);
 
         batch.end();
 
@@ -495,4 +494,37 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         camera.update();
         viewport.update((int)w,(int)h,true);
     }
+
+    //Weapons should have own font
+    private void renderWeapon(Weapon weapon, int x, int y, boolean isRight){
+        Sprite wepSprite = weapon.getSprite();
+        y -= (wepSprite.getHeight()/2);
+        wepSprite.setPosition(x, y);
+        wepSprite.draw(batch);
+
+        int field_x_offset = (int)(sprite.getWidth() * 66 /100);
+        int data_x_offset = field_x_offset + (int)(sprite.getWidth() * 14/100);
+        if(!isRight){
+
+            int temp = (int)(sprite.getWidth() * 20/100);
+            field_x_offset = (temp + (int)(sprite.getWidth() * 14/100)) * -1;
+            data_x_offset = -1 * temp;
+        }
+
+        wdi.setSize(wdi.getWidth() * scale,wepSprite.getHeight());
+        wdi.setPosition(x + field_x_offset, y);
+        wdi.draw(batch);
+        //draw min-max damage in upper right corner
+        wepNumFnt.setColor(Color.WHITE);
+        //Damage Numbers
+        wepNumFnt.draw(batch, weapon.getMin_damage() + "-" + weapon.getMax_damage(), x + data_x_offset,y + wepSprite.getHeight());
+        //Health Mutlipler
+        wepNumFnt.draw(batch, "" + weapon.getHp_multiplier(), x + data_x_offset,y + wepSprite.getHeight()/4*3);
+        //Dmg Type
+        wepNumFnt.draw(batch, weapon.getExtra_type().name().charAt(0) + "", x + data_x_offset,y + wepSprite.getHeight()/2);
+        //Life Steal
+        wepNumFnt.draw(batch, "" + (int)weapon.getLife_steal(), x + data_x_offset,y + wepSprite.getHeight()/4);
+    }
+
+
 }

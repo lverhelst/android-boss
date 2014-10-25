@@ -12,7 +12,7 @@ public class Character {
 
     private int min_dmg;
     private int max_dmg;
-
+    private int base_health;
 
     private String name;
 
@@ -24,6 +24,7 @@ public class Character {
     public Character(String name, int initial_health){
         rng = new Random();
         this.name = name;
+        this.base_health = initial_health;
         this.health = initial_health;
         this.min_dmg = 0;
         this.base_maxdmg = 10;
@@ -64,6 +65,7 @@ public class Character {
         this.equipped_weapon = weapon;
         this.min_dmg = base_mindmg + weapon.getMin_damage();
         this.max_dmg = base_maxdmg + weapon.getMax_damage();
+        this.base_health *= weapon.getHp_multiplier();
     }
 
     public boolean isWeaponEquipped()
@@ -76,10 +78,11 @@ public class Character {
     }
 
     public void reset(){
-        this.health = 100;
+        this.health = base_health;
 
     }
 
-
-
+    public int getBase_health() {
+        return base_health;
+    }
 }
