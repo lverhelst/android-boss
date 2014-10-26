@@ -30,7 +30,9 @@ public class Weapon {
 
     public static Weapon generateRandomWeapon(int lvl, Sprite tempSprite)
     {
-        return new Weapon(0, rng.nextInt(lvl * 2) + 1, DAMAGETYPE.NORMAL, Math.max(rng.nextInt(lvl)/3,1),(float)0.1,tempSprite);
+        int a_roll = (int)rng.nextInt(lvl);
+        int b_roll = rng.nextInt(lvl * 2) + 1;
+        return new Weapon(Math.min(a_roll, b_roll), Math.max(a_roll,b_roll), DAMAGETYPE.NORMAL, Math.max(rng.nextInt(lvl)/3,1),(float)0.1,tempSprite);
 
     }
 
@@ -48,7 +50,7 @@ public class Weapon {
         this.extra_type = dmg_type;
         this.hp_multiplier = hp_multiplier;
         this.life_steal = life_steal;
-        //Copy the sprite so we aren't depended on the external sprite
+        //Copy the sprite so we aren't dependant on the external sprite
         this.sprite = new Sprite(sprite);
 
     }

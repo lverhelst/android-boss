@@ -1,5 +1,6 @@
 package verhelst.rngfight;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Files;
@@ -35,9 +36,7 @@ import java.util.concurrent.ExecutionException;
 
 public class rfmain extends ApplicationAdapter implements InputProcessor, ApplicationListener {
     SpriteBatch batch;
-    Texture img;
-    Texture wepdataicon;
-    Sprite wdi;
+
     Random rng;
     ArrayList<DamageNumber> dnListA = new ArrayList<DamageNumber>();
     ArrayList<DamageNumber> dnListB = new ArrayList<DamageNumber>();
@@ -47,8 +46,8 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
     BitmapFont bf;
     BitmapFont dmgNumFnt;
     BitmapFont wepNumFnt;
-    Character a  = new Character("Enemy", 200);
-    Character b = new Character("You", 200);
+    Character a  = new Character("Enemy", null);
+    Character b = new Character("You", null);
     Battle btl;
     BattleRunnable bsw;
 
@@ -66,63 +65,51 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
     OrthographicCamera camera;
     Viewport viewport;
-    private Sprite sprite;
-    private Sprite sprite2;
-    private Sprite swurd;
     boolean showloot;
 
+    public static float statetime;
 
-    TextureAtlas ta;
-    Animation face_anim;
-    float statetime;
+    private int max_boss_level = 1;
 
-    private int boss_level = 1;
     private int win_streak = 0;
     private int lose_streak = 0;
     float h;
     float w;
 
+    Sprite sprite, sprite2, swurd, wdi;
+    boolean line_debug;
+
+
     @Override
     public void create () {
-
+        //Loads assets
+        //TODO: make assets into a singleton or static class
+        Assets assets = new Assets();
 
         batch = new SpriteBatch();
-
-
-        ta = new TextureAtlas(Gdx.files.internal("face_sprites\\sprite.pack"));
-        //TextureAtlas.AtlasRegion region = ta.findRegion("sprite_a1");
-       /// Sprite sp = new Sprite(region);
-
-        TextureRegion[] hairframes = {new TextureRegion(ta.findRegion("face11")),new TextureRegion(ta.findRegion("face12")),new TextureRegion(ta.findRegion("face13")),new TextureRegion(ta.findRegion("face14"))};
-        face_anim = new Animation(0.075f, hairframes);
         statetime = 0f;
-
-
-
-        //img = region.getTexture();// new Texture(region);
-        img = new Texture("swurd.png");
-        img.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-       // wepdataicon.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        wepdataicon = new Texture("wepdataicon.png");
-        wdi = new Sprite(wepdataicon);
-
-
 
         camera = new OrthographicCamera(w,h);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
+
         viewport = new ScalingViewport(Scaling.stretch,w,h,camera);
+
 
         rng = new Random();
         sr = new ShapeRenderer();
 
-        FreeTypeFontGenerator ftfg = new FreeTypeFontGenerator(Gdx.files.internal("Mecha_Bold.ttf"));
+        FreeTypeFontGenerator ftfg = new FreeTypeFontGenerator(Gdx.files.internal("game_font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter ftfp = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        ftfp.size = Math.round(36 * Gdx.graphics.getDensity() );
+        ftfp.size = Math.round(35 * Gdx.graphics.getDensity() );
         bf = ftfg.generateFont(ftfp);
+
+
         ftfp.size = Math.round(20 * Gdx.graphics.getDensity());
         dmgNumFnt = ftfg.generateFont(ftfp);
-        ftfp.size = Math.round(28 * Gdx.graphics.getDensity());
+        
+        int siz = (Gdx.app.getType() == Application.ApplicationType.Android ? (int) Assets.weapon_data_icon.getHeight() * scale / 4 : 26);
+        ftfp.size = Math.round(siz * Gdx.graphics.getDensity());
         wepNumFnt = ftfg.generateFont(ftfp);
 
         ftfg.dispose();
@@ -134,7 +121,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
         System.out.println(xA + " " + xB);
 
-        sprite = new Sprite(ta.findRegion("face4"));
+        sprite = new Sprite(Assets.resting_face);
         sprite.setOrigin(0,0);
         //sprite.setSize(img.getWidth(), img.getWidth());
         System.out.println(scale);
@@ -143,7 +130,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         sprite.setPosition(xA - sprite.getWidth()/2 ,yB - sprite.getHeight()/2);
 
 
-        sprite2 = new Sprite(ta.findRegion("face4"));
+        sprite2 = new Sprite(Assets.resting_face);
 
         sprite2.setOrigin(0,0);
         //sprite2.setSize(img.getHeight(), img.getWidth());
@@ -153,14 +140,19 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         sprite2.setColor(0.8f,1.0f,0.8f,1.0f);
 
 
-        swurd = new Sprite(img);
+        swurd = new Sprite(Assets.weapons_sprites.get(0));
 
         swurd.setSize(64 * scale,64 * scale);
-        swurd.setPosition( w/2 - swurd.getWidth()/2, h/5);
+        swurd.setPosition( w/2 - (swurd.getWidth()*100/66/2), h/5);
 
+        wdi = Assets.weapon_data_icon;
+
+        a  = new Character("Enemy", sprite);
+        b = new Character("You", sprite2);
 
         Gdx.input.setInputProcessor(this);
     }
+
 
     private void addDmgNum(int num, int x, int y, int whichlist){
         DamageNumber dn = new DamageNumber(num, x, y);
@@ -206,42 +198,46 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
             wx = screenX;
             wy = screenY;
-            if(swurd.getBoundingRectangle().contains(screenX, Gdx.graphics.getHeight() - screenY)){
+
+
+            //sr.circle(w/2,h/4,h/3)
+
+            //(x - center_x)^2 + (y - center_y)^2 < radius^2
+
+
+
+            float ls = (float)( Math.pow(wx - w/2,2) + Math.pow((h-wy) - h/4,2));
+            float r = (float) Math.pow(h/3 - h/4,2);
+            if(ls <= r){
+                System.out.println("b.setQWep loot");
                 b.setEquipped_weapon(loot);
             }
             showloot = false;
         }
         if(!battling) {
             Weapon boss_wep = null;
-            if(win_streak % 4 == 3){
-                boss_level++;
+            if(win_streak % 3 == 2){
+                a.setLevel(a.getLevel() + 1);
+                max_boss_level = Math.max(max_boss_level, a.getLevel());
                 win_streak = 0;
-
-                if(a.isWeaponEquipped())
-                    boss_wep = a.getEquipped_weapon();
-                a = null;
             }
 
             if(lose_streak % 4 == 3){
-                boss_level--;
-                boss_level = Math.max(boss_level, 1);
+                a.setLevel(Math.max(a.getLevel() - 1,1));
                 lose_streak = 0;
-
                 if(a.isWeaponEquipped())
-                    boss_wep = a.getEquipped_weapon();
-                a = null;
+                    a.setEquipped_weapon(Weapon.generateRandomWeapon(a.getLevel(),Assets.weapons_sprites.get(0)));
+
             }
             showloot = false;
             battling = true;
             if (a == null) {
-                a = new Character("Enemy", 200 * boss_level);
-                if(boss_wep != null)
-                    a.setEquipped_weapon(boss_wep);
+                a = new Character("Enemy", sprite);
             }else
                 a.reset();
 
             if (b == null)
-                b = new Character("You", 200);
+                b = new Character("You", sprite2);
             else
                 b.reset();
 
@@ -266,13 +262,17 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
                             lst = bswNumList.poll();
 
-                            addDmgNum(lst.get(0), (int) sprite.getX() + rng.nextInt((int) sprite.getWidth()), (int) sprite.getY() + (int) sprite.getHeight() * (int) sprite.getScaleY() - rng.nextInt(20), 1);
-                            addDmgNum(lst.get(1), (int) sprite2.getX() + rng.nextInt((int) sprite2.getWidth()), (int) sprite2.getY() + (int) sprite2.getHeight() * (int) sprite2.getScaleY() - rng.nextInt(20), 2);
+                            int width = (int)a.getSprite().getWidth();
+                            addDmgNum(lst.get(0), (int)xA - width/2 + rng.nextInt(width), yA + rng.nextInt(30), 1);
+                            addDmgNum(lst.get(1), (int)xB - width/2 + rng.nextInt(width), yB + rng.nextInt(30), 2);
 
                             aH = lst.get(2);
                             bH = lst.get(3);
                             hits = lst.get(4);
                             if (aH <= 0 || bH <= 0) {
+                                System.out.println("NO longer battling");
+
+
                                 battling = false;
                                 if(aH <= 0 && bH <= 0){
                                     win_streak = 0;
@@ -282,26 +282,22 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                                     //generate weapon
                                     if (aH <= 0 && bH > 0 ) {
                                         win_streak++;
-                                        if (hits % 3 == 0 ) {
-                                            loot = Weapon.generateRandomWeapon(boss_level,swurd);
+                                        if (hits % 2 == 0 ) {
+                                            loot = Weapon.generateRandomWeapon(max_boss_level,Assets.weapons_sprites.get(0));
                                             showloot = true;
                                         }
                                         lose_streak = 0;
                                     }
-                                    if (aH > 0 && bH < 0 ) {
+                                    if (aH > 0 && bH < 0) {
                                         win_streak = 0;
                                         lose_streak++;
-                                        if (hits % 3 == 0 ) {
-                                            loot = Weapon.generateRandomWeapon(boss_level,swurd);
+                                        if (hits % 2 == 0 ) {
+                                            loot = Weapon.generateRandomWeapon(a.getLevel(),Assets.weapons_sprites.get(0));
                                             if (!a.isWeaponEquipped() || loot.getMax_damage() > a.getEquipped_weapon().getMax_damage())
                                                 a.setEquipped_weapon(loot);
                                         }
                                     }
                                 }
-
-                                //select next boss
-
-
                             }
 
                         }
@@ -346,43 +342,34 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
     public void render() {
         //Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.update();
+
+
         statetime += Gdx.graphics.getDeltaTime();
-        scale = (int)Math.min(( Gdx.graphics.getDensity()/0.6),2);
+        scale = (int)Math.min(( Gdx.graphics.getDensity()/0.6),2.5);
         h = Gdx.graphics.getHeight();
         w = Gdx.graphics.getWidth();
 
         health_bar_height = scale * 12;
-        sprite.setSize(128 * scale,128 * scale);
-        sprite2.setSize(128 * scale, 128 * scale);
+        //sprite.setSize(128 * scale,128 * scale);
+        //sprite2.setSize(128 * scale, 128 * scale);
         swurd.setSize(64 * scale,64 * scale);
-        sprite.setPosition(xA - sprite.getWidth()/2 ,yB - sprite.getHeight()/2);
-        sprite2.setPosition(xB - sprite2.getWidth()/2, yB - sprite2.getHeight()/2);
-        swurd.setPosition(w/2 - swurd.getWidth()/2,  h/5);
+        wdi.setSize(5 * scale, 32 * scale);
+        //sprite.setPosition(xA - sprite.getWidth()/2 ,yB - sprite.getHeight()/2);
+        //sprite2.setPosition(xB - sprite2.getWidth()/2, yB - sprite2.getHeight()/2);
+        swurd.setPosition(w/2 - ((swurd.getWidth()*100/66)/2),  h/5);
 
         Matrix4 normalProjection = new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(),  Gdx.graphics.getHeight());
+
         batch.setProjectionMatrix(normalProjection);
         batch.begin();
+
+        //Draw Healths.
         bf.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-
         text_height_adjust = (int)bf.getBounds("1000").height;
-
         bf.draw(batch, a.getName() + ": " + Math.max(aH,0) , 0, Gdx.graphics.getHeight() -(health_bar_height + (2 * health_bar_padding)));
-
-        if(aH/50 > 10) {
-            sprite.setRegion(face_anim.getKeyFrame(statetime + 1, true));
-        }else {
-            sprite.setRegion(ta.findRegion("face" + (aH <= 0 ? 1 : Math.max(Math.min(aH / 50, 10), 2))));
-        }
         bf.draw(batch, b.getName() + ": " + Math.max(bH,0) , 0, Gdx.graphics.getHeight() - ((health_bar_height + (2 * health_bar_padding)) * 2 + text_height_adjust));
-        if(bH/50 > 10){
-            sprite2.setRegion(face_anim.getKeyFrame(statetime, true));
-        }else {
-            sprite2.setRegion(ta.findRegion("face" + (bH <= 0 ? 1 : Math.max(Math.min(bH / 50, 10), 2))));
-        }
-        bf.draw(batch, "Hits: " + hits, 0, text_height_adjust + 5);
 
-
+        //Add Damage Numbers to screen
         synchronized (dnListA) {
             for (i = dnListA.iterator(); i.hasNext(); ) {
 
@@ -392,84 +379,96 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                 } else {
                     dmgNumFnt.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
                     dmgNumFnt.draw(batch, dn.getCs(), dn.getX(), dn.getY() +  bf.getBounds(dn.getCs()).height);
-                    dn.update();
+                    dn.update(scale);
                 }
             }
         }
+        //Add damage Numbers to Screen
         synchronized (dnListB) {
-
             for (i = dnListB.iterator(); i.hasNext(); ) {
-
                 DamageNumber dn = i.next();
                 if (dn.isRemoveable()) {
                     i.remove();
                 } else {
                     dmgNumFnt.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
                     dmgNumFnt.draw(batch, dn.getCs(), dn.getX(), dn.getY() + bf.getBounds(dn.getCs()).height);
-                    dn.update();
+                    dn.update(scale);
                 }
-
             }
         }
 
+        //Render character
+        if(a != null && a.getSprite() != null)
+            renderCharacter(a, xA, yA, aH);
+        if(b != null && b.getSprite() != null)
+            renderCharacter(b, xB, yB, bH);
 
-        sprite.draw(batch);
-        bf.draw(batch, a.getName(), sprite.getX(), sprite.getY());
-        sprite2.draw(batch);
-        bf.draw(batch, b.getName(), sprite2.getX(), sprite2.getY());
-
+        //If show loot, show loot
         if(showloot) {
-            swurd.draw(batch);
-            bf.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-            bf.draw(batch, "Loot", swurd.getX() - scale * 20, swurd.getY() + swurd.getHeight() + text_height_adjust + 4);
-            bf.draw(batch, "" + loot.getMin_damage(), swurd.getX() + swurd.getWidth() + 10, swurd.getY() + swurd.getHeight() - 10 + text_height_adjust);
-            bf.draw(batch, "" + loot.getMax_damage(), swurd.getX() + swurd.getWidth() + 10, swurd.getY() + swurd.getHeight() - 40 - text_height_adjust);
+            //swurd.draw(batch);
+           renderWeapon(loot, (int) w/2, (int) h/4, 0);
         }
 
+        //Show character weapon
         if(a.isWeaponEquipped()){
-            renderWeapon(a.getEquipped_weapon(),(int)(sprite.getX() - sprite.getWidth()/2),(int)(sprite.getY()+ sprite.getHeight()/2), false);
+            renderWeapon(a.getEquipped_weapon(),(int)(w/3),(int)(h/2), -1);
         }
         if(b.isWeaponEquipped()){
-            renderWeapon(b.getEquipped_weapon(),(int)(sprite2.getX() + sprite2.getWidth()),(int)(sprite2.getY()+ sprite2.getHeight()/2), true);
+            //System.out.println("Weapon requipped");
+            renderWeapon(b.getEquipped_weapon(),(int)(2 * w / 3),(int)(h/2), 1);
         }
 
+        //Show end message (if available)
         if(!battling && endmessage[0] != null){
-
             bf.drawWrapped(batch, endmessage[0], Gdx.graphics.getWidth()/2 - bf.getWrappedBounds(endmessage[0],Gdx.graphics.getWidth() - 10).width/2, Gdx.graphics.getHeight()/4 * 3, Gdx.graphics.getWidth() - 10);
-
         }
-        bf.draw(batch, "Win Streak: " + win_streak, 0, text_height_adjust*3 + 15);
-        bf.draw(batch, a.getName() + " Level: " + boss_level, 0, text_height_adjust*2 + 10);
 
-        bf.draw(batch, a.getName() + "BHP: " + a.getBase_health(), w - 140, text_height_adjust *2 + 10);
+        //Show Stats
+        bf.draw(batch, "Win Streak: " + win_streak, 0, text_height_adjust*2 + 10);
+        bf.draw(batch, "Hits: " + hits, 0, text_height_adjust + 5);
 
-        bf.draw(batch, b.getName() + "BHP: " + b.getBase_health(), w - 140, text_height_adjust + 5);
+        //Show starting Healths
+        //bf.draw(batch, a.getName() + ": " + a.getInitial_health(), w - 5 - bf.getBounds(a.getName() + "BHP: " + a.getBase_health()).width, text_height_adjust *2 + 10);
+        //bf.draw(batch, b.getName() + ": " + b.getInitial_health(), w - 5 - bf.getBounds(a.getName() + "BHP: " + b.getBase_health()).width, text_height_adjust + 5);
 
         batch.end();
 
-
         sr.setProjectionMatrix(normalProjection);
-
         sr.begin(ShapeRenderer.ShapeType.Filled);
+        //Render Health Bars
+        int a_scale = (a.getInitial_health()/a.getBase_health());
         sr.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         sr.rect(0, Gdx.graphics.getHeight() - health_bar_height - health_bar_padding, 200, health_bar_height );
         sr.setColor(1.0f, 0.0f, 0.0f, 1.0f);
-        sr.rect(1, Gdx.graphics.getHeight() - health_bar_height, aH , health_bar_height - 4);
+        sr.rect(1, Gdx.graphics.getHeight() - health_bar_height, aH/a_scale, health_bar_height - 4);
 
+        int b_scale = (b.getInitial_health()/b.getBase_health());
         sr.setColor(1.0f, 1.0f, 1.0f, 1.0f);
         sr.rect(0, Gdx.graphics.getHeight() - (text_height_adjust + ((health_bar_height + health_bar_padding) * 2) + health_bar_padding), 200, health_bar_height);
         sr.setColor(1.0f, 0.0f, 0.0f, 1.0f);
-        sr.rect(1, Gdx.graphics.getHeight() - (text_height_adjust + (health_bar_height + health_bar_padding) * 2), bH,  health_bar_height - 4);
-
+        sr.rect(1, Gdx.graphics.getHeight() - (text_height_adjust + (health_bar_height + health_bar_padding) * 2), bH/b_scale,  health_bar_height - 4);
 
 
         sr.end();
-        if(showloot) {
-            sr.begin(ShapeRenderer.ShapeType.Line);
-            sr.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-            sr.rect(swurd.getX(), swurd.getY(), swurd.getWidth(), swurd.getHeight());
-            sr.end();
+
+        sr.begin(ShapeRenderer.ShapeType.Line);
+
+        if(line_debug){
+
+            sr.circle(w/2, h/4, h/3-h/4);
+            //verticle middle line
+            sr.rect(w/2, 0,1,h);
+            //horizontal
+            sr.rect(0, h/2,w,1);
+
+            sr.setColor(0.0f,1.0f,0.0f,1.0f);
+            sr.rect(w/3, 0,1,h);
+            sr.rect(w*2/3, 0,1,h);
+
+            sr.rect(0, h/4,w,1);
+
         }
+        sr.end();
     }
 
     @Override
@@ -482,40 +481,55 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         yA = (int)h / 2;
         yB = (int)h / 2;
 
-
-        sprite.setPosition(xA - sprite.getWidth()/2 ,yB - sprite.getHeight()/2);
-        sprite2.setPosition(xB - sprite2.getWidth()/2, yB - sprite2.getHeight()/2);
-        swurd.setPosition(w/2 - swurd.getWidth()/2,  h/5);
-
-
-
+        //Reset Sprite positions
+        //sprite.setPosition(xA - sprite.getWidth()/2 ,yB - sprite.getHeight()/2);
+        //sprite2.setPosition(xB - sprite2.getWidth()/2, yB - sprite2.getHeight()/2);
+        //swurd.setPosition(w/2 - (swurd.getWidth()*100/66/2),  h/5);
+        //Update Camera
         camera.viewportWidth = Gdx.graphics.getWidth();
         camera.viewportHeight = Gdx.graphics.getHeight();
         camera.update();
         viewport.update((int)w,(int)h,true);
     }
 
-    //Weapons should have own font
-    private void renderWeapon(Weapon weapon, int x, int y, boolean isRight){
+    //wep_pos = -1 left, 0 loot, 1 right
+    private void renderWeapon(Weapon weapon, int x, int y, int wep_pos){
+        //System.out.println("weapon render " + wep_pos);
         Sprite wepSprite = weapon.getSprite();
-        y -= (wepSprite.getHeight()/2);
-        wepSprite.setPosition(x, y);
-        wepSprite.draw(batch);
+        wepSprite.setSize(32 * scale, 64 * scale);
+        if(wep_pos != 0)
+            y -= ((wepSprite.getHeight()) + a.getSprite().getWidth()/2);
+        else
+            y -= wepSprite.getHeight()/2;
 
-        int field_x_offset = (int)(sprite.getWidth() * 66 /100);
-        int data_x_offset = field_x_offset + (int)(sprite.getWidth() * 14/100);
-        if(!isRight){
 
-            int temp = (int)(sprite.getWidth() * 20/100);
-            field_x_offset = (temp + (int)(sprite.getWidth() * 14/100)) * -1;
+        int text_x_offset = (int)wepNumFnt.getBounds(weapon.getMin_damage() + "-" + weapon.getMax_damage()).width;
+
+        int field_x_offset = (int)wepSprite.getWidth();
+        int data_x_offset = field_x_offset + (int)(a.getSprite().getWidth() * 14/100);
+
+        if(wep_pos == -1){
+            x -= wepSprite.getWidth();
+            int temp = text_x_offset;
+            field_x_offset = (temp + (int)(a.getSprite().getWidth() * 14/100)) * -1;
             data_x_offset = -1 * temp;
         }
 
-        wdi.setSize(wdi.getWidth() * scale,wepSprite.getHeight());
+
+        //actual draw wep
+        if(wep_pos == 0) {
+            x -= ((wepSprite.getWidth() + wdi.getWidth() + text_x_offset)/2);
+        }
+        wepSprite.setPosition(x, y);
+        wepSprite.draw(batch);
+        //draw icons
+        wdi.setSize(5 * scale,wepSprite.getHeight());
         wdi.setPosition(x + field_x_offset, y);
         wdi.draw(batch);
+
         //draw min-max damage in upper right corner
         wepNumFnt.setColor(Color.WHITE);
+        y = y-1;
         //Damage Numbers
         wepNumFnt.draw(batch, weapon.getMin_damage() + "-" + weapon.getMax_damage(), x + data_x_offset,y + wepSprite.getHeight());
         //Health Mutlipler
@@ -524,7 +538,29 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         wepNumFnt.draw(batch, weapon.getExtra_type().name().charAt(0) + "", x + data_x_offset,y + wepSprite.getHeight()/2);
         //Life Steal
         wepNumFnt.draw(batch, "" + (int)weapon.getLife_steal(), x + data_x_offset,y + wepSprite.getHeight()/4);
+        //
+        if(wep_pos == 0) {
+            int text_y_offset = (int) wepNumFnt.getBounds("Tap to equip").height;
+            wepNumFnt.draw(batch, "Tap to equip", wepSprite.getX() + wepSprite.getWidth()/2 - text_x_offset/2, wepSprite.getY() + wepSprite.getHeight() + text_y_offset + 10);
+        }
+
     }
+
+    public void renderCharacter(Character chr, int x, int y, int hp){
+
+        Sprite spr = chr.getSpriteForHP(hp);
+        spr.setSize(128 * scale, 128 * scale);
+        spr.setPosition(x - spr.getWidth()/2,y - spr.getHeight()/2);
+        spr.draw(batch);
+
+        float offset = 5 + bf.getBounds("" + chr.getLevel()).width;
+
+        bf.draw(batch, chr.getLevel() + "", spr.getX() + (chr.equals(a) ? -offset : offset + spr.getWidth()), spr.getY() + spr.getHeight()/2);
+        //TODO: Find location for name &  better sizing
+        // bf.draw(batch, a.getName(), sprite.getX(), sprite.getY());
+    }
+
+
 
 
 }

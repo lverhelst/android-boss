@@ -56,12 +56,12 @@ public class DamageNumber {
         }
     }
 
-    public void update(){
+    public void update(int scale){
 
-        this.x += Math.cos(this.angle);  //CAH
+        this.x += Math.cos(this.angle) * scale;  //CAH
         //use the alpha value to pull the number down, this gives a nice curve without complicated computations
         //the * 1.1 is just to adjust the intensity of the (-1 + alpha) portion
-        this.y += (Math.sin(this.angle) + (-1 + this.alpha) + 1/(value == 0? 1: value) + rand_force); //SOH
+        this.y += (Math.sin(this.angle) + (-1 + this.alpha) + 1/(value == 0? 1: value) + rand_force) * scale; //SOH
         this.alpha += -0.01f;
         //at an alpha < 0, the random number can be removed from where it is displayed
         //since it will be invisible
