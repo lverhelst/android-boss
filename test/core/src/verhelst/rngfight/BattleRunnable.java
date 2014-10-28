@@ -30,7 +30,6 @@ public class BattleRunnable implements Runnable {
         String results2 = "";
         Character rightside = btl.getRightside();
         Character leftside = btl.getLeftside();
-            Random rng = new Random();
             int dmgtoboss = 0;
             int dmgtoplayer = 0;
             int hitcount = 0;
@@ -58,6 +57,15 @@ public class BattleRunnable implements Runnable {
                 }
 
                 hitcount++;
+                if(hitcount > 9999){
+                    if(new Random().nextBoolean()){
+                        leftside.setHealth(0);
+                    }else{
+                        rightside.setHealth(0);
+                    }
+                }
+
+
             } while (leftside.getHealth() > 0 && rightside.getHealth() > 0);
 
 

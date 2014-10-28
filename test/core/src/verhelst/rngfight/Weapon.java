@@ -30,10 +30,24 @@ public class Weapon {
 
     public static Weapon generateRandomWeapon(int lvl, Sprite tempSprite)
     {
-        int a_roll = (int)rng.nextInt(lvl);
+        int a_roll = rng.nextInt(lvl);
         int b_roll = rng.nextInt(lvl * 2) + 1;
+
         return new Weapon(Math.min(a_roll, b_roll), Math.max(a_roll,b_roll), DAMAGETYPE.NORMAL, Math.max(rng.nextInt(lvl)/3,1),(float)0.1,tempSprite);
 
+    }
+
+    public static Weapon generateScaledWeapon(int mindmg, int max_damage, int lvl, Sprite tempSprite)
+    {
+        double average_dmg = lvl; //(mindmg + max_damage )/2.0;
+        int offset_roll = (int)average_dmg - mindmg;
+        int min_dmg = (int)Math.min(lvl, average_dmg - offset_roll);
+        int max_dmg = (int)Math.min(lvl * 2 + 1, average_dmg + offset_roll);
+
+        System.out.println("A,O,A-O,A+O: " + average_dmg + " " + offset_roll + " " +  min_dmg + " " +  max_dmg);
+
+
+        return new Weapon(min_dmg, max_dmg, DAMAGETYPE.NORMAL, Math.max(rng.nextInt(lvl)/3,1), (float)(0.1), tempSprite);
     }
 
 
@@ -46,7 +60,7 @@ public class Weapon {
 
     public Weapon(int mindmg, int maxdmg, DAMAGETYPE dmg_type, int hp_multiplier, float life_steal, Sprite sprite){
         this.min_damage = mindmg;
-        this.max_damage = maxdmg;
+        this.max_damage = maxdmg; //Should help with scaling weapon balance
         this.extra_type = dmg_type;
         this.hp_multiplier = hp_multiplier;
         this.life_steal = life_steal;

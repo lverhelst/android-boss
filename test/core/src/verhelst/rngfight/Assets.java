@@ -45,13 +45,13 @@ public class Assets {
         //TODO: Make more weapon sprites, loop over sprite sheet
         Texture wepspritepack = new Texture("In Development\\Weapon_Sprites_PaintNet.png");
         TextureRegion wep_temp = new TextureRegion(wepspritepack);
-        TextureRegion[][] wep_sprites = wep_temp.split(34,34);
+        TextureRegion[][] wep_sprites = wep_temp.split(33,34);
         int x_offset = 1;
         int y_offset = 1;
         int width = 32;
         int height = 32;
         for(int i = 0; i < 2; i++){
-            for(int j = 0; j < 5; j++) {
+            for(int j = 0; j < 6; j++) {
                 if(i == 1 && j > 1)
                     break;
                 weapons_sprites.add(new Sprite(wep_sprites[i][j]));

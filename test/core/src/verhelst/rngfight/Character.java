@@ -53,13 +53,13 @@ public class Character {
     public int attack(Character victim){
         int dmgOrHealth = (rng.nextInt(2) == 0 ? -1 : 1) * (rng.nextInt(max_dmg) +  min_dmg);
         //Heal Self
-        //if(dmgOrHealth < 0) {
-        //      this.applyDamageOrHealth(dmgOrHealth);
-        //}
+        if(dmgOrHealth < 0) {
+             this.applyDamageOrHealth(dmgOrHealth);
+        }
         //Damage victim
-        //else{
+        else{
             victim.applyDamageOrHealth(dmgOrHealth);
-        //}
+        }
         return dmgOrHealth;
     }
 
@@ -67,7 +67,7 @@ public class Character {
         return health;
     }
 
-    private void setHealth(int health){
+    public void setHealth(int health){
         this.health = health;
     }
 
@@ -96,7 +96,7 @@ public class Character {
         this.equipped_weapon = weapon;
         this.min_dmg = base_mindmg + weapon.getMin_damage();
         this.max_dmg = base_maxdmg + weapon.getMax_damage();
-        this.health = this.BASE_HEALTH * weapon.getHp_multiplier();
+        this.health = this.BASE_HEALTH * weapon.getHp_multiplier() * this.level;
     }
 
     public boolean isWeaponEquipped()

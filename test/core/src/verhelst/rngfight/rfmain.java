@@ -213,17 +213,23 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
             showloot = false;
         }
         if(!battling) {
-            Weapon boss_wep = null;
             if(win_streak % 3 == 2){
                 a.setLevel(a.getLevel() + 1);
                 max_boss_level = Math.max(max_boss_level, a.getLevel());
+                if(b.isWeaponEquipped())
+                    a.setEquipped_weapon(Weapon.generateScaledWeapon(b.getEquipped_weapon().getMin_damage(), b.getEquipped_weapon().getMax_damage(), a.getLevel(),assets.getWeaponSprite()));
+                else
+                    a.setEquipped_weapon(Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite()));
+
                 win_streak = 0;
             }
 
             if(lose_streak % 4 == 3){
                 a.setLevel(Math.max(a.getLevel() - 1,1));
                 lose_streak = 0;
-                if(a.isWeaponEquipped())
+                if(b.isWeaponEquipped())
+                    a.setEquipped_weapon(Weapon.generateScaledWeapon(b.getEquipped_weapon().getMin_damage(), b.getEquipped_weapon().getMax_damage(), a.getLevel(),assets.getWeaponSprite()));
+                else
                     a.setEquipped_weapon(Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite()));
 
             }
@@ -280,8 +286,8 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                                     //generate weapon
                                     if (aH <= 0 && bH > 0 ) {
                                         win_streak++;
-                                        if (hits % 2 == 0 ) {
-                                            loot = Weapon.generateRandomWeapon(max_boss_level,assets.getWeaponSprite());
+                                        if (hits % 2 == 0 || !b.isWeaponEquipped()) {
+                                            loot = Weapon.generateRandomWeapon(max_boss_level + 1,assets.getWeaponSprite());
                                             showloot = true;
                                         }
                                         lose_streak = 0;
@@ -289,11 +295,6 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                                     if (aH > 0 && bH < 0) {
                                         win_streak = 0;
                                         lose_streak++;
-                                        if (hits % 2 == 0 ) {
-                                            loot = Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite());
-                                            if (!a.isWeaponEquipped() || loot.getMax_damage() > a.getEquipped_weapon().getMax_damage())
-                                                a.setEquipped_weapon(loot);
-                                        }
                                     }
                                 }
                             }
