@@ -78,13 +78,13 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
     Sprite sprite, sprite2, swurd, wdi;
     boolean line_debug;
+    Assets assets;
 
 
     @Override
     public void create () {
         //Loads assets
-        //TODO: make assets into a singleton or static class
-        Assets assets = new Assets();
+        assets = new Assets();
 
         batch = new SpriteBatch();
         statetime = 0f;
@@ -140,7 +140,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         sprite2.setColor(0.8f,1.0f,0.8f,1.0f);
 
 
-        swurd = new Sprite(Assets.weapons_sprites.get(0));
+        swurd = new Sprite(assets.getWeaponSprite());
 
         swurd.setSize(64 * scale,64 * scale);
         swurd.setPosition( w/2 - (swurd.getWidth()*100/66/2), h/5);
@@ -199,7 +199,6 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
             wx = screenX;
             wy = screenY;
 
-
             //sr.circle(w/2,h/4,h/3)
 
             //(x - center_x)^2 + (y - center_y)^2 < radius^2
@@ -209,7 +208,6 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
             float ls = (float)( Math.pow(wx - w/2,2) + Math.pow((h-wy) - h/4,2));
             float r = (float) Math.pow(h/3 - h/4,2);
             if(ls <= r){
-                System.out.println("b.setQWep loot");
                 b.setEquipped_weapon(loot);
             }
             showloot = false;
@@ -226,7 +224,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                 a.setLevel(Math.max(a.getLevel() - 1,1));
                 lose_streak = 0;
                 if(a.isWeaponEquipped())
-                    a.setEquipped_weapon(Weapon.generateRandomWeapon(a.getLevel(),Assets.weapons_sprites.get(0)));
+                    a.setEquipped_weapon(Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite()));
 
             }
             showloot = false;
@@ -283,7 +281,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                                     if (aH <= 0 && bH > 0 ) {
                                         win_streak++;
                                         if (hits % 2 == 0 ) {
-                                            loot = Weapon.generateRandomWeapon(max_boss_level,Assets.weapons_sprites.get(0));
+                                            loot = Weapon.generateRandomWeapon(max_boss_level,assets.getWeaponSprite());
                                             showloot = true;
                                         }
                                         lose_streak = 0;
@@ -292,7 +290,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                                         win_streak = 0;
                                         lose_streak++;
                                         if (hits % 2 == 0 ) {
-                                            loot = Weapon.generateRandomWeapon(a.getLevel(),Assets.weapons_sprites.get(0));
+                                            loot = Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite());
                                             if (!a.isWeaponEquipped() || loot.getMax_damage() > a.getEquipped_weapon().getMax_damage())
                                                 a.setEquipped_weapon(loot);
                                         }
@@ -496,7 +494,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
     private void renderWeapon(Weapon weapon, int x, int y, int wep_pos){
         //System.out.println("weapon render " + wep_pos);
         Sprite wepSprite = weapon.getSprite();
-        wepSprite.setSize(32 * scale, 64 * scale);
+        wepSprite.setSize(64 * scale, 64 * scale);
         if(wep_pos != 0)
             y -= ((wepSprite.getHeight()) + a.getSprite().getWidth()/2);
         else

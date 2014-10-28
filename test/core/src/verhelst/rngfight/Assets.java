@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Leon I. Verhelst on 10/25/2014.
@@ -42,6 +43,21 @@ public class Assets {
 
         //Load Weapon Sprites
         //TODO: Make more weapon sprites, loop over sprite sheet
+        Texture wepspritepack = new Texture("In Development\\Weapon_Sprites_PaintNet.png");
+        TextureRegion wep_temp = new TextureRegion(wepspritepack);
+        TextureRegion[][] wep_sprites = wep_temp.split(34,34);
+        int x_offset = 1;
+        int y_offset = 1;
+        int width = 32;
+        int height = 32;
+        for(int i = 0; i < 2; i++){
+            for(int j = 0; j < 5; j++) {
+                if(i == 1 && j > 1)
+                    break;
+                weapons_sprites.add(new Sprite(wep_sprites[i][j]));
+            }
+        }
+
         Texture wepimg = new Texture("swurd.png");
         wepimg.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
@@ -52,5 +68,10 @@ public class Assets {
 
 
 
+    }
+
+    public Sprite getWeaponSprite(){
+        Random rng = new Random();
+        return weapons_sprites.get(rng.nextInt(weapons_sprites.size()));
     }
 }
