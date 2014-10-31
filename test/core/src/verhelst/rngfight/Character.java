@@ -25,7 +25,8 @@ public class Character {
     private Weapon equipped_weapon = null;
     private Random rng;
 
-
+    private int win_streak = 0;
+    private int lose_streak = 0;
 
     public Character(String name, Sprite sprite){
         rng = new Random();
@@ -51,15 +52,19 @@ public class Character {
 
 
     public int attack(Character victim){
-        int dmgOrHealth = (rng.nextInt(2) == 0 ? -1 : 1) * (rng.nextInt(max_dmg) +  min_dmg);
+      //  int dmgOrHealth = (int)(rng.nextGaussian() * (rng.nextInt(max_dmg +min_dmg)));
+        int dmgOrHealth = (int)((rng.nextBoolean() ? -1 : 1) * (rng.nextInt(max_dmg +min_dmg)));
+
         //Heal Self
-        if(dmgOrHealth < 0) {
-             this.applyDamageOrHealth(dmgOrHealth);
-        }
+        //if(dmgOrHealth < 0) {
+        //     this.applyDamageOrHealth(dmgOrHealth);
+        //}
         //Damage victim
-        else{
+        //else{
             victim.applyDamageOrHealth(dmgOrHealth);
-        }
+            //simulate lifesteal
+            this.applyDamageOrHealth(-1 * Math.abs((int)(dmgOrHealth * 0.01)));
+        //}
         return dmgOrHealth;
     }
 
@@ -96,7 +101,7 @@ public class Character {
         this.equipped_weapon = weapon;
         this.min_dmg = base_mindmg + weapon.getMin_damage();
         this.max_dmg = base_maxdmg + weapon.getMax_damage();
-        this.health = this.BASE_HEALTH * weapon.getHp_multiplier() * this.level;
+        this.health = this.BASE_HEALTH * weapon.getHp_multiplier();// * this.level;
     }
 
     public boolean isWeaponEquipped()
@@ -109,15 +114,16 @@ public class Character {
     }
 
     public void reset(){
-        this.health = (isWeaponEquipped()? equipped_weapon.getHp_multiplier() : 1) * this.BASE_HEALTH * level;
-
+        this.health = (isWeaponEquipped()? equipped_weapon.getHp_multiplier() : 1) * this.BASE_HEALTH;// * level;
+        resetWins();
+        resetLosses();
     }
 
     public int getBase_health() {
         return BASE_HEALTH;
     }
 
-    public int getInitial_health() {return BASE_HEALTH * (isWeaponEquipped() ? equipped_weapon.getHp_multiplier() : 1) * level;
+    public int getInitial_health() {return BASE_HEALTH * (isWeaponEquipped() ? equipped_weapon.getHp_multiplier() : 1);// * level;
     }
 
     public Sprite getSprite() {
@@ -137,4 +143,25 @@ public class Character {
         return sprite;
     }
 
+
+    public void incrementWins(){
+        this.win_streak ++;
+    }
+    public void resetWins(){
+        this.win_streak = 0;
+    }
+    public void incrementLosses(){
+        this.lose_streak++;
+    }
+    public void resetLosses(){
+        this.lose_streak = 0;
+    }
+
+    public int getWin_streak() {
+        return win_streak;
+    }
+
+    public int getLose_streak() {
+        return lose_streak;
+    }
 }

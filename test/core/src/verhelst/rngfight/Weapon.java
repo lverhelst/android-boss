@@ -40,9 +40,9 @@ public class Weapon {
     public static Weapon generateScaledWeapon(int mindmg, int max_damage, int lvl, Sprite tempSprite)
     {
         double average_dmg = lvl; //(mindmg + max_damage )/2.0;
-        int offset_roll = (int)average_dmg - mindmg;
+        int offset_roll = rng.nextInt(lvl);//(int)average_dmg - mindmg;
         int min_dmg = (int)Math.min(lvl, average_dmg - offset_roll);
-        int max_dmg = (int)Math.min(lvl * 2 + 1, average_dmg + offset_roll);
+        int max_dmg = (int)Math.min(lvl * 2, average_dmg + offset_roll);
 
         System.out.println("A,O,A-O,A+O: " + average_dmg + " " + offset_roll + " " +  min_dmg + " " +  max_dmg);
 
@@ -92,4 +92,5 @@ public class Weapon {
     public DAMAGETYPE getExtra_type() {
         return extra_type;
     }
+
 }

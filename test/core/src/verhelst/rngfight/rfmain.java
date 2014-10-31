@@ -32,7 +32,11 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
 
-
+//Levels
+//1 - Easy -> New level each win
+//2 - Normal -> New level every 2 wins
+//3 - Hard -> New level every 3 wins
+//4 - Extreme -> New level every 3 wins + boss hp scaling with level
 
 public class rfmain extends ApplicationAdapter implements InputProcessor, ApplicationListener {
     SpriteBatch batch;
@@ -70,16 +74,19 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
     public static float statetime;
 
     private int max_boss_level = 1;
+    private int max_boss_level_wins = 0;
 
-    private int win_streak = 0;
-    private int lose_streak = 0;
     float h;
     float w;
 
     Sprite sprite, sprite2, swurd, wdi;
     boolean line_debug;
     Assets assets;
+    BattleResultHandler brh;
+    BattleResult[] results;
 
+    boolean isDmgNumOverridden = false;
+    int dmgNumberOverride = 0;
 
     @Override
     public void create () {
@@ -149,7 +156,8 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
         a  = new Character("Enemy", sprite);
         b = new Character("You", sprite2);
-
+        brh = new BattleResultHandler();
+        results = new BattleResult[0];
         Gdx.input.setInputProcessor(this);
     }
 
@@ -198,35 +206,30 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
             wx = screenX;
             wy = screenY;
-
-            //sr.circle(w/2,h/4,h/3)
-
-            //(x - center_x)^2 + (y - center_y)^2 < radius^2
-
-
-
             float ls = (float)( Math.pow(wx - w/2,2) + Math.pow((h-wy) - h/4,2));
             float r = (float) Math.pow(h/3 - h/4,2);
             if(ls <= r){
                 b.setEquipped_weapon(loot);
             }
-            showloot = false;
         }
         if(!battling) {
-            if(win_streak % 3 == 2){
+            if(b.getWin_streak() % 3 == 2){
                 a.setLevel(a.getLevel() + 1);
+                if(a.getLevel() > max_boss_level){
+                    max_boss_level_wins = 0;
+                }
                 max_boss_level = Math.max(max_boss_level, a.getLevel());
                 if(b.isWeaponEquipped())
                     a.setEquipped_weapon(Weapon.generateScaledWeapon(b.getEquipped_weapon().getMin_damage(), b.getEquipped_weapon().getMax_damage(), a.getLevel(),assets.getWeaponSprite()));
                 else
                     a.setEquipped_weapon(Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite()));
 
-                win_streak = 0;
+                b.resetWins();
             }
 
-            if(lose_streak % 4 == 3){
+            if(b.getLose_streak() % 4 == 3){
                 a.setLevel(Math.max(a.getLevel() - 1,1));
-                lose_streak = 0;
+                b.resetLosses();
                 if(b.isWeaponEquipped())
                     a.setEquipped_weapon(Weapon.generateScaledWeapon(b.getEquipped_weapon().getMin_damage(), b.getEquipped_weapon().getMax_damage(), a.getLevel(),assets.getWeaponSprite()));
                 else
@@ -248,6 +251,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
             btl = new Battle(a, b);
 
 
+
             bswNumList = new ConcurrentLinkedQueue<List<Integer>>();
             bsw = new BattleRunnable(btl, bswNumList, endmessage);
 
@@ -267,41 +271,28 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                             lst = bswNumList.poll();
 
                             int width = (int)a.getSprite().getWidth();
-                            addDmgNum(lst.get(0), (int)xA - width/2 + rng.nextInt(width), yA + rng.nextInt(30), 1);
-                            addDmgNum(lst.get(1), (int)xB - width/2 + rng.nextInt(width), yB + rng.nextInt(30), 2);
-
+                            if(isDmgNumOverridden){
+                                addDmgNum(dmgNumberOverride, (int) xA - width / 2 + rng.nextInt(width), yA + rng.nextInt(30), 1);
+                                addDmgNum(dmgNumberOverride, (int) xB - width / 2 + rng.nextInt(width), yB + rng.nextInt(30), 2);
+                            }
+                            else {
+                                addDmgNum(lst.get(0), (int) xA - width / 2 + rng.nextInt(width), yA + rng.nextInt(30), 1);
+                                addDmgNum(lst.get(1), (int) xB - width / 2 + rng.nextInt(width), yB + rng.nextInt(30), 2);
+                            }
                             aH = lst.get(2);
                             bH = lst.get(3);
                             hits = lst.get(4);
                             if (aH <= 0 || bH <= 0) {
-                                System.out.println("NO longer battling");
-
-
                                 battling = false;
-                                if(aH <= 0 && bH <= 0){
-                                    win_streak = 0;
-                                    lose_streak = 0;
-                                }else {
-
-                                    //generate weapon
-                                    if (aH <= 0 && bH > 0 ) {
-                                        win_streak++;
-                                        if (hits % 2 == 0 || !b.isWeaponEquipped()) {
-                                            loot = Weapon.generateRandomWeapon(max_boss_level + 1,assets.getWeaponSprite());
-                                            showloot = true;
-                                        }
-                                        lose_streak = 0;
-                                    }
-                                    if (aH > 0 && bH < 0) {
-                                        win_streak = 0;
-                                        lose_streak++;
-                                    }
-                                }
+                                loot = Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite());
+                                break;
                             }
 
                         }
 
                     }
+                    isDmgNumOverridden = false;
+                    results = brh.getResults(a,b,hits);
                 }
             }).start();
 
@@ -348,15 +339,10 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         h = Gdx.graphics.getHeight();
         w = Gdx.graphics.getWidth();
 
-        health_bar_height = scale * 12;
-        //sprite.setSize(128 * scale,128 * scale);
-        //sprite2.setSize(128 * scale, 128 * scale);
-        swurd.setSize(64 * scale,64 * scale);
-        wdi.setSize(5 * scale, 32 * scale);
-        //sprite.setPosition(xA - sprite.getWidth()/2 ,yB - sprite.getHeight()/2);
-        //sprite2.setPosition(xB - sprite2.getWidth()/2, yB - sprite2.getHeight()/2);
-        swurd.setPosition(w/2 - ((swurd.getWidth()*100/66)/2),  h/5);
 
+
+
+        health_bar_height = scale * 12;
         Matrix4 normalProjection = new Matrix4().setToOrtho2D(0, 0, Gdx.graphics.getWidth(),  Gdx.graphics.getHeight());
 
         batch.setProjectionMatrix(normalProjection);
@@ -378,7 +364,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                 } else {
                     dmgNumFnt.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
                     dmgNumFnt.draw(batch, dn.getCs(), dn.getX(), dn.getY() +  bf.getBounds(dn.getCs()).height);
-                    dn.update(scale);
+                    dn.update(1);
                 }
             }
         }
@@ -391,7 +377,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                 } else {
                     dmgNumFnt.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
                     dmgNumFnt.draw(batch, dn.getCs(), dn.getX(), dn.getY() + bf.getBounds(dn.getCs()).height);
-                    dn.update(scale);
+                    dn.update(1);
                 }
             }
         }
@@ -402,12 +388,6 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         if(b != null && b.getSprite() != null)
             renderCharacter(b, xB, yB, bH);
 
-        //If show loot, show loot
-        if(showloot) {
-            //swurd.draw(batch);
-           renderWeapon(loot, (int) w/2, (int) h/4, 0);
-        }
-
         //Show character weapon
         if(a.isWeaponEquipped()){
             renderWeapon(a.getEquipped_weapon(),(int)(w/3),(int)(h/2), -1);
@@ -417,13 +397,17 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
             renderWeapon(b.getEquipped_weapon(),(int)(2 * w / 3),(int)(h/2), 1);
         }
 
-        //Show end message (if available)
-        if(!battling && endmessage[0] != null){
-            bf.drawWrapped(batch, endmessage[0], Gdx.graphics.getWidth()/2 - bf.getWrappedBounds(endmessage[0],Gdx.graphics.getWidth() - 10).width/2, Gdx.graphics.getHeight()/4 * 3, Gdx.graphics.getWidth() - 10);
-        }
+        //show results if applicable
+        renderBattleResults();
 
         //Show Stats
-        bf.draw(batch, "Win Streak: " + win_streak, 0, text_height_adjust*2 + 10);
+        String line = "";
+        if(a.getLevel() == max_boss_level) {
+            for (int i = 0; i < max_boss_level_wins; i++) {
+                line += "*";
+            }
+        }
+        bf.draw(batch, "Highscore: " + max_boss_level + "" + line , 0,  text_height_adjust*2 + 10);
         bf.draw(batch, "Hits: " + hits, 0, text_height_adjust + 5);
 
         //Show starting Healths
@@ -540,7 +524,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         //
         if(wep_pos == 0) {
             int text_y_offset = (int) wepNumFnt.getBounds("Tap to equip").height;
-            wepNumFnt.draw(batch, "Tap to equip", wepSprite.getX() + wepSprite.getWidth()/2 - text_x_offset/2, wepSprite.getY() + wepSprite.getHeight() + text_y_offset + 10);
+            wepNumFnt.draw(batch, "Tap to equip", wepSprite.getX(), wepSprite.getY() + wepSprite.getHeight() + text_y_offset + 10);
         }
 
     }
@@ -552,11 +536,53 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         spr.setPosition(x - spr.getWidth()/2,y - spr.getHeight()/2);
         spr.draw(batch);
 
-        float offset = 5 + bf.getBounds("" + chr.getLevel()).width;
 
-        bf.draw(batch, chr.getLevel() + "", spr.getX() + (chr.equals(a) ? -offset : offset + spr.getWidth()), spr.getY() + spr.getHeight()/2);
+
+        if(chr == a) {
+            String line = "";
+            for (int i = 0; i < a.getWin_streak(); i++) {
+                    line += "*";
+            }
+            float offset = 5 + bf.getBounds("" + chr.getLevel() + "**").width;
+
+            bf.draw(batch, chr.getLevel() + line, spr.getX() + (chr.equals(a) ? -offset : offset + spr.getWidth()), spr.getY() + spr.getHeight() / 2);
+        }
         //TODO: Find location for name &  better sizing
         // bf.draw(batch, a.getName(), sprite.getX(), sprite.getY());
+    }
+
+    public void renderBattleResults(){
+        if(!battling && results.length > 0){
+            //This can probably be done without a switch, I just don't know how yet.
+            for(BattleResult br : results){
+                switch(br){
+                    case Player1Win:
+                        bf.drawWrapped(batch, a.getName() + " Wins! Too bad.", Gdx.graphics.getWidth() / 2 - bf.getWrappedBounds(endmessage[0], Gdx.graphics.getWidth() - 10).width / 2, Gdx.graphics.getHeight() / 4 * 3, Gdx.graphics.getWidth() - 10);
+                        break;
+                    case Player2Win:
+                        bf.drawWrapped(batch, "Victory! " +  a.getName() + " Defeated!", Gdx.graphics.getWidth() / 2 - bf.getWrappedBounds(endmessage[0], Gdx.graphics.getWidth() - 10).width / 2, Gdx.graphics.getHeight() / 4 * 3, Gdx.graphics.getWidth() - 10);
+                        break;
+                    case Tie:
+                        bf.drawWrapped(batch, "D-D-D-DOUBLE KILL!", Gdx.graphics.getWidth() / 2 - bf.getWrappedBounds(endmessage[0], Gdx.graphics.getWidth() - 10).width / 2, Gdx.graphics.getHeight() / 4 * 3, Gdx.graphics.getWidth() - 10);
+                        break;
+                    case ShowStaticLoot:
+                        showloot = true;
+                        renderWeapon(loot, (int) w/2, (int) h/4, 0);
+                        break;
+                    case ShowRandomLoot:
+                        renderWeapon(loot = Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite()), (int) w/2, (int) h/4, 0);
+                        break;
+                    case CustomMode_ioi:
+                        isDmgNumOverridden = true;
+                        dmgNumberOverride = 101;
+                        break;
+                }
+
+
+
+
+            }
+        }
     }
 
 

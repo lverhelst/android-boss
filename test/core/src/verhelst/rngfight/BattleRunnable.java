@@ -58,7 +58,7 @@ public class BattleRunnable implements Runnable {
 
                 hitcount++;
                 if(hitcount > 9999){
-                    if(new Random().nextBoolean()){
+                    if(leftside.getHealth() <= rightside.getHealth()){
                         leftside.setHealth(0);
                     }else{
                         rightside.setHealth(0);
