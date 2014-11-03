@@ -23,6 +23,7 @@ public class Assets {
     public static Sprite dead_face;
     public static Sprite[] faces;
 
+
     public Assets(){
         weapons_sprites = new ArrayList<Sprite>();
         faces = new Sprite[8];

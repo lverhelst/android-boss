@@ -38,15 +38,15 @@ public class DamageNumber {
 
         //Damage done = red colour
         if(this.value > 0){
-            this.red = 1.0f;
-            this.green = 0.0f;
-            this.blue = 0.0f;
+            this.red = 0.7f;
+            this.green = 0.15f;
+            this.blue = 0.15f;
         }
         //healing done = green colour
         else if(this.value < 0){
-            this.red = 0.0f;
-            this.green = 1.0f;
-            this.blue = 0.0f;
+            this.red = 0.15f;
+            this.green = 0.7f;
+            this.blue = 0.15f;
         }
         //0 done = white color
         else{

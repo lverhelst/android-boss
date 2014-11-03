@@ -53,17 +53,22 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
     Character a  = new Character("Enemy", null);
     Character b = new Character("You", null);
     Battle btl;
-    BattleRunnable bsw;
 
     Weapon loot;
     //for use in Render()
     List<Integer> lst;
     Iterator<DamageNumber> i;
 
-    String[] endmessage= new String[1];
-
     ShapeRenderer sr;
     int xA, xB, yA, yB, aH = 200, bH = 200, hits = 0;
+    int wx, wy;
+    int health_bar_height = 12;
+    int text_height_adjust = 0;
+    int health_bar_padding = 2;
+
+
+    int scale = 1;
+
 
     boolean battling;
 
@@ -248,14 +253,11 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
             else
                 b.reset();
 
-            btl = new Battle(a, b);
-
-
 
             bswNumList = new ConcurrentLinkedQueue<List<Integer>>();
-            bsw = new BattleRunnable(btl, bswNumList, endmessage);
+            btl = new Battle(a, b, bswNumList);
 
-            bsw.run();
+            btl.run();
 
             new Thread(new Runnable() {
                 @Override
@@ -304,8 +306,6 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
     }
 
-    int wx, wy;
-
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         return false;
@@ -322,12 +322,6 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
     }
 
 
-    int health_bar_height = 12;
-    int text_height_adjust = 0;
-    int health_bar_padding = 2;
-
-
-    int scale = 1;
     @Override
     public void render() {
         //Gdx.gl.glClearColor(1, 0, 0, 1);
@@ -536,8 +530,6 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         spr.setPosition(x - spr.getWidth()/2,y - spr.getHeight()/2);
         spr.draw(batch);
 
-
-
         if(chr == a) {
             String line = "";
             for (int i = 0; i < a.getWin_streak(); i++) {
@@ -557,13 +549,13 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
             for(BattleResult br : results){
                 switch(br){
                     case Player1Win:
-                        bf.drawWrapped(batch, a.getName() + " Wins! Too bad.", Gdx.graphics.getWidth() / 2 - bf.getWrappedBounds(endmessage[0], Gdx.graphics.getWidth() - 10).width / 2, Gdx.graphics.getHeight() / 4 * 3, Gdx.graphics.getWidth() - 10);
+                        this.renderWhoWon("You lost. Too bad.");
                         break;
                     case Player2Win:
-                        bf.drawWrapped(batch, "Victory! " +  a.getName() + " Defeated!", Gdx.graphics.getWidth() / 2 - bf.getWrappedBounds(endmessage[0], Gdx.graphics.getWidth() - 10).width / 2, Gdx.graphics.getHeight() / 4 * 3, Gdx.graphics.getWidth() - 10);
+                        this.renderWhoWon("Victory! " + a.getName() + " defeated!");
                         break;
                     case Tie:
-                        bf.drawWrapped(batch, "D-D-D-DOUBLE KILL!", Gdx.graphics.getWidth() / 2 - bf.getWrappedBounds(endmessage[0], Gdx.graphics.getWidth() - 10).width / 2, Gdx.graphics.getHeight() / 4 * 3, Gdx.graphics.getWidth() - 10);
+                        this.renderWhoWon("D-D-D-Double Kill!");
                         break;
                     case ShowStaticLoot:
                         showloot = true;
@@ -577,15 +569,13 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                         dmgNumberOverride = 101;
                         break;
                 }
-
-
-
-
             }
         }
     }
 
-
+    private void renderWhoWon(String message){
+        bf.drawWrapped(batch,message, Gdx.graphics.getWidth() / 2 - bf.getWrappedBounds(message, Gdx.graphics.getWidth() - 10).width / 2, Gdx.graphics.getHeight() / 4 * 3, Gdx.graphics.getWidth() - 10);
+    }
 
 
 }

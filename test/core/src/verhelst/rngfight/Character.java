@@ -144,7 +144,8 @@ public class Character {
     }
 
 
-    public void incrementWins(){
+    public void incrementWins()
+    {
         this.win_streak ++;
     }
     public void resetWins(){
@@ -156,11 +157,9 @@ public class Character {
     public void resetLosses(){
         this.lose_streak = 0;
     }
-
     public int getWin_streak() {
         return win_streak;
     }
-
     public int getLose_streak() {
         return lose_streak;
     }
