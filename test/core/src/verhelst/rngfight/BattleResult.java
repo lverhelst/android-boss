@@ -9,7 +9,8 @@ public enum BattleResult {
         Tie,
         ShowStaticLoot,
         ShowRandomLoot,
-        CustomMode_ioi
+        CustomMode_ioi,
+        Player1GetsLoot
 
 
 

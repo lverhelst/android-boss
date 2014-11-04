@@ -3,9 +3,11 @@ package verhelst.rngfight;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,8 @@ public class Assets {
     public static Sprite resting_face;
     public static Sprite dead_face;
     public static Sprite[] faces;
-
+    public static BitmapFont wepNumFnt;
+    public static BitmapFont dmgNumFnt;
 
     public Assets(){
         weapons_sprites = new ArrayList<Sprite>();
@@ -67,11 +70,16 @@ public class Assets {
         //Weapon Data Icon (For UI)
         weapon_data_icon = new Sprite(new Texture("wepdataicon.png"));
 
+        FreeTypeFontGenerator ftfg = new FreeTypeFontGenerator(Gdx.files.internal("game_font.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter ftfp = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        ftfp.size = Math.round(35 * Gdx.graphics.getDensity());
+        wepNumFnt = ftfg.generateFont(ftfp);
 
-
+        ftfp.size = Math.round(28 * Gdx.graphics.getDensity());
+        dmgNumFnt = ftfg.generateFont(ftfp);
     }
 
-    public Sprite getWeaponSprite(){
+    public static Sprite getWeaponSprite(){
         Random rng = new Random();
         return weapons_sprites.get(rng.nextInt(weapons_sprites.size()));
     }

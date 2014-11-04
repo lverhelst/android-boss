@@ -10,8 +10,6 @@ import javax.rmi.CORBA.Tie;
  */
 public class BattleResultHandler {
 
-    
-
     public BattleResultHandler(){
 
     }
@@ -25,12 +23,22 @@ public class BattleResultHandler {
             a.incrementWins();
             a.resetLosses();
             b.resetWins();
-         
+            if(hitcount % 2 == 1) {
+                resultsList.add(BattleResult.Player1GetsLoot);
+            }else{
+
+            }
         }else if(a.getHealth() <= 0 && b.getHealth() > 0){
             resultsList.add(BattleResult.Player2Win);
             a.resetWins();
             b.incrementWins();
             b.resetLosses();
+            if(hitcount % 2 == 0) {
+                resultsList.add(BattleResult.ShowStaticLoot);
+            }
+            else if(hitcount % 13 == 0) {
+                resultsList.add(BattleResult.ShowRandomLoot);
+            }
         }else{
             resultsList.add(BattleResult.Tie);
             a.resetWins();
@@ -40,15 +48,15 @@ public class BattleResultHandler {
         //Deal with hitcount
         if(hitcount == 101)
             resultsList.add(BattleResult.CustomMode_ioi);
-        if(hitcount % 2 == 0)
-            resultsList.add(BattleResult.ShowStaticLoot);
-        else if(hitcount % 13 == 0)
-            resultsList.add(BattleResult.ShowRandomLoot);
 
+
+        System.out.println(resultsList);
         return resultsList.toArray(new BattleResult[resultsList.size()]);
     }
 
-
+    public Weapon getLoot(Character left){
+        return Weapon.generateRandomWeapon(left.getLevel(), Assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION);
+    }
 
 
 

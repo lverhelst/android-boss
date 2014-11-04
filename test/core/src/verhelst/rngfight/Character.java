@@ -1,12 +1,14 @@
 package verhelst.rngfight;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.Random;
 
 /**
  * Created by Orion on 10/16/2014.
  */
-public class Character {
+public class Character extends Actor {
     private int health;
 
     private final int base_mindmg =0;
@@ -18,7 +20,6 @@ public class Character {
     private int initial_health;
     private int level;
 
-
     private String name;
     private Sprite sprite;
 
@@ -27,6 +28,11 @@ public class Character {
 
     private int win_streak = 0;
     private int lose_streak = 0;
+
+    //GetY() wasn't working in the BattleView
+    //GetHeight() and getX() both worked...wierd.
+    //Use otherY
+    public int otherY = 0;
 
     public Character(String name, Sprite sprite){
         rng = new Random();
@@ -97,7 +103,7 @@ public class Character {
     }
 
     public void setEquipped_weapon(Weapon weapon) {
-        System.out.println("set weapon");
+        System.out.println("Weapon equipped " + name);
         this.equipped_weapon = weapon;
         this.min_dmg = base_mindmg + weapon.getMin_damage();
         this.max_dmg = base_maxdmg + weapon.getMax_damage();
@@ -136,7 +142,7 @@ public class Character {
 
     public Sprite getSpriteForHP(int hp){
         if(hp/(BASE_HEALTH * (isWeaponEquipped()? equipped_weapon.getHp_multiplier() : 1)/4) > 10){
-            sprite.setRegion(Assets.face_anim.getKeyFrame(rfmain.statetime, true));
+            sprite.setRegion(Assets.face_anim.getKeyFrame(BattleScreen.statetime, true));
         }else {
             sprite.setRegion((hp <= 0 ? Assets.dead_face: Assets.faces[Math.max(Math.min(hp/(BASE_HEALTH * (isWeaponEquipped()? equipped_weapon.getHp_multiplier() : 1)/4), 7), 2)]));
         }
@@ -162,5 +168,15 @@ public class Character {
     }
     public int getLose_streak() {
         return lose_streak;
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        Sprite spr = getSpriteForHP(health);
+        otherY = (int)getY();
+        spr.setPosition(getX(), getY());
+        spr.setSize(getWidth(), getHeight());
+        spr.setScale(getScaleX(), getScaleY());
+        spr.draw(batch);
     }
 }

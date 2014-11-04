@@ -27,15 +27,16 @@ public class HealthBar extends Actor {
     private NinePatchDrawable foreground;
 
     private Label nameAndHealth;
+    private final Character character;
 
 
-    public HealthBar(int base_value, String name){
+    public HealthBar(Character character){
+        this.character = character;
+        this.name = character.getName();
+        this.health_value = character.getBase_health();
 
-        this.name = name;
-        this.health_value = base_value;
 
-
-        this.initial_value = base_value;
+        this.initial_value = character.getInitial_health();
         health_scale = (initial_value/BASE == 0 ? 1 : initial_value/BASE);
         TextureAtlas skinAtlas = new TextureAtlas(Gdx.files.internal("data/uiskin.atlas"));
 
@@ -74,7 +75,7 @@ public class HealthBar extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         background.draw(batch, getX(), getY(), BASE * getScaleX(),  getHeight() * getScaleY());
-        foreground.draw(batch,getX(), getY(), this.health_value / health_scale, getHeight() * getScaleY());
+        foreground.draw(batch,getX(), getY(), health_value / health_scale, getHeight() * getScaleY());
     }
 
     @Override

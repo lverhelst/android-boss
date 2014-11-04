@@ -218,6 +218,8 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
             }
         }
         if(!battling) {
+
+            //Result handler stuff
             if(b.getWin_streak() % 3 == 2){
                 a.setLevel(a.getLevel() + 1);
                 if(a.getLevel() > max_boss_level){
@@ -225,9 +227,9 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                 }
                 max_boss_level = Math.max(max_boss_level, a.getLevel());
                 if(b.isWeaponEquipped())
-                    a.setEquipped_weapon(Weapon.generateScaledWeapon(b.getEquipped_weapon().getMin_damage(), b.getEquipped_weapon().getMax_damage(), a.getLevel(),assets.getWeaponSprite()));
+                    a.setEquipped_weapon(Weapon.generateScaledWeapon(b.getEquipped_weapon().getMin_damage(), b.getEquipped_weapon().getMax_damage(), a.getLevel(), assets.getWeaponSprite(), Weapon.POSITION.LEFT_POSITION));
                 else
-                    a.setEquipped_weapon(Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite()));
+                    a.setEquipped_weapon(Weapon.generateRandomWeapon(a.getLevel(), assets.getWeaponSprite(),Weapon.POSITION.LEFT_POSITION));
 
                 b.resetWins();
             }
@@ -236,11 +238,12 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                 a.setLevel(Math.max(a.getLevel() - 1,1));
                 b.resetLosses();
                 if(b.isWeaponEquipped())
-                    a.setEquipped_weapon(Weapon.generateScaledWeapon(b.getEquipped_weapon().getMin_damage(), b.getEquipped_weapon().getMax_damage(), a.getLevel(),assets.getWeaponSprite()));
+                    a.setEquipped_weapon(Weapon.generateScaledWeapon(b.getEquipped_weapon().getMin_damage(), b.getEquipped_weapon().getMax_damage(), a.getLevel(),assets.getWeaponSprite(),Weapon.POSITION.LEFT_POSITION));
                 else
-                    a.setEquipped_weapon(Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite()));
+                    a.setEquipped_weapon(Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite(),Weapon.POSITION.LEFT_POSITION));
 
             }
+            //reset stuff
             showloot = false;
             battling = true;
             if (a == null) {
@@ -286,7 +289,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                             hits = lst.get(4);
                             if (aH <= 0 || bH <= 0) {
                                 battling = false;
-                                loot = Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite());
+                                loot = Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite(),Weapon.POSITION.LOOT_POSITION);
                                 break;
                             }
 
@@ -450,7 +453,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
 
     @Override
     public void resize(int width, int height) {
-        //move sprites to middle
+
         h = Gdx.graphics.getHeight();
         w = Gdx.graphics.getWidth();
         xA = (int)w/3;
@@ -458,10 +461,6 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
         yA = (int)h / 2;
         yB = (int)h / 2;
 
-        //Reset Sprite positions
-        //sprite.setPosition(xA - sprite.getWidth()/2 ,yB - sprite.getHeight()/2);
-        //sprite2.setPosition(xB - sprite2.getWidth()/2, yB - sprite2.getHeight()/2);
-        //swurd.setPosition(w/2 - (swurd.getWidth()*100/66/2),  h/5);
         //Update Camera
         camera.viewportWidth = Gdx.graphics.getWidth();
         camera.viewportHeight = Gdx.graphics.getHeight();
@@ -562,7 +561,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                         renderWeapon(loot, (int) w/2, (int) h/4, 0);
                         break;
                     case ShowRandomLoot:
-                        renderWeapon(loot = Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite()), (int) w/2, (int) h/4, 0);
+                        renderWeapon(loot = Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION), (int) w/2, (int) h/4, 0);
                         break;
                     case CustomMode_ioi:
                         isDmgNumOverridden = true;
