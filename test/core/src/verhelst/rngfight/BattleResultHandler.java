@@ -10,8 +10,11 @@ import javax.rmi.CORBA.Tie;
  */
 public class BattleResultHandler {
 
-    public BattleResultHandler(){
+    int playerAmaxLvl, playerBmaxLvl;
 
+    public BattleResultHandler(){
+        playerAmaxLvl = 0;
+        playerBmaxLvl = 0;
     }
 
 
@@ -23,16 +26,18 @@ public class BattleResultHandler {
             a.incrementWins();
             a.resetLosses();
             b.resetWins();
+            b.incrementLosses();
+
             if(hitcount % 2 == 1) {
                 resultsList.add(BattleResult.Player1GetsLoot);
-            }else{
-
             }
         }else if(a.getHealth() <= 0 && b.getHealth() > 0){
             resultsList.add(BattleResult.Player2Win);
+            a.incrementLosses();
             a.resetWins();
             b.incrementWins();
             b.resetLosses();
+
             if(hitcount % 2 == 0) {
                 resultsList.add(BattleResult.ShowStaticLoot);
             }
@@ -45,10 +50,12 @@ public class BattleResultHandler {
             b.resetWins();
         }
 
+        playerAmaxLvl = Math.max(a.getLevel(), playerAmaxLvl);
+        playerBmaxLvl = Math.max(b.getLevel(), playerBmaxLvl);
+
         //Deal with hitcount
         if(hitcount == 101)
             resultsList.add(BattleResult.CustomMode_ioi);
-
 
         System.out.println(resultsList);
         return resultsList.toArray(new BattleResult[resultsList.size()]);

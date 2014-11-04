@@ -26,6 +26,7 @@ public class Assets {
     public static Sprite[] faces;
     public static BitmapFont wepNumFnt;
     public static BitmapFont dmgNumFnt;
+    public static BitmapFont bf;
 
     public Assets(){
         weapons_sprites = new ArrayList<Sprite>();
@@ -72,6 +73,9 @@ public class Assets {
 
         FreeTypeFontGenerator ftfg = new FreeTypeFontGenerator(Gdx.files.internal("game_font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter ftfp = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        ftfp.size = Math.round(35 * Gdx.graphics.getDensity() );
+        bf = ftfg.generateFont(ftfp);
+
         ftfp.size = Math.round(35 * Gdx.graphics.getDensity());
         wepNumFnt = ftfg.generateFont(ftfp);
 

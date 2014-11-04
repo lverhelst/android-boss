@@ -30,6 +30,9 @@ public class BattleScreen implements Screen, InputProcessor {
     //A list of itegers for consuming the posts from the battle
     List<Integer> lst;
 
+    Character a;
+    Character a2;
+    String message;
     boolean showLoot,battling;
     public static float statetime;
     int hits = 0, anim_h1, anim_h2;
@@ -37,11 +40,11 @@ public class BattleScreen implements Screen, InputProcessor {
 
 
     public BattleScreen(){
-        Character a = new Character("Enemy", Assets.resting_face);
-        Character a2 = new Character("Enemy2", Assets.resting_face);
+        a = new Character("Enemy", Assets.resting_face);
+        a2 = new Character("Enemy2", Assets.resting_face);
         anim_h1 = a.getHealth();
         anim_h2 = a2.getHealth();
-
+        message = "";
         btl = new Battle(a,a2,bswNumList);
         brh = new BattleResultHandler();
         results = new BattleResult[0];
@@ -62,13 +65,13 @@ public class BattleScreen implements Screen, InputProcessor {
             for(BattleResult br : results){
                 switch(br){
                     case Player1Win:
-                       // this.renderWhoWon("You lost. Too bad.");
+                        message = "You lost. Too bad.";
                         break;
                     case Player2Win:
-                       // this.renderWhoWon("Victory! " + a.getName() + " defeated!");
+                        message = "Victory! " + a.getName() + " defeated!";
                         break;
                     case Tie:
-                    //    this.renderWhoWon("D-D-D-Double Kill!");
+                     message = "D-D-D-Double Kill!";
                         break;
                     case ShowStaticLoot:
                         showLoot = true;
@@ -104,7 +107,7 @@ public class BattleScreen implements Screen, InputProcessor {
             handleBattleResults();
 
 
-        bView.update(anim_h1, anim_h2, showLoot);
+        bView.update(anim_h1, anim_h2, showLoot, brh.playerAmaxLvl);
         Weapon aWep = btl.getLeftside().getEquipped_weapon();
         Weapon bWep = btl.getRightside().getEquipped_weapon();
 
@@ -114,6 +117,7 @@ public class BattleScreen implements Screen, InputProcessor {
         bhud.getStage().draw();
         bView.renderDamageNumbers(RngFight.batch);
         bView.getStage().draw();
+        bView.renderMessage(message, RngFight.batch);
     }
 
     @Override
@@ -197,6 +201,7 @@ public class BattleScreen implements Screen, InputProcessor {
             }
         }
         if(!battling){
+            message = "";
             battling = true;
             showLoot = false;
             //reset fighters (can be put into battle maybe?)

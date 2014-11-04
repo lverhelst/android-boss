@@ -29,7 +29,7 @@ public class BattleView {
     Random rng;
     Stage battleStage;
     OrthographicCamera camera;
-    Label r3c2;
+    Label r2c1, r3c2;
     Battle b;
     final Weapon lootWep, aWep, bWep;
     Table rootTable;
@@ -48,7 +48,7 @@ public class BattleView {
 
         Skin skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
-        Label r2c1 = new Label("", skin); //Right - bottom alight, left half
+        r2c1 = new Label("", skin); //Right - bottom alight, left half
         Label r2c2 = new Label("", skin); //Empty Right half
 
         r3c2  = new Label("R3C2", skin); //Left stars
@@ -205,7 +205,7 @@ public class BattleView {
     }
 
 
-    public void update(int lefthp, int righthp, boolean showLoot){
+    public void update(int lefthp, int righthp, boolean showLoot, int aMax){
         b.getLeftside().setHealth(lefthp);
         b.getRightside().setHealth(righthp);
         lootWep.setVisible(showLoot);
@@ -213,9 +213,16 @@ public class BattleView {
         for(int i = 0; i < b.getLeftside().getLose_streak() % 3; i++ ){
             line += "*";
         }
-        r3c2.setText(line);
+        String str = String.format("%3s", line);
+        r3c2.setText(str);
+        //System.out.println(str);
+        r2c1.setText(aMax + "");
     }
 
-
+    public void renderMessage(String message, SpriteBatch batch){
+        batch.begin();
+        Assets.bf.drawWrapped(batch,message, Gdx.graphics.getWidth() / 2 - Assets.bf.getWrappedBounds(message, Gdx.graphics.getWidth() - 10).width / 2, Gdx.graphics.getHeight() / 4 * 3, Gdx.graphics.getWidth() - 10);
+        batch.end();
+    }
 
 }

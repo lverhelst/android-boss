@@ -127,7 +127,7 @@ public class Weapon extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-         System.out.println(this.getName());
+         //System.out.println(this.getName());
 
 
         Sprite spr = sprite;

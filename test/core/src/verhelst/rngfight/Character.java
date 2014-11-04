@@ -26,6 +26,8 @@ public class Character extends Actor {
     private Weapon equipped_weapon = null;
     private Random rng;
 
+
+    private int wins_to_level = 2;
     private int win_streak = 0;
     private int lose_streak = 0;
 
@@ -121,8 +123,6 @@ public class Character extends Actor {
 
     public void reset(){
         this.health = (isWeaponEquipped()? equipped_weapon.getHp_multiplier() : 1) * this.BASE_HEALTH;// * level;
-        resetWins();
-        resetLosses();
     }
 
     public int getBase_health() {
@@ -152,13 +152,21 @@ public class Character extends Actor {
 
     public void incrementWins()
     {
-        this.win_streak ++;
+        this.win_streak++;
+        if(win_streak % (wins_to_level + 1) == wins_to_level){
+            level--;
+            level = Math.max(1, level);
+        }
     }
     public void resetWins(){
         this.win_streak = 0;
     }
-    public void incrementLosses(){
+    public void incrementLosses()
+    {
         this.lose_streak++;
+        if(lose_streak % (wins_to_level + 1) == wins_to_level){
+            level++;
+        }
     }
     public void resetLosses(){
         this.lose_streak = 0;

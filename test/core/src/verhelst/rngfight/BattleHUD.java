@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -93,7 +94,14 @@ public class BattleHUD {
         two.setHealth_value(hbval2);
         twoLbl.setText(b.getRightside().getName() + ": " + (hbval2 > 0 ? hbval2 : 0));
 
+
         highscore.setText("Win Streak: " + b.getRightside().getWin_streak());
         hitcount.setText("Hitcount: " + hits);
+    }
+
+    public void renderMessage(String message, SpriteBatch batch){
+        batch.begin();
+        Assets.bf.drawWrapped(batch,message, Gdx.graphics.getWidth() / 2 - Assets.bf.getWrappedBounds(message, Gdx.graphics.getWidth() - 10).width / 2, Gdx.graphics.getHeight() / 4 * 3, Gdx.graphics.getWidth() - 10);
+        batch.end();
     }
 }
