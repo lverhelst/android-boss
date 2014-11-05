@@ -31,6 +31,8 @@ public class BattleHUD {
     OrthographicCamera camera;
     Battle b;
 
+    boolean debug = false;
+
     public BattleHUD(Battle b){
         this.b = b;
         camera = new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
@@ -71,7 +73,7 @@ public class BattleHUD {
         table.add(highscore).align(Align.left);
         table.row();
         table.add(hitcount).align(Align.left);
-        table.setDebug(true);
+        table.setDebug(debug);
         table.setFillParent(true);
         stage = new Stage(new ScalingViewport(Scaling.fit, camera.viewportWidth, camera.viewportHeight, camera), RngFight.batch);
         stage.addActor(table);

@@ -106,15 +106,15 @@ public class BattleScreen implements Screen, InputProcessor {
         if(!battling)
             handleBattleResults();
 
+        bhud.update(hits, anim_h1, anim_h2);
+        bhud.getStage().draw();
 
-        bView.update(anim_h1, anim_h2, showLoot, brh.playerAmaxLvl);
+
         Weapon aWep = btl.getLeftside().getEquipped_weapon();
         Weapon bWep = btl.getRightside().getEquipped_weapon();
 
         bView.updateCharacterWeapons(aWep, bWep);
-        bhud.update(hits, anim_h1, anim_h2);
-
-        bhud.getStage().draw();
+        bView.update(anim_h1, anim_h2, showLoot, brh.playerAmaxLvl);
         bView.renderDamageNumbers(RngFight.batch);
         bView.getStage().draw();
         bView.renderMessage(message, RngFight.batch);

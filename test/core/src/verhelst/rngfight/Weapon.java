@@ -64,6 +64,7 @@ public class Weapon extends Actor {
     public Weapon(){
         this.setName("DummyWeap" + System.currentTimeMillis());
         this.sprite = Assets.getWeaponSprite();
+        this.posi = POSITION.LOOT_POSITION;
     }
 
 
