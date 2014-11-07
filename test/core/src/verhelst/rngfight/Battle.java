@@ -48,7 +48,7 @@ public class Battle implements Runnable {
             dmgtoplayer += leftside.attack(rightside);
             dmgtoboss += rightside.attack(leftside);
 
-            if(hitcount % 13 == 0) {
+            if(hitcount % 5 == 0) {
                 final List<Integer> chunk = new ArrayList<Integer>();
                 chunk.add(dmgtoboss);
                 chunk.add(dmgtoplayer);
@@ -67,7 +67,7 @@ public class Battle implements Runnable {
             }
 
             hitcount++;
-            if(hitcount > 9999){
+            if(hitcount > 49999){
                 if(leftside.getHealth() <= rightside.getHealth()){
                     leftside.setHealth(0);
                 }else{

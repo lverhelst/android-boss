@@ -10,11 +10,9 @@ import javax.rmi.CORBA.Tie;
  */
 public class BattleResultHandler {
 
-    int playerAmaxLvl, playerBmaxLvl;
 
     public BattleResultHandler(){
-        playerAmaxLvl = 0;
-        playerBmaxLvl = 0;
+
     }
 
 
@@ -27,16 +25,13 @@ public class BattleResultHandler {
             a.resetLosses();
             b.resetWins();
             b.incrementLosses();
-
-            if(hitcount % 2 == 1) {
-                resultsList.add(BattleResult.Player1GetsLoot);
-            }
         }else if(a.getHealth() <= 0 && b.getHealth() > 0){
             resultsList.add(BattleResult.Player2Win);
             a.incrementLosses();
             a.resetWins();
             b.incrementWins();
             b.resetLosses();
+
 
             if(hitcount % 2 == 0) {
                 resultsList.add(BattleResult.ShowStaticLoot);
@@ -50,14 +45,19 @@ public class BattleResultHandler {
             b.resetWins();
         }
 
-        playerAmaxLvl = Math.max(a.getLevel(), playerAmaxLvl);
-        playerBmaxLvl = Math.max(b.getLevel(), playerBmaxLvl);
+        if(hitcount % 2 == 1) {
+            resultsList.add(BattleResult.Player1GetsLoot);
+        }
+
+
+
 
         //Deal with hitcount
         if(hitcount == 101)
             resultsList.add(BattleResult.CustomMode_ioi);
 
-        System.out.println(resultsList);
+        System.out.print(resultsList);
+        System.out.println("        CL " + a.getLevel() + " ws " + a.getWin_streak() + " ml" + a.max_level + " mwtl" + a.max_wtnl + " ls " + a.getLose_streak() + " lscheck" + a.getLose_streak() % (a.wins_to_level + 1));
         return resultsList.toArray(new BattleResult[resultsList.size()]);
     }
 

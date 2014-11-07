@@ -361,7 +361,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                 } else {
                     dmgNumFnt.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
                     dmgNumFnt.draw(batch, dn.getCs(), dn.getX(), dn.getY() +  bf.getBounds(dn.getCs()).height);
-                    dn.update(1);
+                    dn.update();
                 }
             }
         }
@@ -374,7 +374,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                 } else {
                     dmgNumFnt.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
                     dmgNumFnt.draw(batch, dn.getCs(), dn.getX(), dn.getY() + bf.getBounds(dn.getCs()).height);
-                    dn.update(1);
+                    dn.update();
                 }
             }
         }

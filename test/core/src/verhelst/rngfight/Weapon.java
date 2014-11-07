@@ -35,7 +35,7 @@ public class Weapon extends Actor {
     private int max_damage, min_damage, hp_multiplier;
     private float life_steal;
 
-
+    int wdi_initWidth, sprite_initWidth;
     private final static Random rng = new Random();
 
     public static Weapon generateRandomWeapon(int lvl, Sprite tempSprite, POSITION position)
@@ -64,6 +64,8 @@ public class Weapon extends Actor {
     public Weapon(){
         this.setName("DummyWeap" + System.currentTimeMillis());
         this.sprite = Assets.getWeaponSprite();
+        this.sprite_initWidth = (int)sprite.getWidth();
+        this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
         this.posi = POSITION.LOOT_POSITION;
     }
 
@@ -75,6 +77,8 @@ public class Weapon extends Actor {
         this.min_damage = min_damage;
         this.life_steal = life_steal;
         this.sprite  = new Sprite(sprite);
+        this.sprite_initWidth = (int)sprite.getWidth();
+        this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
         this.posi = position;
     }
 
@@ -88,6 +92,8 @@ public class Weapon extends Actor {
         this.posi = position;
         //Copy the sprite so we aren't dependant on the external sprite
         this.sprite = new Sprite(sprite);
+        this.sprite_initWidth = (int)sprite.getWidth();
+        this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
     }
 
     public void copyWeapon(Weapon to_copy, POSITION posit){
@@ -99,6 +105,9 @@ public class Weapon extends Actor {
         this.life_steal = to_copy.life_steal;
         this.posi = posit;
         this.sprite = new Sprite(to_copy.getSprite());
+        this.sprite_initWidth = (int)to_copy.sprite_initWidth;
+        this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
+
     }
 
     public int getMax_damage() {
@@ -133,13 +142,15 @@ public class Weapon extends Actor {
 
         Sprite spr = sprite;
 
+        float padding = Assets.bf.getBounds("|||").width + 10;
+
+
         spr.setPosition(getX(), getY());
+        spr.setSize(getWidth() - padding, getHeight() - padding);
 
+        Sprite wdi = new Sprite(Assets.weapon_data_icon);
 
-        spr.setSize(getWidth(), getHeight());
-
-        Sprite wdi = Assets.weapon_data_icon;
-        wdi.setSize(wdi.getWidth() * getScaleX(), getHeight());
+        wdi.setSize( wdi_initWidth * (getWidth()/sprite_initWidth), getHeight());
         float wdi_offset = 0;
         int text_x_offset = 0;
         switch(this.posi){
@@ -162,7 +173,7 @@ public class Weapon extends Actor {
         Assets.wepNumFnt.setColor(Color.WHITE);
 
         //Damage Numbers
-        Assets.wepNumFnt.draw(batch, getMin_damage() + "-" + getMax_damage(), getX() + text_x_offset,getY() - 2 + getHeight());
+        Assets.wepNumFnt.draw(batch, getMin_damage() + "-" + getMax_damage(), getX() + text_x_offset, getY() - 2 + getHeight());
         //Health Mutlipler
         Assets.wepNumFnt.draw(batch, "" + getHp_multiplier(),getX() + text_x_offset,getY() - 2 + getHeight()/4*3);
         //Dmg Type

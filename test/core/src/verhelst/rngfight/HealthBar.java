@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -39,12 +40,17 @@ public class HealthBar extends Actor {
         this.initial_value = character.getInitial_health();
         health_scale = (initial_value/BASE == 0 ? 1 : initial_value/BASE);
         TextureAtlas skinAtlas = new TextureAtlas(Gdx.files.internal("data/uiskin.atlas"));
+        float height = Assets.HUDbf.getBounds("100").height;
 
         NinePatch bg = new NinePatch(skinAtlas.findRegion("default-round"), 5, 5, 4, 4);
+        bg.setMiddleHeight(height);
+        bg.setColor(Color.DARK_GRAY);
 
-        bg.setColor(Color.WHITE);
         NinePatch fg = new NinePatch(skinAtlas.findRegion("default-round"), 5, 5, 4, 4);
+
+
         fg.setColor(Color.RED);
+        fg.setMiddleHeight(height);
         background = new NinePatchDrawable(bg);
         foreground = new NinePatchDrawable(fg);
 
@@ -58,7 +64,6 @@ public class HealthBar extends Actor {
 
     public void setHealth_value(int health_value){
         this.health_value = health_value;
-
     }
 
     public void setInitial_value(int initial_value){
@@ -74,8 +79,12 @@ public class HealthBar extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        background.draw(batch, getX(), getY(), BASE * getScaleX(),  getHeight() * getScaleY());
-        foreground.draw(batch,getX(), getY(), health_value / health_scale, getHeight() * getScaleY());
+
+        background.draw(batch, getX(), getY(), BASE * getScaleX(), getHeight());
+        if(health_value > 0 )
+            foreground.draw(batch,getX(), getY(), health_value / health_scale, getHeight());
+
+        Assets.HUDbf.draw(batch, this.name + ": " + (health_value > 0 ? health_value : 0), getX(), getY() + Assets.HUDbf.getBounds(this.name).height + 1);
     }
 
     @Override

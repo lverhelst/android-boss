@@ -18,8 +18,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class BattleScreen implements Screen, InputProcessor {
 
-    BattleHUD bhud;
-    BattleView bView;
+     BattleView bView;
     Random rng;
     ConcurrentLinkedQueue<List<Integer>> bswNumList = new ConcurrentLinkedQueue<List<Integer>>();
 
@@ -51,10 +50,9 @@ public class BattleScreen implements Screen, InputProcessor {
         rng = new Random();
         statetime = 0f;
 
-        bhud = new BattleHUD(btl);
 
 
-        bView = new BattleView(btl, new Weapon(), new Weapon(), new Weapon());
+        bView = new BattleView(btl);
 
         Gdx.input.setInputProcessor(this);
     }
@@ -75,9 +73,9 @@ public class BattleScreen implements Screen, InputProcessor {
                         break;
                     case ShowStaticLoot:
                         showLoot = true;
-                        Weapon weapon = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION);
+                        Weapon weapon = Weapon.generateRandomWeapon(a.max_level, Assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION);
                         bView.setLoot(weapon);
-                        System.out.println("Showloot");
+                       // System.out.println("Showloot");
                         break;
                     case ShowRandomLoot:
                         //renderWeapon(loot = Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION), (int) w/2, (int) h/4, 0);
@@ -106,29 +104,20 @@ public class BattleScreen implements Screen, InputProcessor {
         if(!battling)
             handleBattleResults();
 
-        bhud.update(hits, anim_h1, anim_h2);
-        bhud.getStage().draw();
 
 
         Weapon aWep = btl.getLeftside().getEquipped_weapon();
         Weapon bWep = btl.getRightside().getEquipped_weapon();
 
         bView.updateCharacterWeapons(aWep, bWep);
-        bView.update(anim_h1, anim_h2, showLoot, brh.playerAmaxLvl);
+        bView.update(anim_h1, anim_h2, showLoot, a.max_level, message, hits);
         bView.renderDamageNumbers(RngFight.batch);
         bView.getStage().draw();
-        bView.renderMessage(message, RngFight.batch);
+
     }
 
     @Override
     public void resize(int width, int height) {
-
-
-        //Update Camera
-        bhud.getCamera().viewportWidth = width;
-        bhud.getCamera().viewportHeight = height;
-        bhud.getCamera().update();
-        bhud.getStage().getViewport().update(width, height, true);
 
         bView.getCamera().viewportWidth = width;
         bView.getCamera().viewportHeight = height;
@@ -191,7 +180,7 @@ public class BattleScreen implements Screen, InputProcessor {
             Vector2 vec = bView.getStage().screenToStageCoordinates(new Vector2(screenX, screenY));
             Actor tActor = bView.getStage().hit(vec.x, vec.y, true);
             if(tActor != null && tActor.getName() != null) {
-                System.out.println(tActor.getName() + " " + bView.lootWep.getName());
+               // System.out.println(tActor.getName() + " " + bView.lootWep.getName());
                 if (tActor.getName().equals(bView.lootWep.getName())) {
                     //Copy the weapon so that we aren't passing the reference
                     Weapon newWep = new Weapon();

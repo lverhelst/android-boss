@@ -16,6 +16,7 @@ public class Character extends Actor {
 
     private int min_dmg;
     private int max_dmg;
+    int max_level, max_wtnl;
     private static final int BASE_HEALTH = 200;
     private int initial_health;
     private int level;
@@ -27,7 +28,7 @@ public class Character extends Actor {
     private Random rng;
 
 
-    private int wins_to_level = 2;
+    int wins_to_level = 2;
     private int win_streak = 0;
     private int lose_streak = 0;
 
@@ -44,6 +45,8 @@ public class Character extends Actor {
         this.base_maxdmg = 10;
         this.max_dmg = this.base_maxdmg;
         level = 1;
+        max_level = 1;
+        max_wtnl = 0;
         if(sprite != null)
             this.sprite = new Sprite(sprite);
     }
@@ -105,7 +108,7 @@ public class Character extends Actor {
     }
 
     public void setEquipped_weapon(Weapon weapon) {
-        System.out.println("Weapon equipped " + name);
+        //System.out.println("Weapon equipped " + name);
         this.equipped_weapon = weapon;
         this.min_dmg = base_mindmg + weapon.getMin_damage();
         this.max_dmg = base_maxdmg + weapon.getMax_damage();
@@ -153,10 +156,11 @@ public class Character extends Actor {
     public void incrementWins()
     {
         this.win_streak++;
-        if(win_streak % (wins_to_level + 1) == wins_to_level){
+        if(win_streak % (wins_to_level + 2) == wins_to_level + 1){
             level--;
             level = Math.max(1, level);
         }
+
     }
     public void resetWins(){
         this.win_streak = 0;
@@ -164,8 +168,15 @@ public class Character extends Actor {
     public void incrementLosses()
     {
         this.lose_streak++;
-        if(lose_streak % (wins_to_level + 1) == wins_to_level){
+        if(lose_streak % wins_to_level == 0){
             level++;
+            System.out.println(name + " lvl up");
+            if(level > max_level)
+                max_wtnl = 0;
+            max_level = Math.max(max_level, level);
+        }
+        if(level == max_level){
+            max_wtnl = Math.max(max_wtnl, lose_streak % wins_to_level);
         }
     }
     public void resetLosses(){
