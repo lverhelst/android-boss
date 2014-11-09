@@ -47,7 +47,7 @@ public class Weapon extends Actor {
 
     }
 
-    public static Weapon generateScaledWeapon(int mindmg, int max_damage, int lvl, Sprite tempSprite, POSITION position)
+    public static Weapon generateScaledWeapon(int lvl, Sprite tempSprite, POSITION position)
     {
         double average_dmg = lvl; //(mindmg + max_damage )/2.0;
         int offset_roll = rng.nextInt(lvl);//(int)average_dmg - mindmg;
@@ -57,7 +57,7 @@ public class Weapon extends Actor {
         System.out.println("A,O,A-O,A+O: " + average_dmg + " " + offset_roll + " " +  min_dmg + " " +  max_dmg);
 
 
-        return new Weapon(min_dmg, max_dmg, DAMAGETYPE.NORMAL, Math.max(rng.nextInt(lvl)/3,1), (float)(0.1), tempSprite, position);
+        return new Weapon(min_dmg, max_dmg, DAMAGETYPE.NORMAL, Math.max(rng.nextInt(lvl)/3, Math.max(lvl/5,1)), (float)(0.1), tempSprite, position);
     }
 
     //Dummy Constructor
@@ -182,8 +182,8 @@ public class Weapon extends Actor {
         Assets.wepNumFnt.draw(batch, "" + (int)getLife_steal(), getX() + text_x_offset, getY() - 6 + getHeight()/4);
         //
         if(posi == POSITION.LOOT_POSITION) {
-            int text_y_offset = (int) Assets.wepNumFnt.getBounds("Tap to equip").height;
-            Assets.wepNumFnt.draw(batch, "Tap to equip", getX(), getY() + getHeight() + text_y_offset + 10);
+            int text_y_offset = (int) Assets.wepNumFnt.getBounds("Drag to equip").height;
+            Assets.wepNumFnt.draw(batch, "Drag to equip", getX(), getY() + getHeight() + text_y_offset + 10);
         }
 
         spr.draw(batch);

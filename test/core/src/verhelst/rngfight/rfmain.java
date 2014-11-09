@@ -227,7 +227,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                 }
                 max_boss_level = Math.max(max_boss_level, a.getLevel());
                 if(b.isWeaponEquipped())
-                    a.setEquipped_weapon(Weapon.generateScaledWeapon(b.getEquipped_weapon().getMin_damage(), b.getEquipped_weapon().getMax_damage(), a.getLevel(), assets.getWeaponSprite(), Weapon.POSITION.LEFT_POSITION));
+                    a.setEquipped_weapon(Weapon.generateScaledWeapon( a.getLevel(), assets.getWeaponSprite(), Weapon.POSITION.LEFT_POSITION));
                 else
                     a.setEquipped_weapon(Weapon.generateRandomWeapon(a.getLevel(), assets.getWeaponSprite(),Weapon.POSITION.LEFT_POSITION));
 
@@ -238,7 +238,7 @@ public class rfmain extends ApplicationAdapter implements InputProcessor, Applic
                 a.setLevel(Math.max(a.getLevel() - 1,1));
                 b.resetLosses();
                 if(b.isWeaponEquipped())
-                    a.setEquipped_weapon(Weapon.generateScaledWeapon(b.getEquipped_weapon().getMin_damage(), b.getEquipped_weapon().getMax_damage(), a.getLevel(),assets.getWeaponSprite(),Weapon.POSITION.LEFT_POSITION));
+                    a.setEquipped_weapon(Weapon.generateScaledWeapon( a.getLevel(),assets.getWeaponSprite(),Weapon.POSITION.LEFT_POSITION));
                 else
                     a.setEquipped_weapon(Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite(),Weapon.POSITION.LEFT_POSITION));
 

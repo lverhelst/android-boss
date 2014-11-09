@@ -33,10 +33,8 @@ public class BattleResultHandler {
             b.resetLosses();
 
 
-            if(hitcount % 2 == 0) {
-                resultsList.add(BattleResult.ShowStaticLoot);
-            }
-            else if(hitcount % 13 == 0) {
+
+             if(hitcount % 13 == 0) {
                 resultsList.add(BattleResult.ShowRandomLoot);
             }
         }else{
@@ -49,7 +47,9 @@ public class BattleResultHandler {
             resultsList.add(BattleResult.Player1GetsLoot);
         }
 
-
+        if(hitcount % 2 == 0 || true) {
+            resultsList.add(BattleResult.ShowStaticLoot);
+        }
 
 
         //Deal with hitcount
@@ -60,12 +60,5 @@ public class BattleResultHandler {
         System.out.println("        CL " + a.getLevel() + " ws " + a.getWin_streak() + " ml" + a.max_level + " mwtl" + a.max_wtnl + " ls " + a.getLose_streak() + " lscheck" + a.getLose_streak() % (a.wins_to_level + 1));
         return resultsList.toArray(new BattleResult[resultsList.size()]);
     }
-
-    public Weapon getLoot(Character left){
-        return Weapon.generateRandomWeapon(left.getLevel(), Assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION);
-    }
-
-
-
 
 }

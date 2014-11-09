@@ -54,37 +54,22 @@ public class HealthBar extends Actor {
         background = new NinePatchDrawable(bg);
         foreground = new NinePatchDrawable(fg);
 
-
     }
 
-    public void resetHP(){
-        this.health_value = initial_value;
 
-    }
 
     public void setHealth_value(int health_value){
         this.health_value = health_value;
     }
 
-    public void setInitial_value(int initial_value){
-        this.initial_value = initial_value;
-        this.health_value = initial_value;
-        this.health_scale  = initial_value/BASE;
-
-    }
-
-    private void updateNameAndHealth(){
-        nameAndHealth.setText(this.name + ": " + this.health_value);
-    }
-
     @Override
     public void draw(Batch batch, float parentAlpha) {
 
-        background.draw(batch, getX(), getY(), BASE * getScaleX(), getHeight());
+        background.draw(batch, getX(), getY(), character.getInitial_health()/character.getBase_health() * getScaleX(), getHeight());
         if(health_value > 0 )
-            foreground.draw(batch,getX(), getY(), health_value / health_scale, getHeight());
+            foreground.draw(batch,getX(), getY(), character.getHealth() / (character.getInitial_health()/character.getBase_health()), getHeight());
 
-        Assets.HUDbf.draw(batch, this.name + ": " + (health_value > 0 ? health_value : 0), getX(), getY() + Assets.HUDbf.getBounds(this.name).height + 1);
+        Assets.HUDbf.draw(batch, this.name + ": " + ( character.getHealth()  > 0 ?  character.getHealth()  : 0), getX(), getY() + Assets.HUDbf.getBounds( character.getName()).height + 1);
     }
 
     @Override

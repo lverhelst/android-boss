@@ -23,6 +23,7 @@ public class Assets {
     public static Sprite weapon_data_icon;
     public static Sprite resting_face;
     public static Sprite dead_face;
+    public static Sprite arm;
     public static Sprite[] faces;
     public static BitmapFont wepNumFnt;
     public static BitmapFont dmgNumFnt;
@@ -66,6 +67,10 @@ public class Assets {
 
         Texture wepimg = new Texture("swurd.png");
         wepimg.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        Texture armImg = new Texture("In Development\\arm.png");
+        armImg.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        arm = new Sprite(armImg);
 
         Sprite weptemp = new Sprite(wepimg);
         weapons_sprites.add(weptemp);

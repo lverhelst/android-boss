@@ -1,6 +1,9 @@
 package verhelst.rngfight;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.Random;
@@ -189,6 +192,7 @@ public class Character extends Actor {
         return lose_streak;
     }
 
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         Sprite spr = getSpriteForHP(health);
@@ -197,5 +201,50 @@ public class Character extends Actor {
         spr.setSize(getWidth(), getHeight());
         spr.setScale(getScaleX(), getScaleY());
         spr.draw(batch);
+
+        if(BattleScreen.battling)
+            this.drawAttack(batch, rotation += (Math.PI * 4));
+        else
+            this.drawAttack(batch, rotation = 0);
+
+
+
+
     }
-}
+
+    double rotation = 0;
+
+    private void drawAttack(Batch batch, double rot){
+
+        Sprite test = Assets.arm;
+        test.setSize(100,10);
+
+        int joint1x = (int)(getX() + getWidth()/2);
+        int joint1y = (int)(getY());
+        int joint1rotation = 180 + (int)(Math.sin(Math.toRadians(rot)) * 20);
+
+        test.setPosition(joint1x,joint1y);
+        test.setRotation(joint1rotation);
+        int joint2x = (int)(joint1x + Math.cos(Math.toRadians(joint1rotation)) * test.getWidth());
+        int joint2y = (int)(joint1y + Math.sin(Math.toRadians(joint1rotation)) * test.getWidth());
+
+        if(isWeaponEquipped()) {
+
+            int joint2rotation = 270 + joint1rotation;
+
+            Sprite test2 = new Sprite(this.getEquipped_weapon().getSprite());
+            test2.setSize(32,32);
+          //  test2.setScale((float)0.5, (float)0.5);
+          //  test2.setOrigin(test.getWidth()/4, test.getHeight()/2);
+            test2.setPosition(joint2x + test2.getWidth()/2, joint2y);
+            test2.setRotation(270 + joint2rotation);
+            test2.draw(batch);
+        }
+         test.draw(batch);
+
+
+
+        batch.begin();
+
+    }
+ }

@@ -32,9 +32,12 @@ public class BattleScreen implements Screen, InputProcessor {
     Character a;
     Character a2;
     String message;
-    boolean showLoot,battling;
+    boolean showLoot;
+    public static boolean battling;
     public static float statetime;
     int hits = 0, anim_h1, anim_h2;
+
+    Weapon dragme;
 
 
 
@@ -85,7 +88,7 @@ public class BattleScreen implements Screen, InputProcessor {
                         //dmgNumberOverride = 101;
                         break;
                     case Player1GetsLoot:
-                        btl.getLeftside().setEquipped_weapon(brh.getLoot(btl.getLeftside()));
+                        btl.getLeftside().setEquipped_weapon(Weapon.generateScaledWeapon(a.getLevel(), Assets.getWeaponSprite(), Weapon.POSITION.LEFT_POSITION));
                         break;
                 }
             }
@@ -111,7 +114,7 @@ public class BattleScreen implements Screen, InputProcessor {
 
         bView.updateCharacterWeapons(aWep, bWep);
         bView.update(anim_h1, anim_h2, showLoot, a.max_level, message, hits);
-        bView.renderDamageNumbers(RngFight.batch);
+      //  bView.renderDamageNumbers(RngFight.batch);
         bView.getStage().draw();
 
     }
@@ -170,25 +173,58 @@ public class BattleScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(showLoot){
+            //check to see if touch aligns with displayed loot, if so, equip on player
+            Vector2 vec = bView.getStage().screenToStageCoordinates(new Vector2(screenX, screenY));
+            Actor tActor = bView.getStage().hit(vec.x, vec.y, true);
+            if(tActor != null && tActor.getName() != null) {
+                // System.out.println(tActor.getName() + " " + bView.lootWep.getName());
+                if (tActor.getName().equals(bView.lootWep.getName())) {
+                    //Copy the weapon so that we aren't passing the reference
+                    dragme = new Weapon();
+                    dragme.copyWeapon(bView.lootWep, Weapon.POSITION.RIGHT_POSITION);
+                    bView.getStage().addActor(dragme);
+
+                }
+            }
+        }
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
         if(showLoot){
             //check to see if touch aligns with displayed loot, if so, equip on player
             Vector2 vec = bView.getStage().screenToStageCoordinates(new Vector2(screenX, screenY));
             Actor tActor = bView.getStage().hit(vec.x, vec.y, true);
             if(tActor != null && tActor.getName() != null) {
                // System.out.println(tActor.getName() + " " + bView.lootWep.getName());
-                if (tActor.getName().equals(bView.lootWep.getName())) {
+               /* if (tActor.getName().equals(bView.lootWep.getName())) {
                     //Copy the weapon so that we aren't passing the reference
                     Weapon newWep = new Weapon();
                     newWep.copyWeapon(bView.lootWep, Weapon.POSITION.RIGHT_POSITION);
                     btl.getRightside().setEquipped_weapon(newWep);
+
+                }*/
+                if(tActor instanceof Character && dragme != null){
+                    Character chr = (Character)tActor;
+                    if(chr.getName().equals("Enemy2")) {
+                        //Copy the weapon so that we aren't passing the reference
+                        Weapon newWep = new Weapon();
+                        newWep.copyWeapon(bView.lootWep, Weapon.POSITION.RIGHT_POSITION);
+                        btl.getRightside().setEquipped_weapon(newWep);
+                    }
                 }
+
             }
+
+
+
         }
+        if(dragme != null)
+             dragme.remove();
+        dragme = null;
         if(!battling){
             message = "";
             battling = true;
@@ -244,7 +280,15 @@ public class BattleScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+
+
+        System.out.println(screenX + " h:" + screenY);
+        if(dragme != null)
+        dragme.setPosition(screenX, Gdx.graphics.getHeight() - screenY);
+
+
         return false;
+
     }
 
     @Override
