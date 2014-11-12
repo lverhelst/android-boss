@@ -214,37 +214,36 @@ public class Character extends Actor {
 
     double rotation = 0;
 
-    private void drawAttack(Batch batch, double rot){
+    private void drawAttack(Batch batch, double rot)        {
 
-        Sprite test = Assets.arm;
-        test.setSize(100,10);
+            Sprite test = Assets.arm;
+            test.setSize(100,10);
 
-        int joint1x = (int)(getX() + getWidth()/2);
-        int joint1y = (int)(getY());
-        int joint1rotation = 180 + (int)(Math.sin(Math.toRadians(rot)) * 20);
+            int joint1x = (int)(getX() + getWidth()/2);
+            int joint1y = (int)(getY());
+            int joint1rotation = 180 + (int)(Math.sin(Math.toRadians(rot)) * 20);
 
-        test.setPosition(joint1x,joint1y);
-        test.setRotation(joint1rotation);
-        int joint2x = (int)(joint1x + Math.cos(Math.toRadians(joint1rotation)) * test.getWidth());
-        int joint2y = (int)(joint1y + Math.sin(Math.toRadians(joint1rotation)) * test.getWidth());
+            test.setPosition(joint1x,joint1y);
+            test.setRotation(joint1rotation);
+            int joint2x = (int)(joint1x + Math.cos(Math.toRadians(joint1rotation)) * test.getWidth());
+            int joint2y = (int)(joint1y + Math.sin(Math.toRadians(joint1rotation)) * test.getWidth());
 
-        if(isWeaponEquipped()) {
+            if(isWeaponEquipped()) {
 
-            int joint2rotation = 270 + joint1rotation;
+                int joint2rotation = 270 + joint1rotation;
 
-            Sprite test2 = new Sprite(this.getEquipped_weapon().getSprite());
-            test2.setSize(32,32);
-          //  test2.setScale((float)0.5, (float)0.5);
-          //  test2.setOrigin(test.getWidth()/4, test.getHeight()/2);
-            test2.setPosition(joint2x + test2.getWidth()/2, joint2y);
-            test2.setRotation(270 + joint2rotation);
-            test2.draw(batch);
+                Sprite test2 = new Sprite(this.getEquipped_weapon().getSprite());
+                test2.setSize(32,32);
+                //  test2.setScale((float)0.5, (float)0.5);
+                //  test2.setOrigin(test.getWidth()/4, test.getHeight()/2);
+                test2.setPosition(joint2x + test2.getWidth()/2, joint2y);
+                test2.setRotation(270 + joint2rotation);
+                test2.draw(batch);
+            }
+            test.draw(batch);
+
+
+
+
         }
-         test.draw(batch);
-
-
-
-        batch.begin();
-
-    }
  }

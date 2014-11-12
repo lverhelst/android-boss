@@ -17,7 +17,8 @@ public class RngFight extends com.badlogic.gdx.Game{
         Assets assets = new Assets();
         batch = new SpriteBatch();
 
-        setScreen(new BattleScreen());
+       // setScreen(new BattleScreen());
+        setScreen(new TestScreen());
     }
 
     @Override
