@@ -1,6 +1,5 @@
 package verhelst.bones;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.ArrayList;
@@ -10,47 +9,62 @@ import java.util.ArrayList;
  */
 public class Joint {
 
-        float offset_x, offset_y;
-        double rotation;
-        double length;
 
+
+    private double angle;
+        double length;
+        String name;
         Joint parent;
         ArrayList<Joint> children;
 
-        public Joint(float xOffset, float yOffset, Joint parent){
-            this.offset_x = xOffset;
-            this.offset_y = yOffset;
+        public Joint(double angle_degrees, double length, String name){
+
             this.children = new ArrayList<Joint>();
-            if(parent != null) {
-                this.offset_x += parent.offset_x;
-                this.offset_y += parent.offset_y;
-            }
-            this.parent = parent;
-            //Pythagorous to get length
-            this.length = Math.sqrt(xOffset * xOffset + yOffset * yOffset);
-            //rotation
-            if(yOffset != 0 && xOffset != 0)
-                this.rotation = Math.atan(xOffset/yOffset);
-            else
-                this.rotation = 0;
-            System.out.println("x" + offset_x + " y" + offset_y );
+            this.angle = angle_degrees;
+            this.length = length;
+            this.name = name;
         }
 
         public void addChild(Joint b){
+            b.setParent(this);
             children.add(b);
+
         }
 
-        public void render(ShapeRenderer sr){
+        public void setParent(Joint par){
+            this.parent = par;
+
+        }
+
+        public void adjustAngle(double deg){
+            this.angle = ((angle + deg) % 360);
+            for(Joint j : children)
+                j.adjustAngle(deg);
+        }
+
+
+        public void renderSkeleton(ShapeRenderer sr, float x, float y){
+
+
+            float offx = x + (float)(Math.cos(Math.toRadians(this.angle)) * length);
+            float offy = y + (float)(Math.sin(Math.toRadians(this.angle)) * length);
+
             if(parent != null){
-                //System.out.println(parent.offset_x + " " + offset_x + " " + parent.offset_y + " " + offset_y) ;
-                sr.line(parent.offset_x, parent.offset_y, offset_x, offset_y);
+                //System.out.println(x + " " + y + " " + offx + " " + offy) ;
+                sr.line(x, y, offx, offy);
 
             }else{
-                sr.rect(this.offset_x, this.offset_y, 2 , 2);
+
+                sr.rect(x, y, 2 , 2);
             }
             for(Joint j : children) {
-                j.render(sr);
+
+                j.renderSkeleton(sr, offx, offy);
             }
+        }
+
+        public String toString(){
+            return this.name;
         }
 
         public void print(){
@@ -58,5 +72,17 @@ public class Joint {
             for(Joint j : children){
                 j.print();
             }
+        }
+
+        public double getAngle() {
+            return angle;
+        }
+
+        public void setAngle(double angle) {
+
+            int adjustment = (int)(angle - this.angle);
+            System.out.println("adj: " + adjustment);
+            this.adjustAngle(adjustment);
+
         }
 }
