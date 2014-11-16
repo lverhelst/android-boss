@@ -1,17 +1,21 @@
 package verhelst.bones;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.ArrayList;
+
+import verhelst.rngfight.Assets;
 
 /**
  * Created by Orion on 11/8/2014.
  */
 public class Joint {
 
+        Sprite testS;
 
-
-    private double angle;
+        private double angle;
         double length;
         String name;
         Joint parent;
@@ -23,6 +27,9 @@ public class Joint {
             this.angle = angle_degrees;
             this.length = length;
             this.name = name;
+            testS = new Sprite(Assets.findSpriteForName(name));
+            if(!name.equals("head"))
+                testS.setSize((int) length, 8);
         }
 
         public void addChild(Joint b){
@@ -51,7 +58,7 @@ public class Joint {
 
             if(parent != null){
                 //System.out.println(x + " " + y + " " + offx + " " + offy) ;
-                sr.line(x, y, offx, offy);
+                sr.rectLine(x, y, offx, offy, 8);
 
             }else{
 
@@ -62,6 +69,29 @@ public class Joint {
                 j.renderSkeleton(sr, offx, offy);
             }
         }
+
+        public void renderWithSprites(Batch batch, float x, float y){
+
+            float offx = x + (float)(Math.cos(Math.toRadians(this.angle)) * length);
+            float offy = y + (float)(Math.sin(Math.toRadians(this.angle)) * length);
+
+            this.testS.setOrigin(0,0);
+            this.testS.setPosition(x, y);
+
+
+            this.testS.setRotation((float)angle);
+
+            this.testS.draw(batch);
+
+            System.out.println(x + " " + y + " " + offx + " " + offy + " " + angle) ;
+
+            for(Joint j : children) {
+
+                j.renderWithSprites(batch, offx, offy);
+            }
+
+        }
+
 
         public String toString(){
             return this.name;
@@ -81,7 +111,7 @@ public class Joint {
         public void setAngle(double angle) {
 
             int adjustment = (int)(angle - this.angle);
-            System.out.println("adj: " + adjustment);
+          //  System.out.println("adj: " + adjustment);
             this.adjustAngle(adjustment);
 
         }

@@ -49,7 +49,7 @@ public class Assets {
         }
 
         //Load Weapon Sprites
-        //TODO: Make more weapon sprites, loop over sprite sheet
+        //TODO: Make more weapon sprites
         Texture wepspritepack = new Texture("In Development\\Weapon_Sprites_PaintNet.png");
         TextureRegion wep_temp = new TextureRegion(wepspritepack);
         TextureRegion[][] wep_sprites = wep_temp.split(33,34);
@@ -65,15 +65,15 @@ public class Assets {
             }
         }
 
-        Texture wepimg = new Texture("swurd.png");
-        wepimg.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+      //  Texture wepimg = new Texture("swurd.png");
+      //  wepimg.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         Texture armImg = new Texture("In Development\\arm.png");
         armImg.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         arm = new Sprite(armImg);
 
-        Sprite weptemp = new Sprite(wepimg);
-        weapons_sprites.add(weptemp);
+      //  Sprite weptemp = new Sprite(wepimg);
+     //   weapons_sprites.add(weptemp);
         //Weapon Data Icon (For UI)
         weapon_data_icon = new Sprite(new Texture("wepdataicon.png"));
 
@@ -95,5 +95,19 @@ public class Assets {
     public static Sprite getWeaponSprite(){
         Random rng = new Random();
         return weapons_sprites.get(rng.nextInt(weapons_sprites.size()));
+    }
+
+    public static Sprite findSpriteForName(String name){
+        if(name.equals("head"))
+            return resting_face;
+        if(name.equals("shoulder"))
+            return arm;
+        if(name.equals("leg"))
+            return arm;
+        if(name.equals("torso"))
+            return arm;
+        if(name.equals("wrist"))
+            return getWeaponSprite();
+        return arm;
     }
 }

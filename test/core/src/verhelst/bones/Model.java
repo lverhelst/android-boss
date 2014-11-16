@@ -10,7 +10,7 @@ public class Model {
 
 
     //TODO: Loadable animations
-    //But seriously, the stabbing doesn't need work.
+    //But seriously, the stabbing is grand
     Joint root;
 
     ShapeRenderer sr = new ShapeRenderer();
@@ -22,36 +22,41 @@ public class Model {
         this.originy = abs_y;
 
         root = new Joint(0,0, "root");
-        root.addChild(new Joint(-90,10, "shoulder"));
-        root.children.get(0).addChild(new Joint(180,10,"elbow"));
-        root.children.get(0).children.get(0).addChild(new Joint(180,25, "wrist"));
-        root.addChild(new Joint(-90, 20, "torso"));
-        root.children.get(1).addChild(new Joint(-90,20, "leg"));
-        root.addChild(new Joint(90,5, "head"));
+        root.addChild(new Joint(-90, 32, "torso"));
+        root.children.get(0).addChild(new Joint(-90,32, "leg"));
+        root.addChild(new Joint(-90,16, "shoulder"));
+        root.children.get(1).addChild(new Joint(180,16,"elbow"));
+        root.children.get(1).children.get(0).addChild(new Joint(180,32, "wrist"));
+
+        root.addChild(new Joint(0,32, "head"));
         root.print();
     }
 
     public void render(Batch batch){
-
+        batch.end();
         sr.begin(ShapeRenderer.ShapeType.Line);
 
-        Joint shoulder = root.children.get(0);
+        Joint shoulder = root.children.get(1);
         if(Math.abs(shoulder.getAngle()) < 180){
-            shoulder.adjustAngle(-30);
+            shoulder.adjustAngle(-15);
         }else{
             shoulder.setAngle(-90);
         }
         Joint elbow = shoulder.children.get(0);
-        System.out.println(elbow.getAngle());
+      //  System.out.println(elbow.getAngle());
         if(Math.abs(elbow.getAngle()) < 270){
-            elbow.adjustAngle(30);
+            elbow.adjustAngle(15);
         }else
         {
             elbow.setAngle(180);
         }
 
-        root.renderSkeleton(sr, originx, originy);
+        //root.renderSkeleton(sr, originx, originy);
+
+
         sr.end();
+        batch.begin();
+        root.renderWithSprites(batch, originx, originy);
     }
 
 }

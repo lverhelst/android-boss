@@ -22,8 +22,11 @@ public class TestScreen implements Screen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        RngFight.batch.begin();
         m.render(RngFight.batch);
+        RngFight.batch.end();
     }
+
 
     @Override
     public void resize(int width, int height) {
