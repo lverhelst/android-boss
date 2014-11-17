@@ -14,7 +14,7 @@ public class TestScreen implements Screen {
     Model m;
 
     public TestScreen(){
-        m = new Model(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+        m = new Model(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, false, 96);
     }
 
 

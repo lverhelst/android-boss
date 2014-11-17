@@ -44,6 +44,7 @@ public class BattleScreen implements Screen, InputProcessor {
     public BattleScreen(){
         a = new Character("Enemy", Assets.resting_face);
         a2 = new Character("Enemy2", Assets.resting_face);
+
         anim_h1 = a.getHealth();
         anim_h2 = a2.getHealth();
         message = "";
@@ -114,7 +115,9 @@ public class BattleScreen implements Screen, InputProcessor {
 
         bView.updateCharacterWeapons(aWep, bWep);
         bView.update(anim_h1, anim_h2, showLoot, a.max_level, message, hits);
-      //  bView.renderDamageNumbers(RngFight.batch);
+        bView.renderDamageNumbers(RngFight.batch);
+
+
         bView.getStage().draw();
 
     }
@@ -199,7 +202,9 @@ public class BattleScreen implements Screen, InputProcessor {
             Vector2 vec = bView.getStage().screenToStageCoordinates(new Vector2(screenX, screenY));
             Actor tActor = bView.getStage().hit(vec.x, vec.y, true);
             if(tActor != null && tActor.getName() != null) {
-               // System.out.println(tActor.getName() + " " + bView.lootWep.getName());
+
+
+               System.out.println(tActor.getName() + " " + bView.lootWep.getName());
                /* if (tActor.getName().equals(bView.lootWep.getName())) {
                     //Copy the weapon so that we aren't passing the reference
                     Weapon newWep = new Weapon();
@@ -214,6 +219,7 @@ public class BattleScreen implements Screen, InputProcessor {
                         Weapon newWep = new Weapon();
                         newWep.copyWeapon(bView.lootWep, Weapon.POSITION.RIGHT_POSITION);
                         btl.getRightside().setEquipped_weapon(newWep);
+                        System.out.println("QUEIROASDAS");
                     }
                 }
 

@@ -34,7 +34,11 @@ public class BattleResultHandler {
 
 
 
-             if(hitcount % 13 == 0) {
+            if(hitcount % 3  == 0) {
+                resultsList.add(BattleResult.ShowStaticLoot);
+            }
+
+            if(hitcount % 13 == 0) {
                 resultsList.add(BattleResult.ShowRandomLoot);
             }
         }else{
@@ -45,10 +49,6 @@ public class BattleResultHandler {
 
         if(hitcount % 2 == 1) {
             resultsList.add(BattleResult.Player1GetsLoot);
-        }
-
-        if(hitcount % 2 == 0 || true) {
-            resultsList.add(BattleResult.ShowStaticLoot);
         }
 
 

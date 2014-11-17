@@ -23,7 +23,7 @@ public class Assets {
     public static Sprite weapon_data_icon;
     public static Sprite resting_face;
     public static Sprite dead_face;
-    public static Sprite arm;
+    public static Sprite arm, pants, shirt, tempface, shoulder;
     public static Sprite[] faces;
     public static BitmapFont wepNumFnt;
     public static BitmapFont dmgNumFnt;
@@ -50,7 +50,7 @@ public class Assets {
 
         //Load Weapon Sprites
         //TODO: Make more weapon sprites
-        Texture wepspritepack = new Texture("In Development\\Weapon_Sprites_PaintNet.png");
+        Texture wepspritepack = new Texture(Gdx.files.internal("In Development\\Weapon_Sprites_PaintNet.png"));
         TextureRegion wep_temp = new TextureRegion(wepspritepack);
         TextureRegion[][] wep_sprites = wep_temp.split(33,34);
         int x_offset = 1;
@@ -68,14 +68,20 @@ public class Assets {
       //  Texture wepimg = new Texture("swurd.png");
       //  wepimg.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-        Texture armImg = new Texture("In Development\\arm.png");
+        Texture armImg = new Texture(Gdx.files.internal("In Development\\arm.png"));
         armImg.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         arm = new Sprite(armImg);
 
       //  Sprite weptemp = new Sprite(wepimg);
      //   weapons_sprites.add(weptemp);
         //Weapon Data Icon (For UI)
-        weapon_data_icon = new Sprite(new Texture("wepdataicon.png"));
+        shoulder = new Sprite(new Texture(Gdx.files.internal("In Development\\shoulder.png")));
+        pants =  new Sprite(new Texture(Gdx.files.internal("In Development\\pants.png")));
+        shirt =  new Sprite(new Texture(Gdx.files.internal("In Development\\Shirt.png")));
+        tempface =  new Sprite(new Texture(Gdx.files.internal("In Development\\tempface.png")));
+
+
+        weapon_data_icon = new Sprite(new Texture(Gdx.files.internal("wepdataicon.png")));
 
         FreeTypeFontGenerator ftfg = new FreeTypeFontGenerator(Gdx.files.internal("game_font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter ftfp = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -99,13 +105,13 @@ public class Assets {
 
     public static Sprite findSpriteForName(String name){
         if(name.equals("head"))
-            return resting_face;
+            return tempface;
         if(name.equals("shoulder"))
-            return arm;
+            return shoulder;
         if(name.equals("leg"))
-            return arm;
+            return pants;
         if(name.equals("torso"))
-            return arm;
+            return shirt;
         if(name.equals("wrist"))
             return getWeaponSprite();
         return arm;

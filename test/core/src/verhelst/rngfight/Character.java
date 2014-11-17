@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.Random;
 
+import verhelst.bones.Model;
+
 /**
  * Created by Orion on 10/16/2014.
  */
@@ -40,6 +42,8 @@ public class Character extends Actor {
     //Use otherY
     public int otherY = 0;
 
+    private Model m;
+
     public Character(String name, Sprite sprite){
         rng = new Random();
         this.name = name;
@@ -52,6 +56,13 @@ public class Character extends Actor {
         max_wtnl = 0;
         if(sprite != null)
             this.sprite = new Sprite(sprite);
+
+        if(name.equals("Enemy")) {
+            m = new Model((int)(getX() + getWidth()/2), (int)(getY() + getHeight()), true, getHeight());
+            m.isFlipped = true;
+            m.flip();
+        }else
+            m = new Model((int)(getX() + getWidth()/2), (int)(getY() + getHeight()), false, getHeight());
     }
 
     public void setSprite(Sprite sp){
@@ -116,6 +127,9 @@ public class Character extends Actor {
         this.min_dmg = base_mindmg + weapon.getMin_damage();
         this.max_dmg = base_maxdmg + weapon.getMax_damage();
         this.health = this.BASE_HEALTH * weapon.getHp_multiplier();// * this.level;
+
+        m.updateSprite("wrist", weapon.getSprite());
+
     }
 
     public boolean isWeaponEquipped()
@@ -195,7 +209,7 @@ public class Character extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        Sprite spr = getSpriteForHP(health);
+        /*Sprite spr = getSpriteForHP(health);
         otherY = (int)getY();
         spr.setPosition(getX(), getY());
         spr.setSize(getWidth(), getHeight());
@@ -207,7 +221,12 @@ public class Character extends Actor {
         else
             this.drawAttack(batch, rotation = 0);
 
+        */
+        otherY = (int)getY();
 
+        m.originx = (int)(getX() + getWidth()/2);
+        m.originy = (int)(getY() + getHeight()/2);
+        m.render(batch);
 
 
     }

@@ -141,6 +141,7 @@ public class BattleView {
             row2pt2.row();
             row2pt2.setDebug(debug);
         row2.add(row2pt2).expand().fill(); //Stars A
+
         row2.add(battle.getLeftside()).expand().fill().left();  //Char A
         row2.add(battle.getRightside()).expand().fill().right(); //Char B
         row2.add(r3c5).expand().left(); //Stars B
@@ -284,11 +285,10 @@ public class BattleView {
     }
 
 
-    public void update(int lefthp, int righthp, boolean showLoot, int aMax, String message, int hits){
+            public void update(int lefthp, int righthp, boolean showLoot, int aMax, String message, int hits){
         b.getLeftside().setHealth(lefthp);
+
         b.getRightside().setHealth(righthp);
-
-
 
         lootWep.setVisible(showLoot);
         String line = "";

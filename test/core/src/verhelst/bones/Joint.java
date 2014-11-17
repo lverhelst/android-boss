@@ -20,16 +20,19 @@ public class Joint {
         String name;
         Joint parent;
         ArrayList<Joint> children;
+        boolean isFlipped;
 
-        public Joint(double angle_degrees, double length, String name){
+        public Joint(double angle_degrees, double length, String name, boolean flip){
 
             this.children = new ArrayList<Joint>();
             this.angle = angle_degrees;
             this.length = length;
             this.name = name;
+
             testS = new Sprite(Assets.findSpriteForName(name));
-            if(!name.equals("head"))
-                testS.setSize((int) length, 8);
+            testS.flip(false, flip);
+            testS.setSize(testS.getWidth() * Model.scale, testS.getHeight() * Model.scale);
+            this.isFlipped = flip;
         }
 
         public void addChild(Joint b){
@@ -58,7 +61,9 @@ public class Joint {
 
             if(parent != null){
                 //System.out.println(x + " " + y + " " + offx + " " + offy) ;
-                sr.rectLine(x, y, offx, offy, 8);
+                sr.rectLine(x, y, offx, offy, 1);
+
+
 
             }else{
 
@@ -75,15 +80,37 @@ public class Joint {
             float offx = x + (float)(Math.cos(Math.toRadians(this.angle)) * length);
             float offy = y + (float)(Math.sin(Math.toRadians(this.angle)) * length);
 
-            this.testS.setOrigin(0,0);
+            this.testS.setOrigin(0,0 + testS.getHeight()/2);
+            if(name.equals("shoulder")){
+               // y -= testS.getHeight()/2;
+                //offy -= testS.getHeight()/2;
+                if(!isFlipped)
+                x += testS.getWidth()/4;
+            }
+            if(name.equals("elbow")){
+                if(!isFlipped) {
+                    x += testS.getWidth() / 4;
+                    offx += testS.getWidth() / 4;
+                }
+            }
+            if(name.equals("wrist") ){
+
+                    y -= testS.getHeight() / 4;
+                    offy -= testS.getHeight() / 4;
+                if(!isFlipped) {
+                x += testS.getWidth()/4;
+                offx += testS.getWidth()/4;}
+            }
+
             this.testS.setPosition(x, y);
 
 
             this.testS.setRotation((float)angle);
 
-            this.testS.draw(batch);
+            if(!name.equals("root"))
+                this.testS.draw(batch);
 
-            System.out.println(x + " " + y + " " + offx + " " + offy + " " + angle) ;
+
 
             for(Joint j : children) {
 
@@ -92,6 +119,11 @@ public class Joint {
 
         }
 
+
+        public void flip(){
+            //fliiiip
+            angle = 180 - angle;
+        }
 
         public String toString(){
             return this.name;
