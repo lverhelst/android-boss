@@ -49,8 +49,8 @@ public class Weapon extends Actor {
 
     public static Weapon generateScaledWeapon(int lvl, Sprite tempSprite, POSITION position)
     {
-        double average_dmg = lvl; //(mindmg + max_damage )/2.0;
-        int offset_roll = rng.nextInt(lvl);//(int)average_dmg - mindmg;
+        double average_dmg = Math.pow(lvl,1.11); //(mindmg + max_damage )/2.0;
+        int offset_roll = rng.nextInt((int)average_dmg);//(int)average_dmg - mindmg;
         int min_dmg = (int)Math.min(lvl, average_dmg - offset_roll);
         int max_dmg = (int)Math.min(lvl * 2, average_dmg + offset_roll);
 
