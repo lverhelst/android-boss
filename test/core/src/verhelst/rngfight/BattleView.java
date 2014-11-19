@@ -177,7 +177,7 @@ public class BattleView {
 
         row4.add(statsTable).expand().fill();
         row4.add(new Label("", skin)).expand().fill();
-        row4.add(lootWep).center().top().expand().fill().pad(PADDING); //LOOT
+        row4.add(lootWep.getTable(skin)).center().top().expand().fill().pad(PADDING); //LOOT
         row4.add(new Label("", skin)).expand().fill();
         row4.add(new Label("", skin)).expand().fill();
         rootTable.add(row4).expand().fill();

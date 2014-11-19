@@ -1,9 +1,13 @@
 package verhelst.rngfight;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import java.util.Random;
 
@@ -29,6 +33,8 @@ public class Weapon extends Actor {
 
 
     private Sprite sprite;
+    private Label lldmg, llhrt;
+    private String dmgstring, heartstring;
 
     private DAMAGETYPE extra_type;
     private POSITION posi;
@@ -36,6 +42,8 @@ public class Weapon extends Actor {
     private float life_steal;
 
     int wdi_initWidth, sprite_initWidth;
+
+
     private final static Random rng = new Random();
 
     public static Weapon generateRandomWeapon(int lvl, Sprite tempSprite, POSITION position)
@@ -94,6 +102,13 @@ public class Weapon extends Actor {
         this.sprite = new Sprite(sprite);
         this.sprite_initWidth = (int)sprite.getWidth();
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
+        this.dmgstring = min_damage + "-" + max_damage;
+        this.heartstring = hp_multiplier +"";
+        Skin skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+        lldmg = new Label(dmgstring, skin);
+        lldmg.setText(dmgstring);
+        llhrt = new Label(heartstring, skin);
+        llhrt.setText(heartstring);
     }
 
     public void copyWeapon(Weapon to_copy, POSITION posit){
@@ -107,6 +122,12 @@ public class Weapon extends Actor {
         this.sprite = new Sprite(to_copy.getSprite());
         this.sprite_initWidth = (int)to_copy.sprite_initWidth;
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
+        this.dmgstring = min_damage + "-" + max_damage;
+        this.heartstring = hp_multiplier +"";
+
+        lldmg.setText(dmgstring);
+
+        llhrt.setText(heartstring);
 
     }
 
@@ -187,6 +208,62 @@ public class Weapon extends Actor {
         }
 
         spr.draw(batch);
+    }
+
+
+    //TODO: move to a view class
+    public Table getTable(Skin skin){
+        Table root = new Table();
+
+        root.setDebug(true);
+        Table dataTable = new Table(skin);
+        dataTable.columnDefaults(1).width(32);
+        dataTable.setDebug(true);
+
+        dataTable.add(lldmg).center().pad(5);
+        dataTable.add(new WDIActor(1)).center().expand().fill();
+        dataTable.row();
+
+        dataTable.add(llhrt).center().pad(5);
+        dataTable.add(new WDIActor(2)).center().expand().fill();
+
+        root.add(dataTable).uniform();
+        root.add(new WepSpriteActor()).uniform().fill();
+
+
+        return root;
+    }
+
+    private class WDIActor extends Actor{
+        Sprite wdi;
+
+        public WDIActor(int icon){
+            if(icon == 1)
+                wdi = new Sprite(Assets.dmgIcon);
+            else if(icon == 2)
+                wdi = new Sprite(Assets.hrtIcon);
+            else
+                wdi = new Sprite(Assets.weapon_data_icon);
+        }
+
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+            wdi.setSize(getWidth(), getHeight());
+            wdi.setPosition(getX(), getY());
+
+            wdi.draw(batch);
+        }
+    }
+
+    private class WepSpriteActor extends Actor{
+
+        @Override
+        public void draw(Batch batch, float parentAlpha){
+            sprite.setSize(getWidth(), getHeight());
+            sprite.setPosition(getX(), getY());
+            sprite.draw(batch);
+        }
+
     }
 
 }

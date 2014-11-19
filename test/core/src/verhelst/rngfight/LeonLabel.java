@@ -42,4 +42,6 @@ public class LeonLabel extends Widget {
         else
             Assets.HUDbf.draw(batch, text, getX(), getY() + Assets.bf.getBounds(text).height - 2);
     }
+
+    
 }

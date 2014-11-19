@@ -73,8 +73,8 @@ public class Model {
                 shoulder.setAngle(-90);
             }
             Joint elbow = shoulder.children.get(0);
-            System.out.println(shoulder.getAngle());
-              System.out.println(elbow.getAngle());
+            //System.out.println(shoulder.getAngle());
+          //    System.out.println(elbow.getAngle());
             if(Math.abs(elbow.getAngle()) < 90 && BattleScreen.battling){
                 // elbow.adjustAngle(10);
             }else

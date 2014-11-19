@@ -29,6 +29,7 @@ public class Assets {
     public static BitmapFont dmgNumFnt;
     public static BitmapFont bf;
     public static BitmapFont HUDbf;
+    public static Sprite dmgIcon, hrtIcon;
 
     public Assets(){
         weapons_sprites = new ArrayList<Sprite>();
@@ -81,7 +82,12 @@ public class Assets {
         tempface =  new Sprite(new Texture(Gdx.files.internal("In Development\\tempface.png")));
 
 
+
         weapon_data_icon = new Sprite(new Texture(Gdx.files.internal("wepdataicon.png")));
+
+        dmgIcon = new Sprite(new Texture(Gdx.files.internal("In Development\\DmgIcon.png")));
+        hrtIcon = new Sprite(new Texture(Gdx.files.internal("In Development\\HrtIcon.png")));
+
 
         FreeTypeFontGenerator ftfg = new FreeTypeFontGenerator(Gdx.files.internal("game_font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter ftfp = new FreeTypeFontGenerator.FreeTypeFontParameter();
