@@ -264,6 +264,8 @@ public class Weapon extends Actor {
         public void draw(Batch batch, float parentAlpha){
             sprite.setSize(getWidth(), getHeight());
             sprite.setPosition(getX(), getY());
+            sprite.setOrigin(getWidth()/2, getHeight()/2);
+            sprite.setRotation(45);
             sprite.draw(batch);
         }
 
