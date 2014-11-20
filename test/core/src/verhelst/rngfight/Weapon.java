@@ -212,8 +212,9 @@ public class Weapon extends Actor {
 
 
     //TODO: move to a view class
+    Table root;
     public Table getTable(Skin skin){
-        Table root = new Table();
+        root = new Table();
 
         root.setDebug(true);
         Table dataTable = new Table(skin);
@@ -221,16 +222,18 @@ public class Weapon extends Actor {
         dataTable.setDebug(true);
 
         dataTable.add(lldmg).center().pad(5);
-        dataTable.add(new WDIActor(1)).center().expand().fill();
+        dataTable.add(new WDIActor(1)).center().pad(5).expand().fill();
         dataTable.row();
 
         dataTable.add(llhrt).center().pad(5);
-        dataTable.add(new WDIActor(2)).center().expand().fill();
-
-        root.add(dataTable).uniform();
-        root.add(new WepSpriteActor()).uniform().fill();
-
-
+        dataTable.add(new WDIActor(2)).center().pad(5).expand().fill();
+        if(posi != POSITION.RIGHT_POSITION) {
+            root.add(dataTable).uniform();
+            root.add(new WepSpriteActor()).uniform().fill();
+        }else{
+            root.add(new WepSpriteActor()).uniform().fill();
+            root.add(dataTable).uniform();
+        }
         return root;
     }
 
@@ -266,4 +269,10 @@ public class Weapon extends Actor {
 
     }
 
+    @Override
+    public void setVisible(boolean visible) {
+        if(root != null)
+            root.setVisible(visible);
+        super.setVisible(visible);
+    }
 }

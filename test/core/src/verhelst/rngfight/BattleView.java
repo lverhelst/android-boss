@@ -153,12 +153,12 @@ public class BattleView {
         aWep = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.LEFT_POSITION);
         aWep.setVisible(false);
         row3.add(r5c3).expand().fill();
-        row3.add(aWep).right().expand().fill().pad(PADDING); //A Weapon
+        row3.add(aWep.getTable(skin)).right().expand().fill().pad(PADDING); //A Weapon
 
         row3.add(r5c3).expand();         //Space
         bWep = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.RIGHT_POSITION);
         bWep.setVisible(false);
-        row3.add(bWep).left().expand().fill().pad(PADDING); //B Weapon
+        row3.add(bWep.getTable(skin)).left().expand().fill().pad(PADDING); //B Weapon
         row3.add(r5c3).expand().fill();
 
         rootTable.add(row3).expand().fill();
