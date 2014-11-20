@@ -51,7 +51,7 @@ public class BattleView {
     //For rendering damage numbers
     Iterator<DamageNumber> i;
 
-    boolean debug = false;
+    boolean debug = true;
 
     public BattleView(Battle battle){
         rng = new Random();
@@ -153,12 +153,12 @@ public class BattleView {
         aWep = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.LEFT_POSITION);
         aWep.setVisible(false);
         row3.add(r5c3).expand().fill();
-        row3.add(aWep.getTable(skin)).right().expand().fill().pad(PADDING); //A Weapon
+        row3.add(aWep.getTable(skin)).right().expand().fill();//.pad(PADDING); //A Weapon
 
         row3.add(r5c3).expand();         //Space
         bWep = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.RIGHT_POSITION);
         bWep.setVisible(false);
-        row3.add(bWep.getTable(skin)).left().expand().fill().pad(PADDING); //B Weapon
+        row3.add(bWep.getTable(skin)).left().expand().fill();//.pad(PADDING); //B Weapon
         row3.add(r5c3).expand().fill();
 
         rootTable.add(row3).expand().fill();
@@ -177,7 +177,7 @@ public class BattleView {
 
         row4.add(statsTable).expand().fill();
         row4.add(new Label("", skin)).expand().fill();
-        row4.add(lootWep.getTable(skin)).center().top().expand().fill().pad(PADDING); //LOOT
+        row4.add(lootWep.getTable(skin)).center().top().expand().fill();//.pad(PADDING); //LOOT
         row4.add(new Label("", skin)).expand().fill();
         row4.add(new Label("", skin)).expand().fill();
         rootTable.add(row4).expand().fill();

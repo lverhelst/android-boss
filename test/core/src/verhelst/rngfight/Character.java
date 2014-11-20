@@ -223,11 +223,9 @@ public class Character extends Actor {
 
         */
         otherY = (int)getY();
-
         m.originx = (int)(getX() + getWidth()/2);
         m.originy = (int)(getY() + getHeight()/2);
         m.render(batch);
-
 
     }
 

@@ -219,14 +219,14 @@ public class Weapon extends Actor {
         root.setDebug(true);
         Table dataTable = new Table(skin);
         dataTable.columnDefaults(1).width(32);
-        dataTable.setDebug(true);
+        dataTable.setDebug(false);
 
         dataTable.add(lldmg).center().pad(5);
-        dataTable.add(new WDIActor(1)).center().pad(5).expand().fill();
+        dataTable.add(new WDIActor(1)).center().pad(5).fill().expand();
         dataTable.row();
 
         dataTable.add(llhrt).center().pad(5);
-        dataTable.add(new WDIActor(2)).center().pad(5).expand().fill();
+        dataTable.add(new WDIActor(2)).center().pad(5).fill().expand();
         if(posi != POSITION.RIGHT_POSITION) {
             root.add(dataTable).uniform();
             root.add(new WepSpriteActor()).uniform().fill();
@@ -275,4 +275,6 @@ public class Weapon extends Actor {
             root.setVisible(visible);
         super.setVisible(visible);
     }
+
+
 }
