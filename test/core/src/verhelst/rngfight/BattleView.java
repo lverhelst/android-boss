@@ -181,7 +181,7 @@ public class BattleView {
         row4.add(statsTable).expand().fill();
         row4.add(new Label("", skin)).expand().fill();
         //.getTable(skin)
-        row4.add(lootWep.getActor()).center().top().expand().fill();//.pad(PADDING); //LOOT
+        row4.add(((Weapon)(lootWep.getActor())).getTable(skin)).center().top().expand().fill();//.pad(PADDING); //LOOT
         row4.add(new Label("", skin)).expand().fill();
         row4.add(new Label("", skin)).expand().fill();
         rootTable.add(row4).expand().fill();
@@ -283,7 +283,6 @@ public class BattleView {
     public void updateCharacterWeapons(Weapon aWeapon, Weapon bWeapon){
 
         if(b.getLeftside().isWeaponEquipped()) {
-
           aWep.copyWeapon(aWeapon, Weapon.POSITION.LEFT_POSITION);
           aWep.setVisible(true);
         }else{
@@ -301,13 +300,10 @@ public class BattleView {
 
     public void update(int lefthp, int righthp, boolean showLoot, int aMax, String message, int hits){
         b.getLeftside().setHealth(lefthp);
-
         b.getRightside().setHealth(righthp);
 
         lootWep.setVisible(showLoot);
-        lootWep.getActor().setVisible(showLoot);
-
-
+        //lootWep.getActor().setVisible(showLoot);
 
         String line = "";
         for(int i = 0; i < b.getRightside().getWin_streak() % b.getRightside().wins_to_level; i++ ){
@@ -330,9 +326,7 @@ public class BattleView {
         two.setHealth_value(righthp);
         //twoLbl.setText(b.getRightside().getName() + ": " + (righthp > 0 ? righthp : 0));
 
-
         highscore.setText("Streak: " + b.getRightside().getWin_streak());
         hitcount.setText("Hits: " + hits);
-
     }
 }

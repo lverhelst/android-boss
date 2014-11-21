@@ -52,6 +52,7 @@ public class BattleResultHandler {
         }
 
 
+        resultsList.add(BattleResult.ShowStaticLoot);
 
         //Deal with hitcount
         if(hitcount == 101)

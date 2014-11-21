@@ -209,8 +209,10 @@ public class Weapon extends Actor implements Loot {
         }
 
         spr.draw(batch);
-        */
-        root.draw(batch, parentAlpha);
+*/
+        System.out.println("weapon draw");
+        //root.draw(batch, parentAlpha);
+
     }
 
     //TODO: move to a view class
@@ -255,7 +257,6 @@ public class Weapon extends Actor implements Loot {
         public void draw(Batch batch, float parentAlpha) {
             wdi.setSize(getWidth(), getHeight());
             wdi.setPosition(getX(), getY());
-
             wdi.draw(batch);
         }
     }
