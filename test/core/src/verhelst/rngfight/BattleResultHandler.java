@@ -19,6 +19,9 @@ public class BattleResultHandler {
     public BattleResult[] getResults(Character a, Character b, int hitcount){
         List<BattleResult> resultsList = new ArrayList<BattleResult>();
         //Decide winner
+
+
+
         if(a.getHealth() > 0 && b.getHealth() <= 0){
             resultsList.add(BattleResult.Player1Win);
             a.incrementWins();
@@ -32,15 +35,12 @@ public class BattleResultHandler {
             b.incrementWins();
             b.resetLosses();
 
-
-
             if(hitcount % 3  == 0) {
                 resultsList.add(BattleResult.ShowStaticLoot);
+            }else if(hitcount % 7 == 0) {
+                resultsList.add(BattleResult.HeadLoot);
             }
 
-            if(hitcount % 13 == 0) {
-                resultsList.add(BattleResult.ShowRandomLoot);
-            }
         }else{
             resultsList.add(BattleResult.Tie);
             a.resetWins();
@@ -51,6 +51,8 @@ public class BattleResultHandler {
             resultsList.add(BattleResult.Player1GetsLoot);
         }
 
+
+        resultsList.add(BattleResult.ShowStaticLoot);
 
         //Deal with hitcount
         if(hitcount == 101)

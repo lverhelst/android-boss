@@ -40,7 +40,8 @@ public class BattleView {
     OrthographicCamera camera;
     LeonLabel r2c1, r3c2, endMessageLbl;
     Battle b;
-    final Weapon lootWep, aWep, bWep;
+    final LootActor lootWep;
+    final Weapon aWep, bWep;
     Table rootTable;
     public final float PADDING;
 
@@ -165,8 +166,7 @@ public class BattleView {
         rootTable.row();
 
         Table row4 = new Table();
-        lootWep = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION);
-        lootWep.setVisible(false);
+
         Table statsTable = new Table();
         statsTable.add(highscore).expand().align(Align.left);
         statsTable.row();
@@ -174,10 +174,14 @@ public class BattleView {
         statsTable.row();
         statsTable.setDebug(debug);
 
+        lootWep = new LootActor(Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION));
+        lootWep.getActor().setVisible(false);
+
 
         row4.add(statsTable).expand().fill();
         row4.add(new Label("", skin)).expand().fill();
-        row4.add(lootWep.getTable(skin)).center().top().expand().fill();//.pad(PADDING); //LOOT
+        //.getTable(skin)
+        row4.add(((Weapon)(lootWep.getActor())).getTable(skin)).center().top().expand().fill();//.pad(PADDING); //LOOT
         row4.add(new Label("", skin)).expand().fill();
         row4.add(new Label("", skin)).expand().fill();
         rootTable.add(row4).expand().fill();
@@ -261,15 +265,24 @@ public class BattleView {
     }
 
 
-    public void setLoot(Weapon copy){
+    public void setLoot(Loot copy){
       //  System.out.println("Set Loot");
-        lootWep.copyWeapon(copy, Weapon.POSITION.LOOT_POSITION);
+        if(copy instanceof  Weapon) {
+            lootWep.setActor(copy.getActor());
+            ((Weapon)lootWep.getActor()).copyWeapon((Weapon) copy, Weapon.POSITION.LOOT_POSITION);
+
+        }
+        if(copy instanceof HeadSpriteActor){
+            lootWep.setActor(copy.getActor());
+            lootWep.getActor().setName("Head" + System.currentTimeMillis());
+        }
+        lootWep.setName(lootWep.getActor().getName());
+
     }
 
     public void updateCharacterWeapons(Weapon aWeapon, Weapon bWeapon){
 
         if(b.getLeftside().isWeaponEquipped()) {
-
           aWep.copyWeapon(aWeapon, Weapon.POSITION.LEFT_POSITION);
           aWep.setVisible(true);
         }else{
@@ -285,12 +298,13 @@ public class BattleView {
     }
 
 
-            public void update(int lefthp, int righthp, boolean showLoot, int aMax, String message, int hits){
+    public void update(int lefthp, int righthp, boolean showLoot, int aMax, String message, int hits){
         b.getLeftside().setHealth(lefthp);
-
         b.getRightside().setHealth(righthp);
 
         lootWep.setVisible(showLoot);
+        //lootWep.getActor().setVisible(showLoot);
+
         String line = "";
         for(int i = 0; i < b.getRightside().getWin_streak() % b.getRightside().wins_to_level; i++ ){
             line += "*";
@@ -312,9 +326,7 @@ public class BattleView {
         two.setHealth_value(righthp);
         //twoLbl.setText(b.getRightside().getName() + ": " + (righthp > 0 ? righthp : 0));
 
-
         highscore.setText("Streak: " + b.getRightside().getWin_streak());
         hitcount.setText("Hits: " + hits);
-
     }
 }

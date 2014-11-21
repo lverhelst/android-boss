@@ -63,6 +63,7 @@ public class Character extends Actor {
             m.flip();
         }else
             m = new Model((int)(getX() + getWidth()/2), (int)(getY() + getHeight()), false, getHeight());
+        m.hideWeapon();
     }
 
     public void setSprite(Sprite sp){
@@ -129,7 +130,15 @@ public class Character extends Actor {
         this.health = this.BASE_HEALTH * weapon.getHp_multiplier();// * this.level;
 
         m.updateSprite("wrist", weapon.getSprite());
+        m.showWeapon();
 
+    }
+
+    public void setHead(HeadSpriteActor hsa){
+        Sprite toequip = new Sprite(hsa.getSprite());
+        toequip.rotate90(true);
+
+        m.updateSprite("head", toequip);
     }
 
     public boolean isWeaponEquipped()

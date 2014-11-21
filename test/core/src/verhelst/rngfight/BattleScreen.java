@@ -37,7 +37,7 @@ public class BattleScreen implements Screen, InputProcessor {
     public static float statetime;
     int hits = 0, anim_h1, anim_h2;
 
-    Weapon dragme;
+    Loot dragme;
 
 
 
@@ -79,6 +79,7 @@ public class BattleScreen implements Screen, InputProcessor {
                         showLoot = true;
                         Weapon weapon = Weapon.generateRandomWeapon(a.max_level, Assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION);
                         bView.setLoot(weapon);
+
                        // System.out.println("Showloot");
                         break;
                     case ShowRandomLoot:
@@ -90,6 +91,11 @@ public class BattleScreen implements Screen, InputProcessor {
                         break;
                     case Player1GetsLoot:
                         btl.getLeftside().setEquipped_weapon(Weapon.generateScaledWeapon(a.getLevel(), Assets.getWeaponSprite(), Weapon.POSITION.LEFT_POSITION));
+                        break;
+                    case HeadLoot:
+                        showLoot = true;
+                        HeadSpriteActor hsa = new HeadSpriteActor();
+                        bView.setLoot(hsa);
                         break;
                 }
             }
@@ -181,12 +187,19 @@ public class BattleScreen implements Screen, InputProcessor {
             Vector2 vec = bView.getStage().screenToStageCoordinates(new Vector2(screenX, screenY));
             Actor tActor = bView.getStage().hit(vec.x, vec.y, true);
             if(tActor != null && tActor.getName() != null) {
-                // System.out.println(tActor.getName() + " " + bView.lootWep.getName());
-                if (tActor.getName().equals(bView.lootWep.getName())) {
+                System.out.println(tActor.getName() + " " + bView.lootWep.getName());
+                if (tActor.getName().equals(bView.lootWep.getActor().getName())) {
                     //Copy the weapon so that we aren't passing the reference
-                    dragme = new Weapon();
-                    dragme.copyWeapon(bView.lootWep, Weapon.POSITION.RIGHT_POSITION);
-                    bView.getStage().addActor(dragme);
+
+                    if(bView.lootWep.getActor() instanceof Weapon) {
+                        dragme = new Weapon();
+                        ((Weapon)dragme).copyWeapon((Weapon) bView.lootWep.getActor(), Weapon.POSITION.RIGHT_POSITION);
+                    }
+                    if(bView.lootWep.getActor() instanceof HeadSpriteActor){
+                        dragme = new HeadSpriteActor();
+                        ((HeadSpriteActor)dragme).copyHSA((HeadSpriteActor)bView.lootWep.getActor());
+                    }
+                    bView.getStage().addActor(dragme.getActor());
 
                 }
             }
@@ -204,7 +217,7 @@ public class BattleScreen implements Screen, InputProcessor {
             if(tActor != null && tActor.getName() != null) {
 
 
-               System.out.println(tActor.getName() + " " + bView.lootWep.getName());
+               System.out.println(tActor.getName() + " " + bView.lootWep.getActor().getName());
                /* if (tActor.getName().equals(bView.lootWep.getName())) {
                     //Copy the weapon so that we aren't passing the reference
                     Weapon newWep = new Weapon();
@@ -216,10 +229,18 @@ public class BattleScreen implements Screen, InputProcessor {
                     Character chr = (Character)tActor;
                     if(chr.getName().equals("Enemy2")) {
                         //Copy the weapon so that we aren't passing the reference
-                        Weapon newWep = new Weapon();
-                        newWep.copyWeapon(bView.lootWep, Weapon.POSITION.RIGHT_POSITION);
-                        btl.getRightside().setEquipped_weapon(newWep);
-                        System.out.println("QUEIROASDAS");
+                        if(bView.lootWep.getActor() instanceof Weapon) {
+                            Weapon newWep = new Weapon();
+                            newWep.copyWeapon((Weapon)bView.lootWep.getActor(), Weapon.POSITION.RIGHT_POSITION);
+                            btl.getRightside().setEquipped_weapon(newWep);
+                            System.out.println("QUEIROASDAS");
+                        }
+                        if(bView.lootWep.getActor() instanceof HeadSpriteActor){
+                            System.out.println("EQUIP HEAD HERE PLEASE");
+                            btl.getRightside().setHead((HeadSpriteActor)bView.lootWep.getActor());
+
+                        }
+
                     }
                 }
 
@@ -229,7 +250,7 @@ public class BattleScreen implements Screen, InputProcessor {
 
         }
         if(dragme != null)
-             dragme.remove();
+             dragme.getActor().remove();
         dragme = null;
         if(!battling){
             message = "";
@@ -288,11 +309,11 @@ public class BattleScreen implements Screen, InputProcessor {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 
 
-        System.out.println(screenX + " h:" + screenY);
-        if(dragme != null)
-        dragme.setPosition(screenX, Gdx.graphics.getHeight() - screenY);
-
-
+      //  System.out.println(screenX + " h:" + screenY +  " dragme not null? " + (dragme != null));
+        if(dragme != null) {
+            dragme.getActor().setPosition(screenX, Gdx.graphics.getHeight() - screenY);
+            dragme.getActor().setSize(30,30);
+        }
         return false;
 
     }

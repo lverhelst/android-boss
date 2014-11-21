@@ -10,7 +10,8 @@ public enum BattleResult {
         ShowStaticLoot,
         ShowRandomLoot,
         CustomMode_ioi,
-        Player1GetsLoot
+        Player1GetsLoot,
+        HeadLoot
 
 
 

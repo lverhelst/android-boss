@@ -24,6 +24,8 @@ public class Model {
     public Model(int abs_x, int abs_y, boolean flip, float height){
 
         scale = (float) Math.max(height/96, 1);
+
+      //  scale = (float) Math.max(height/96, 2.5);
         System.out.println("Scale" + scale);
 
 
@@ -32,22 +34,22 @@ public class Model {
         this.originx = abs_x;
         this.originy = abs_y;
 
-        root = new Joint(0,0 * scale, "root", flip);
-        root.addChild(new Joint(-90, 32 * scale, "torso", flip));
-        root.children.get(0).addChild(new Joint(-90,32 * scale, "leg", flip));
-        root.addChild(new Joint(-90,32 * scale, "shoulder", flip));
-        root.children.get(1).addChild(new Joint(180,32 * scale,"elbow", flip));
-        root.children.get(1).children.get(0).addChild(new Joint(180,32 * scale, "wrist", flip));
-
-        root.addChild(new Joint(90,32 * scale, "head",flip));
+        root = new Joint(0,0 * scale, "root", flip,0);
+        root.addChild(new Joint(-90, 32 * scale, "torso", flip,0));
+        root.children.get(0).addChild(new Joint(-90,32 * scale, "leg", flip,0));
+        root.addChild(new Joint(-90,32 * scale, "shoulder", flip, 32/4 * scale));
+        root.children.get(1).addChild(new Joint(180,32 * scale,"elbow", flip, 32/4 * scale));
+        root.children.get(1).children.get(0).addChild(new Joint(180,32 * scale, "wrist", flip, 32/5 * scale));
+        root.addChild(new Joint(90,32 * scale, "head",flip,0));
         root.print();
+
     }
 
     public void render(Batch batch){
-       /* batch.end();
-        sr.begin(ShapeRenderer.ShapeType.Line);
+//        batch.end();
+//        sr.begin(ShapeRenderer.ShapeType.Line);
 
-    */
+
 
         Joint shoulder = root.children.get(1);
         if(!isFlipped){
@@ -66,7 +68,7 @@ public class Model {
             }
         }else{
             if(shoulder.getAngle() < 0 && BattleScreen.battling){
-                shoulder.adjustAngle(30);
+                shoulder.adjustAngle(10);
 
             }else{
 
@@ -74,20 +76,21 @@ public class Model {
             }
             Joint elbow = shoulder.children.get(0);
             //System.out.println(shoulder.getAngle());
-          //    System.out.println(elbow.getAngle());
-            if(Math.abs(elbow.getAngle()) < 90 && BattleScreen.battling){
-                // elbow.adjustAngle(10);
+            //  System.out.println(elbow.getAngle());
+            if(Math.abs(elbow.getAngle()) < 45 && BattleScreen.battling){
+                 elbow.adjustAngle(5);
+
             }else
             {
                 elbow.setAngle(0);
             }
         }
 
-        /*root.renderSkeleton(sr, originx, originy);
+//        root.renderSkeleton(sr, originx, originy);
 
 
-        sr.end();
-        batch.begin();*/
+//        sr.end();
+//        batch.begin();
         root.renderWithSprites(batch, originx, originy);
     }
 
@@ -130,6 +133,17 @@ public class Model {
             }
             return jj;
         }
+    }
+
+    public void showWeapon(){
+        Joint writ = searchForJointByName("wrist", root);
+        writ.setIsVisible(true);
+    }
+
+    public void hideWeapon(){
+
+        Joint writ = searchForJointByName("wrist", root);
+        writ.setIsVisible(false);
     }
 
 }
