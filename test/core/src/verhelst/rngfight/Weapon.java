@@ -16,7 +16,7 @@ import java.util.Random;
  */
 
 
-public class Weapon extends Actor {
+public class Weapon extends Actor implements Loot {
 
     enum DAMAGETYPE{
         NORMAL,
@@ -159,7 +159,7 @@ public class Weapon extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
          //System.out.println(this.getName());
-
+        /*
 
         Sprite spr = sprite;
 
@@ -167,6 +167,7 @@ public class Weapon extends Actor {
 
 
         spr.setPosition(getX(), getY());
+
         spr.setSize(getWidth() - padding, getHeight() - padding);
 
         Sprite wdi = new Sprite(Assets.weapon_data_icon);
@@ -208,8 +209,9 @@ public class Weapon extends Actor {
         }
 
         spr.draw(batch);
+        */
+        root.draw(batch, parentAlpha);
     }
-
 
     //TODO: move to a view class
     Table root;
@@ -279,4 +281,13 @@ public class Weapon extends Actor {
     }
 
 
+    @Override
+    public Actor getActor() {
+        return this;
+    }
+
+    @Override
+    public void setActor(Actor actor) {
+        //do nothing
+    }
 }

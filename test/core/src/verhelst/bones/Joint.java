@@ -1,10 +1,12 @@
 package verhelst.bones;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import verhelst.rngfight.Assets;
 
@@ -20,19 +22,22 @@ public class Joint {
         String name;
         Joint parent;
         ArrayList<Joint> children;
-        boolean isFlipped;
+        boolean isFlipped, isVisible;
+        float adjustment;
 
-        public Joint(double angle_degrees, double length, String name, boolean flip){
+        public Joint(double angle_degrees, double length, String name, boolean flip, float adjustment){
 
             this.children = new ArrayList<Joint>();
             this.angle = angle_degrees;
             this.length = length;
             this.name = name;
+            this.adjustment = adjustment;
 
             testS = new Sprite(Assets.findSpriteForName(name));
             testS.flip(false, flip);
             testS.setSize(testS.getWidth() * Model.scale, testS.getHeight() * Model.scale);
             this.isFlipped = flip;
+            this.isVisible = true;
         }
 
         public void addChild(Joint b){
@@ -52,12 +57,17 @@ public class Joint {
                 j.adjustAngle(deg);
         }
 
-
+          Random rc = new Random();
+          Color c = new Color();
         public void renderSkeleton(ShapeRenderer sr, float x, float y){
-
+            x += (adjustment * (isFlipped ? -1 : 1));
 
             float offx = x + (float)(Math.cos(Math.toRadians(this.angle)) * length);
             float offy = y + (float)(Math.sin(Math.toRadians(this.angle)) * length);
+
+            sr.setColor(c.set(rc.nextFloat(),rc.nextFloat(),rc.nextFloat(),rc.nextFloat()));
+
+
 
             if(parent != null){
                 //System.out.println(x + " " + y + " " + offx + " " + offy) ;
@@ -77,37 +87,18 @@ public class Joint {
 
         public void renderWithSprites(Batch batch, float x, float y){
 
+            x += (adjustment * (isFlipped ? -1 : 1));
             float offx = x + (float)(Math.cos(Math.toRadians(this.angle)) * length);
             float offy = y + (float)(Math.sin(Math.toRadians(this.angle)) * length);
 
             this.testS.setOrigin(0,0 + testS.getHeight()/2);
-            if(name.equals("shoulder")){
-               // y -= testS.getHeight()/2;
-                //offy -= testS.getHeight()/2;
-                if(!isFlipped)
-                x += testS.getWidth()/4;
-            }
-            if(name.equals("elbow")){
-                if(!isFlipped) {
-                    x += testS.getWidth() / 4;
-                    offx += testS.getWidth() / 4;
-                }
-            }
-            if(name.equals("wrist") ){
 
-                    y -= testS.getHeight() / 4;
-                    offy -= testS.getHeight() / 4;
-                if(!isFlipped) {
-                x += testS.getWidth()/4;
-                offx += testS.getWidth()/4;}
-            }
+
 
             this.testS.setPosition(x, y);
-
-
             this.testS.setRotation((float)angle);
 
-            if(!name.equals("root"))
+            if(!name.equals("root") && isVisible)
                 this.testS.draw(batch);
 
 
@@ -146,5 +137,13 @@ public class Joint {
           //  System.out.println("adj: " + adjustment);
             this.adjustAngle(adjustment);
 
+        }
+
+        public boolean getIsVisible(){
+            return isVisible;
+        }
+
+        public void setIsVisible(boolean isVisible){
+            this.isVisible = isVisible;
         }
 }

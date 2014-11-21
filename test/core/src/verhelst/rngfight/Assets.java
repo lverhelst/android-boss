@@ -80,9 +80,6 @@ public class Assets {
         pants =  new Sprite(new Texture(Gdx.files.internal("In Development\\pants.png")));
         shirt =  new Sprite(new Texture(Gdx.files.internal("In Development\\Shirt.png")));
         tempface =  new Sprite(new Texture(Gdx.files.internal("In Development\\tempface.png")));
-
-
-
         weapon_data_icon = new Sprite(new Texture(Gdx.files.internal("wepdataicon.png")));
 
         dmgIcon = new Sprite(new Texture(Gdx.files.internal("In Development\\DmgIcon.png")));
@@ -121,5 +118,10 @@ public class Assets {
         if(name.equals("wrist"))
             return getWeaponSprite();
         return arm;
+    }
+
+    public static Sprite getHeadSprite(){
+        Random rng = new Random();
+        return faces[rng.nextInt(faces.length)];
     }
 }
