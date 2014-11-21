@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -222,11 +223,11 @@ public class Weapon extends Actor {
         dataTable.setDebug(false);
 
         dataTable.add(lldmg).center().pad(5);
-        dataTable.add(new WDIActor(1)).center().pad(5).fill().expand();
+        dataTable.add(new Image(Assets.dmgIconTxture)).center().pad(5).fill().expand();
         dataTable.row();
 
         dataTable.add(llhrt).center().pad(5);
-        dataTable.add(new WDIActor(2)).center().pad(5).fill().expand();
+        dataTable.add(new Image(Assets.hrtIconTxture)).center().pad(5).fill().expand();
         if(posi != POSITION.RIGHT_POSITION) {
             root.add(dataTable).uniform();
             root.add(new WepSpriteActor()).uniform().fill();
@@ -237,28 +238,8 @@ public class Weapon extends Actor {
         return root;
     }
 
-    private class WDIActor extends Actor{
-        Sprite wdi;
-
-        public WDIActor(int icon){
-            if(icon == 1)
-                wdi = new Sprite(Assets.dmgIcon);
-            else if(icon == 2)
-                wdi = new Sprite(Assets.hrtIcon);
-            else
-                wdi = new Sprite(Assets.weapon_data_icon);
-        }
-
-        @Override
-        public void draw(Batch batch, float parentAlpha) {
-            wdi.setSize(getWidth(), getHeight());
-            wdi.setPosition(getX(), getY());
-
-            wdi.draw(batch);
-        }
-    }
-
     private class WepSpriteActor extends Actor{
+
 
         @Override
         public void draw(Batch batch, float parentAlpha){
