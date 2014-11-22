@@ -184,6 +184,10 @@ public class BattleScreen implements Screen, InputProcessor {
             //check to see if touch aligns with displayed loot, if so, equip on player
             Vector2 vec = bView.getStage().screenToStageCoordinates(new Vector2(screenX, screenY));
             Actor tActor = bView.getStage().hit(vec.x, vec.y, true);
+
+
+
+
             if(tActor != null && tActor.getName() != null) {
                 System.out.println(tActor.getName() + " " + bView.lootActor.getName());
                 if (tActor.getName().equals(bView.lootActor.getName())) {
@@ -193,7 +197,7 @@ public class BattleScreen implements Screen, InputProcessor {
                         dragme = new Weapon();
 
                         ((Weapon)dragme).copyWeapon((Weapon) bView.lootActor, Weapon.POSITION.RIGHT_POSITION);
-                        dragme.setSize(((Weapon) bView.lootActor).dragx, ((Weapon) bView.lootActor).dragy);
+                        dragme.setSize(((Weapon) bView.lootActor).dragx/2, ((Weapon) bView.lootActor).dragy/2);
                         //System.out.println(((Weapon) bView.lootActor).dragx + " " +  ((Weapon) bView.lootActor).dragy);
                     }
                     if(bView.lootActor instanceof HeadSpriteActor){
@@ -214,43 +218,40 @@ public class BattleScreen implements Screen, InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
         if(showLoot){
-            //check to see if touch aligns with displayed loot, if so, equip on player
-            Vector2 vec = bView.getStage().screenToStageCoordinates(new Vector2(screenX, screenY));
-            Actor tActor = bView.getStage().hit(vec.x, vec.y, true);
-            if(tActor != null && tActor.getName() != null) {
+          
+            if(dragme != null) {
+                float rectax1 = btl.getRightside().getX();
+                float rectbx2 = dragme.getX() + dragme.getWidth();
 
+                float rectax2 = btl.getRightside().getX() + btl.getRightside().getWidth();
+                float rectbx1 = dragme.getX();
 
-               System.out.println("Touchup: " + tActor.getName() + " " + bView.lootActor.getName());
-               /* if (tActor.getName().equals(bView.lootActor.getName())) {
+                float rectay1 = btl.getRightside().otherY;
+                float rectby2 = dragme.getY() + dragme.getHeight();
+
+                float rectay2 = btl.getRightside().otherY + btl.getRightside().getHeight();
+                float rectby1 = dragme.getY();
+
+                if (rectax1 <= rectbx1 && rectax2 >= rectbx2
+                        && rectay1 <= rectby2 && rectay2 >= rectby1) {
+                    System.out.println("DRAGME OVERLAPS CHARACHTER RIGHT");
                     //Copy the weapon so that we aren't passing the reference
-                    Weapon newWep = new Weapon();
-                    newWep.copyWeapon(bView.lootActor, Weapon.POSITION.RIGHT_POSITION);
-                    btl.getRightside().setEquipped_weapon(newWep);
-
-                }*/
-                if(tActor instanceof Character && dragme != null){
-                    Character chr = (Character)tActor;
-                    if(chr.getName().equals("Enemy2")) {
-                        //Copy the weapon so that we aren't passing the reference
-                        if(bView.lootActor instanceof Weapon) {
-                            Weapon newWep = new Weapon();
-                            newWep.copyWeapon((Weapon)bView.lootActor, Weapon.POSITION.RIGHT_POSITION);
-                            btl.getRightside().setEquipped_weapon(newWep);
-                            System.out.println("QUEIROASDAS");
-                        }
-                        if(bView.lootActor instanceof HeadSpriteActor){
-                            System.out.println("EQUIP HEAD HERE PLEASE");
-                            btl.getRightside().setHead((HeadSpriteActor)bView.lootActor);
-
-                        }
+                    if(bView.lootActor instanceof Weapon) {
+                        Weapon newWep = new Weapon();
+                        newWep.copyWeapon((Weapon)bView.lootActor, Weapon.POSITION.RIGHT_POSITION);
+                        btl.getRightside().setEquipped_weapon(newWep);
+                        System.out.println("QUEIROASDAS");
+                    }
+                    if(bView.lootActor instanceof HeadSpriteActor){
+                        System.out.println("EQUIP HEAD HERE PLEASE");
+                        btl.getRightside().setHead((HeadSpriteActor)bView.lootActor);
 
                     }
                 }
+                System.out.println("Ax1 " + rectax1 + " x2 " + rectax2 + " y1 " + rectay1 + " y2  " + rectay2);
 
+                System.out.println("Bx1 " + rectbx1 + " x2 " + rectbx2 + " y1 " + rectby1 + " y2  " + rectby2);
             }
-
-
-
         }
         if(dragme != null)
              dragme.remove();
