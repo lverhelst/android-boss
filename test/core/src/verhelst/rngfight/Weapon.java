@@ -17,7 +17,7 @@ import java.util.Random;
  */
 
 
-public class Weapon extends Actor implements Loot {
+public class Weapon extends Actor {
 
     enum DAMAGETYPE{
         NORMAL,
@@ -46,6 +46,10 @@ public class Weapon extends Actor implements Loot {
 
 
     private final static Random rng = new Random();
+
+    private String nm;
+    public Skin skin;
+
 
     public static Weapon generateRandomWeapon(int lvl, Sprite tempSprite, POSITION position)
     {
@@ -76,6 +80,13 @@ public class Weapon extends Actor implements Loot {
         this.sprite_initWidth = (int)sprite.getWidth();
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
         this.posi = POSITION.LOOT_POSITION;
+        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+
+        lldmg = new Label(dmgstring, skin);
+        //lldmg.setText(dmgstring);
+        llhrt = new Label(heartstring, skin);
+        //llhrt.setText(heartstring);
+        root = getTable();
     }
 
 
@@ -89,10 +100,13 @@ public class Weapon extends Actor implements Loot {
         this.sprite_initWidth = (int)sprite.getWidth();
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
         this.posi = position;
+        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+        root = getTable();
     }
 
     public Weapon(int mindmg, int maxdmg, DAMAGETYPE dmg_type, int hp_multiplier, float life_steal, Sprite sprite, POSITION position){
         this.setName("Weap" + System.currentTimeMillis());
+        this.nm = this.getName();
         this.min_damage = mindmg;
         this.max_damage = maxdmg;
         this.extra_type = dmg_type;
@@ -105,12 +119,13 @@ public class Weapon extends Actor implements Loot {
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
         this.dmgstring = min_damage + "-" + max_damage;
         this.heartstring = hp_multiplier +"";
-        Skin skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         lldmg = new Label(dmgstring, skin);
         lldmg.setText(dmgstring);
         llhrt = new Label(heartstring, skin);
         llhrt.setText(heartstring);
-    }
+        root = getTable();
+     }
 
     public void copyWeapon(Weapon to_copy, POSITION posit){
         this.max_damage = to_copy.getMax_damage();
@@ -126,9 +141,13 @@ public class Weapon extends Actor implements Loot {
         this.dmgstring = min_damage + "-" + max_damage;
         this.heartstring = hp_multiplier +"";
 
+//        System.out.println(this.getName() + " copy from " + to_copy.getName());
+        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+        lldmg = new Label(dmgstring, skin);
         lldmg.setText(dmgstring);
-
+        llhrt = new Label(heartstring, skin);
         llhrt.setText(heartstring);
+        root = getTable();
 
     }
 
@@ -160,7 +179,7 @@ public class Weapon extends Actor implements Loot {
     @Override
     public void draw(Batch batch, float parentAlpha) {
          //System.out.println(this.getName());
-        /*
+
 
         Sprite spr = sprite;
 
@@ -210,27 +229,36 @@ public class Weapon extends Actor implements Loot {
         }
 
         spr.draw(batch);
-*/
-        System.out.println("weapon draw");
-        //root.draw(batch, parentAlpha);
+
+        //System.out.println("weapon draw");
+
+
+
+
+        //if(root != null) {
+            //root.setPosition(getX(), getY());
+          //  root.draw(batch, parentAlpha);
+     //       System.out.println("Drawing table.");
+//        /}
 
     }
 
     //TODO: move to a view class
     Table root;
-    public Table getTable(Skin skin){
-        root = new Table();
+    public Table getTable(){
+        if(root == null)
+            root = new Table();
 
         root.setDebug(true);
         Table dataTable = new Table(skin);
         dataTable.columnDefaults(1).width(32);
-        dataTable.setDebug(false);
-
-        dataTable.add(lldmg).center().pad(5);
+        dataTable.setDebug(true);
+        dataTable.add(lldmg).center().pad(5).expand().fill();
         dataTable.add(new Image(Assets.dmgIconTxture)).center().pad(5).fill().expand();
         dataTable.row();
 
-        dataTable.add(llhrt).center().pad(5);
+        dataTable.add(llhrt).center().pad(5).expand().fill();
+
         dataTable.add(new Image(Assets.hrtIconTxture)).center().pad(5).fill().expand();
         if(posi != POSITION.RIGHT_POSITION) {
             root.add(dataTable).uniform();
@@ -264,13 +292,4 @@ public class Weapon extends Actor implements Loot {
     }
 
 
-    @Override
-    public Actor getActor() {
-        return this;
-    }
-
-    @Override
-    public void setActor(Actor actor) {
-        //do nothing
-    }
 }

@@ -3,9 +3,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 import verhelst.bones.Model;
@@ -43,6 +46,19 @@ public class Character extends Actor {
     public int otherY = 0;
 
     private Model m;
+
+    enum DmgListSide{
+        LEFT,
+        RIGHT
+    }
+
+    //Damage Numbers during battle
+    ArrayList<DamageNumber> dnListA = new ArrayList<DamageNumber>();
+    ArrayList<DamageNumber> dnListB = new ArrayList<DamageNumber>();
+
+    //For rendering damage numbers
+    Iterator<DamageNumber> i;
+
 
     public Character(String name, Sprite sprite){
         rng = new Random();
@@ -234,6 +250,7 @@ public class Character extends Actor {
         otherY = (int)getY();
         m.originx = (int)(getX() + getWidth()/2);
         m.originy = (int)(getY() + getHeight()/2);
+        renderDamageNumbers(batch);
         m.render(batch);
 
     }
@@ -272,4 +289,44 @@ public class Character extends Actor {
 
 
         }
- }
+
+
+
+
+    //Adds a new damage number to the appropriate damage list
+    private void addDmgNum(int num, int x, int y, DmgListSide side){
+        DamageNumber dn = new DamageNumber(num, x, y);
+            synchronized (dnListA) {
+                dnListA.add(dn);
+            }
+
+    }
+
+    public void consumeDmgNumPost(int num, DmgListSide side){
+
+        float y = otherY + getHeight()/2;// + (rng.nextBoolean() ? - 1 : 1) * rng.nextInt((int)b.getLeftside().getHeight()/2);
+        float x = getX() + getWidth()/2;// + (rng.nextBoolean() ? - 1 : 1) * rng.nextInt((int)b.getRightside().getWidth()/4);
+        addDmgNum(num, (int) x, (int) y, side);
+    }
+
+    public void renderDamageNumbers(Batch batch){
+
+        //Add Damage Numbers to screen
+        synchronized (dnListA) {
+
+            for (i = dnListA.iterator(); i.hasNext(); ) {
+
+                DamageNumber dn = i.next();
+                if (dn.isRemoveable()) {
+                    i.remove();
+                } else {
+                    Assets.dmgNumFnt.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
+                    Assets.dmgNumFnt.draw(batch, dn.getCs(), dn.getX(), dn.getY());
+                    dn.update();
+                }
+            }
+        }
+
+    }
+
+}

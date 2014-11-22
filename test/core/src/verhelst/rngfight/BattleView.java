@@ -3,12 +3,12 @@ package verhelst.rngfight;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
@@ -23,10 +23,7 @@ import java.util.Random;
  */
 public class BattleView {
 
-    enum DmgListSide{
-        LEFT,
-        RIGHT
-    }
+
 
 
 
@@ -40,17 +37,12 @@ public class BattleView {
     OrthographicCamera camera;
     LeonLabel r2c1, r3c2, endMessageLbl;
     Battle b;
-    final LootActor lootWep;
+    Actor lootActor;
     final Weapon aWep, bWep;
-    Table rootTable;
+    Table rootTable, row4;
     public final float PADDING;
 
-    //Damage Numbers during battle
-    ArrayList<DamageNumber> dnListA = new ArrayList<DamageNumber>();
-    ArrayList<DamageNumber> dnListB = new ArrayList<DamageNumber>();
 
-    //For rendering damage numbers
-    Iterator<DamageNumber> i;
 
     boolean debug = true;
 
@@ -154,18 +146,18 @@ public class BattleView {
         aWep = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.LEFT_POSITION);
         aWep.setVisible(false);
         row3.add(r5c3).expand().fill();
-        row3.add(aWep.getTable(skin)).right().expand().fill();//.pad(PADDING); //A Weapon
+        row3.add(aWep.getTable()).right().fill();//.pad(PADDING); //A Weapon
 
         row3.add(r5c3).expand();         //Space
         bWep = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.RIGHT_POSITION);
         bWep.setVisible(false);
-        row3.add(bWep.getTable(skin)).left().expand().fill();//.pad(PADDING); //B Weapon
+        row3.add(bWep.getTable()).left().fill();//.pad(PADDING); //B Weapon
         row3.add(r5c3).expand().fill();
 
-        rootTable.add(row3).expand().fill();
+        rootTable.add(row3).fill();
         rootTable.row();
 
-        Table row4 = new Table();
+        row4 = new Table();
 
         Table statsTable = new Table();
         statsTable.add(highscore).expand().align(Align.left);
@@ -174,14 +166,14 @@ public class BattleView {
         statsTable.row();
         statsTable.setDebug(debug);
 
-        lootWep = new LootActor(Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION));
-        lootWep.getActor().setVisible(false);
+        lootActor = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION);
+        lootActor.setVisible(false);
 
 
         row4.add(statsTable).expand().fill();
         row4.add(new Label("", skin)).expand().fill();
         //.getTable(skin)
-        row4.add(((Weapon)(lootWep.getActor())).getTable(skin)).center().top().expand().fill();//.pad(PADDING); //LOOT
+        row4.add(lootActor).center().top().expand().fill();//.pad(PADDING); //LOOT
         row4.add(new Label("", skin)).expand().fill();
         row4.add(new Label("", skin)).expand().fill();
         rootTable.add(row4).expand().fill();
@@ -205,79 +197,23 @@ public class BattleView {
     }
 
 
-    //Adds a new damage number to the appropriate damage list
-    private void addDmgNum(int num, int x, int y, DmgListSide side){
-        DamageNumber dn = new DamageNumber(num, x, y);
-        if(side == DmgListSide.LEFT)
-            synchronized (dnListA) {
-                dnListA.add(dn);
+    public void setLoot(Actor newloot){
+        Cell c =  row4.getCell(lootActor);
+        System.out.println("Setting loot");
+
+        System.out.println(lootActor);
+        if(c != null) {
+            System.out.println("Cell found");
+            if(newloot instanceof  Weapon) {
+                c.setActor(((Weapon) newloot));
+                System.out.println("Weapon max dmaage" + ((Weapon)newloot).getMax_damage());
             }
-        else
-            synchronized (dnListB) {
-                dnListB.add(dn);
+            else {
+                c.setActor(newloot);
             }
-    }
-
-    public void consumeDmgNumPost(int num, DmgListSide side){
-
-        float y =  b.getRightside().otherY + b.getLeftside().getHeight()/2;// + (rng.nextBoolean() ? - 1 : 1) * rng.nextInt((int)b.getLeftside().getHeight()/2);
-        float x;
-        if(side == DmgListSide.RIGHT){
-            x = b.getRightside().getX() + b.getRightside().getWidth()/2;// + (rng.nextBoolean() ? - 1 : 1) * rng.nextInt((int)b.getRightside().getWidth()/4);
-
-        }else{
-            x = b.getLeftside().getX() + b.getLeftside().getWidth()/2;// + (rng.nextBoolean() ? - 1 : 1) * rng.nextInt((int)b.getLeftside().getWidth()/4);
+            lootActor = newloot;
         }
-        addDmgNum(num, (int) x, (int) y, side);
-    }
-
-    public void renderDamageNumbers(SpriteBatch batch){
-        batch.begin();
-        //Add Damage Numbers to screen
-        synchronized (dnListA) {
-
-            for (i = dnListA.iterator(); i.hasNext(); ) {
-
-                DamageNumber dn = i.next();
-                if (dn.isRemoveable()) {
-                    i.remove();
-                } else {
-                    Assets.dmgNumFnt.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
-                    Assets.dmgNumFnt.draw(batch, dn.getCs(), dn.getX(), dn.getY());
-                    dn.update();
-                }
-            }
-        }
-        //Add damage Numbers to Screen
-        synchronized (dnListB) {
-            for (i = dnListB.iterator(); i.hasNext(); ) {
-                DamageNumber dn = i.next();
-                if (dn.isRemoveable()) {
-                    i.remove();
-                } else {
-                    Assets.dmgNumFnt.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
-                    Assets.dmgNumFnt.draw(batch, dn.getCs(), dn.getX(), dn.getY());
-                    dn.update();
-                }
-            }
-        }
-        batch.end();
-    }
-
-
-    public void setLoot(Loot copy){
-      //  System.out.println("Set Loot");
-        if(copy instanceof  Weapon) {
-            lootWep.setActor(copy.getActor());
-            ((Weapon)lootWep.getActor()).copyWeapon((Weapon) copy, Weapon.POSITION.LOOT_POSITION);
-
-        }
-        if(copy instanceof HeadSpriteActor){
-            lootWep.setActor(copy.getActor());
-            lootWep.getActor().setName("Head" + System.currentTimeMillis());
-        }
-        lootWep.setName(lootWep.getActor().getName());
-
+        System.out.println(lootActor);
     }
 
     public void updateCharacterWeapons(Weapon aWeapon, Weapon bWeapon){
@@ -286,7 +222,7 @@ public class BattleView {
           aWep.copyWeapon(aWeapon, Weapon.POSITION.LEFT_POSITION);
           aWep.setVisible(true);
         }else{
-            aWep.setVisible(false);
+          aWep.setVisible(false);
         }
 
         if(b.getRightside().isWeaponEquipped()){
@@ -302,8 +238,7 @@ public class BattleView {
         b.getLeftside().setHealth(lefthp);
         b.getRightside().setHealth(righthp);
 
-        lootWep.setVisible(showLoot);
-        //lootWep.getActor().setVisible(showLoot);
+        lootActor.setVisible(showLoot);
 
         String line = "";
         for(int i = 0; i < b.getRightside().getWin_streak() % b.getRightside().wins_to_level; i++ ){

@@ -47,9 +47,9 @@ public class BattleResultHandler {
             b.resetWins();
         }
 
-        if(hitcount % 2 == 1) {
+        //if(hitcount % 2 == 1) {
             resultsList.add(BattleResult.Player1GetsLoot);
-        }
+        //}
 
 
         resultsList.add(BattleResult.ShowStaticLoot);

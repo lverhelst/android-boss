@@ -7,14 +7,14 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 /**
  * Created by Leon I. Verhelst on 11/17/2014.
  */
-public class HeadSpriteActor extends Actor implements Loot {
+public class HeadSpriteActor extends Actor {
 
     Sprite headSprite;
-    Actor actor;
+
 
     public HeadSpriteActor(){
         headSprite = new Sprite(Assets.getHeadSprite());
-        actor = this;
+
     }
 
     public Sprite getSprite(){
@@ -23,17 +23,7 @@ public class HeadSpriteActor extends Actor implements Loot {
 
     public void copyHSA(HeadSpriteActor hsa){
         this.headSprite = new Sprite(hsa.getSprite());
-        actor = this;
-    }
 
-    @Override
-    public Actor getActor() {
-        return actor;
-    }
-
-    @Override
-    public void setActor(Actor actor) {
-        this.actor = actor;
     }
 
     @Override
