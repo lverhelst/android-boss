@@ -175,6 +175,7 @@ public class Weapon extends Actor {
         return extra_type;
     }
 
+    public int dragx = 0, dragy = 0;
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
@@ -189,6 +190,9 @@ public class Weapon extends Actor {
         spr.setPosition(getX(), getY());
 
         spr.setSize(getWidth() - padding, getHeight() - padding);
+
+        dragx = (int)getWidth();
+        dragy = (int)getHeight();
 
         Sprite wdi = new Sprite(Assets.weapon_data_icon);
 
@@ -248,6 +252,8 @@ public class Weapon extends Actor {
     public Table getTable(){
         if(root == null)
             root = new Table();
+        else
+            root.clearChildren();
 
         root.setDebug(true);
         Table dataTable = new Table(skin);

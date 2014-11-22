@@ -191,12 +191,17 @@ public class BattleScreen implements Screen, InputProcessor {
 
                     if(bView.lootActor instanceof Weapon) {
                         dragme = new Weapon();
+
                         ((Weapon)dragme).copyWeapon((Weapon) bView.lootActor, Weapon.POSITION.RIGHT_POSITION);
+                        dragme.setSize(((Weapon) bView.lootActor).dragx, ((Weapon) bView.lootActor).dragy);
+                        //System.out.println(((Weapon) bView.lootActor).dragx + " " +  ((Weapon) bView.lootActor).dragy);
                     }
                     if(bView.lootActor instanceof HeadSpriteActor){
                         dragme = new HeadSpriteActor();
                         ((HeadSpriteActor)dragme).copyHSA((HeadSpriteActor)bView.lootActor);
                     }
+
+                    dragme.setPosition(dragme.getX() - dragme.getWidth()/2, dragme.getY() - dragme.getHeight()/2);
                     bView.getStage().addActor(dragme);
 
                 }
@@ -215,7 +220,7 @@ public class BattleScreen implements Screen, InputProcessor {
             if(tActor != null && tActor.getName() != null) {
 
 
-               System.out.println(tActor.getName() + " " + bView.lootActor.getName());
+               System.out.println("Touchup: " + tActor.getName() + " " + bView.lootActor.getName());
                /* if (tActor.getName().equals(bView.lootActor.getName())) {
                     //Copy the weapon so that we aren't passing the reference
                     Weapon newWep = new Weapon();
@@ -309,8 +314,8 @@ public class BattleScreen implements Screen, InputProcessor {
 
       //  System.out.println(screenX + " h:" + screenY +  " dragme not null? " + (dragme != null));
         if(dragme != null) {
-            dragme.setPosition(screenX, Gdx.graphics.getHeight() - screenY);
-            dragme.setSize(30,30);
+
+            dragme.setPosition(screenX - dragme.getWidth()/2, Gdx.graphics.getHeight() - screenY - dragme.getHeight()/2);
         }
         return false;
 
