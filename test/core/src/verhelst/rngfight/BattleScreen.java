@@ -89,6 +89,11 @@ public class BattleScreen implements Screen, InputProcessor {
                         break;
                     case Player1GetsLoot:
                         btl.getLeftside().setEquipped_weapon(Weapon.generateScaledWeapon(a.getLevel(), Assets.getWeaponSprite(), Weapon.POSITION.LEFT_POSITION));
+                        Weapon aWep = btl.getLeftside().getEquipped_weapon();
+                        Weapon bWep = btl.getRightside().getEquipped_weapon();
+
+                        bView.updateCharacterWeapons(aWep, bWep);
+
                         break;
                     case HeadLoot:
                         showLoot = true;
@@ -114,10 +119,6 @@ public class BattleScreen implements Screen, InputProcessor {
 
 
 
-        Weapon aWep = btl.getLeftside().getEquipped_weapon();
-        Weapon bWep = btl.getRightside().getEquipped_weapon();
-
-        bView.updateCharacterWeapons(aWep, bWep);
         bView.update(anim_h1, anim_h2, showLoot, a.max_level, message, hits);
 
 
@@ -218,7 +219,7 @@ public class BattleScreen implements Screen, InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
         if(showLoot){
-          
+
             if(dragme != null) {
                 float rectax1 = btl.getRightside().getX();
                 float rectbx2 = dragme.getX() + dragme.getWidth();
@@ -240,6 +241,11 @@ public class BattleScreen implements Screen, InputProcessor {
                         Weapon newWep = new Weapon();
                         newWep.copyWeapon((Weapon)bView.lootActor, Weapon.POSITION.RIGHT_POSITION);
                         btl.getRightside().setEquipped_weapon(newWep);
+                        Weapon aWep = btl.getLeftside().getEquipped_weapon();
+                        Weapon bWep = btl.getRightside().getEquipped_weapon();
+
+                        bView.updateCharacterWeapons(aWep, bWep);
+
                         System.out.println("QUEIROASDAS");
                     }
                     if(bView.lootActor instanceof HeadSpriteActor){
