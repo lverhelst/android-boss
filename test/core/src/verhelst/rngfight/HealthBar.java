@@ -78,7 +78,7 @@ public class HealthBar extends Actor {
 
             foreground.draw(batch, getX(), getY(), getWidth(), hh * scaler);
         }
-        Assets.HUDbf.draw(batch, this.name + ": " + ( character.getHealth()  > 0 ?  character.getHealth()  : 0), getX() + getWidth()/4, getY() + Assets.HUDbf.getBounds( character.getName()).height + 1);
+                Assets.HUDbf.draw(batch, /*this.name + ": " +*/ "" + ( character.getHealth()  > 0 ?  character.getHealth()  : 0), getX() + getWidth()/10, getY() + Assets.HUDbf.getBounds( character.getName()).height + 1);
     }
 
     @Override

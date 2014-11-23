@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import java.util.Random;
 
+import verhelst.Comp.LTable;
+
 /**
  * Created by Orion on 10/23/2014.
  */
@@ -248,36 +250,40 @@ public class Weapon extends Actor {
     }
 
     //TODO: move to a view class
-    Table root;
-    public Table getTable(){
+    LTable root;
+    public LTable getTable(){
         if(root == null)
-            root = new Table();
-        else
-            root.clearChildren();
+            root = new LTable(0,0,100,100);
+        else{
+            root.removeChildren();
+        }
+        root.setName("WeaponRoot");
+        //else
+        //    root.clearChildren();
 
-        root.setDebug(false);
-        Table dataTable = new Table(skin);
-        dataTable.columnDefaults(1).width(32);
-        dataTable.setDebug(false);
-        dataTable.add(lldmg).center().pad(5).expand().fill();
-        dataTable.add(new Image(Assets.dmgIconTxture)).center().pad(5).fill().expand();
-        dataTable.row();
-
-        dataTable.add(llhrt).center().pad(5).expand().fill();
-
-        dataTable.add(new Image(Assets.hrtIconTxture)).center().pad(5).fill().expand();
+        LTable dataTable = new LTable(0,0,100,100);
+        //dataTable.columnDefaults(1).width(32);
+        //dataTable.setDebug(true);
+        dataTable.addActor(lldmg);//.center().pad(5).expand().fill();
+        dataTable.addActor(new Image(Assets.dmgIconTxture),true);//.center().pad(5).fill().expand();
+        dataTable.addRow();
+        dataTable.addActor(llhrt);//.center().pad(5).expand().fill();
+        dataTable.addActor(new Image(Assets.hrtIconTxture),true);//.center().pad(5).fill().expand();
         if(posi != POSITION.RIGHT_POSITION) {
-            root.add(dataTable).uniform();
-            root.add(new WepSpriteActor()).uniform().fill();
+            root.addActor(dataTable);//.uniform().expand().fill();
+            root.addActor(new WepSpriteActor(),true);//.uniform().expand().fill();
         }else{
-            root.add(new WepSpriteActor()).uniform().fill();
-            root.add(dataTable).uniform();
+            root.addActor(new WepSpriteActor(),true);//.uniform().expand().fill();
+            root.addActor(dataTable);//.uniform().expand().fill();
         }
         return root;
     }
 
     private class WepSpriteActor extends Actor{
 
+        public WepSpriteActor(){
+            setSize(32,32);
+        }
 
         @Override
         public void draw(Batch batch, float parentAlpha){

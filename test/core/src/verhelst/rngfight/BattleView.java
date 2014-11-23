@@ -18,14 +18,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+import verhelst.Comp.LCell;
+import verhelst.Comp.LTable;
+
 /**
  * Created by Orion on 11/2/2014.
  */
 public class BattleView {
-
-
-
-
 
     HealthBar one, two;
     Stage stage;
@@ -38,13 +37,13 @@ public class BattleView {
     LeonLabel r2c1, r3c2, endMessageLbl;
     Battle b;
     Actor lootActor;
-    final Weapon aWep, bWep;
-    Table rootTable, row4;
+     Weapon aWep, bWep;
+    LTable rootTable, row3, row4;
     public final float PADDING;
 
 
 
-    boolean debug = false;
+    boolean debug = true;
 
     public BattleView(Battle battle){
         rng = new Random();
@@ -95,7 +94,7 @@ public class BattleView {
 
         Label r6c1 = new Label("R6C1", skin); //Centre- top align, loot weapon & bottom row
 
-        rootTable = new Table();
+        rootTable = new LTable(0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         /*Table healthbarstable = new Table();
         healthbarstable.add(one).expand().fill().align(Align.left);
         healthbarstable.row();
@@ -108,7 +107,6 @@ public class BattleView {
         healthbarstable.setDebug(debug);
         rootTable.add(healthbarstable).expandX().fillX();
         */
-        rootTable.row();
 
 
         Table row1 = new Table();
@@ -120,8 +118,8 @@ public class BattleView {
         row1.setDebug(debug);
         row1.row();
 
-        rootTable.add(row1).expand().fillX();
-        rootTable.row();
+        rootTable.addActor(row1);
+        rootTable.addRow();
 
         Table row1point5 = new Table();
 
@@ -129,33 +127,34 @@ public class BattleView {
         //rootTable.add(row1point5).expandX().fill();
         //rootTable.row();
 
-        Table row2 = new Table();
+        LTable row2 = new LTable(0,0,100,100);
 
-        row2.add(one).expand().fill(); //Stars A
+        row2.addActor(one, 2);//.expand().fill(); //Stars A
 
-        row2.add(battle.getLeftside()).expand().fill().left();  //Char A
-        row2.add(battle.getRightside()).expand().fill().right(); //Char B
-        row2.add(two).expand().fill(); //Stars B
-        row2.setDebug(debug);
-        rootTable.add(row2).expand().fill();
-        rootTable.row();
+        row2.addActor(battle.getLeftside());//.expand().fill().left();  //Char A
+        row2.addActor(battle.getRightside());//.expand().fill().right(); //Char B
+        row2.addActor(two, 2);//.expand().fill(); //Stars B
+       // row2.setDebug(debug);
+        rootTable.addActor(row2,2);
+        rootTable.addRow();
 
-        Table row3 = new Table();
+        row3 = new LTable(0,0,100,100);
         aWep = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.LEFT_POSITION);
         aWep.setVisible(false);
-        row3.add(r5c3).expand().fill();
-        row3.add(aWep.getTable()).right().fill();//.pad(PADDING); //A Weapon
 
-        row3.add(r5c3).expand();         //Space
+        row3.addActor(r5c3);//.expand().fill();
+        row3.addActor(aWep.getTable());//.right().expand().fill();//.pad(PADDING); //A Weapon
+
+        row3.addActor(r5c3);//.expand();         //Space
         bWep = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.RIGHT_POSITION);
         bWep.setVisible(false);
-        row3.add(bWep.getTable()).left().fill();//.pad(PADDING); //B Weapon
-        row3.add(r5c3).expand().fill();
+        row3.addActor(bWep.getTable());//.left().expand().fill();//.pad(PADDING); //B Weapon
+        row3.addActor(r5c3);//.expand().fill();
 
-        rootTable.add(row3).fill();
-        rootTable.row();
-
-        row4 = new Table();
+        rootTable.addActor(row3);
+        rootTable.addRow();
+        rootTable.addRow();
+        row4 = new LTable(0,0,100,100);
 
         Table statsTable = new Table();
         statsTable.add(r2c1).expand().top().left();
@@ -179,17 +178,16 @@ public class BattleView {
         lootActor.setVisible(false);
 
 
-        row4.add(statsTable).expand().fill();
-        row4.add(new Label("", skin)).expand().fill();
+        row4.addActor(statsTable);
+        row4.addActor(new Label("", skin));
         //.getTable(skin)
-        row4.add(lootActor).center().top().expand().fill();//.pad(PADDING); //LOOT
-        row4.add(new Label("", skin)).expand().fill();
-        row4.add(new Label("", skin)).expand().fill();
-        rootTable.add(row4).expand().fill();
-        rootTable.row();
+        row4.addActor(lootActor);//.center().top().expand().fill();//.pad(PADDING); //LOOT
+        row4.addActor(new Label("", skin));//.expand().fill();
+        row4.addActor(new Label("", skin));//.expand().fill();
+        rootTable.addActor(row4);//.expand().fill();
 
-        rootTable.setDebug(debug);
-        rootTable.setFillParent(true);
+        //rootTable.setDebug(debug);
+        //rootTable.setFillParent(true);
 
 
         battleStage = new Stage(new ScalingViewport(Scaling.fit, camera.viewportWidth, camera.viewportHeight, camera), RngFight.batch);
@@ -207,15 +205,15 @@ public class BattleView {
 
 
     public void setLoot(Actor newloot){
-        Cell c =  row4.getCell(lootActor);
+        LCell c =  row4.getLCellForActor(lootActor);
         System.out.println("Setting loot");
 
         System.out.println(lootActor);
         if(c != null) {
             System.out.println("Cell found");
             if(newloot instanceof  Weapon) {
-                c.setActor(((Weapon) newloot));
-                System.out.println("Weapon max dmaage" + ((Weapon)newloot).getMax_damage());
+                c.setActor(newloot);
+             //   System.out.println("Weapon max dmaage" + ((Weapon)newloot).getMax_damage());
             }
             else {
                 c.setActor(newloot);
@@ -227,16 +225,31 @@ public class BattleView {
 
     public void updateCharacterWeapons(Weapon aWeapon, Weapon bWeapon){
 
+
+        System.out.println("Update Character Weapons");
         if(b.getLeftside().isWeaponEquipped()) {
-          aWep.copyWeapon(aWeapon, Weapon.POSITION.LEFT_POSITION);
-          aWep.setVisible(true);
+            //aWep.copyWeapon(aWeapon, Weapon.POSITION.LEFT_POSITION);
+            LCell c = row3.getLCellForActor(aWep.getTable());
+            if(c != null) {
+                System.out.println("AWeaponFound");
+                c.setActor(aWeapon.getTable());
+                aWep = aWeapon;
+            }
+            aWep.setVisible(true);
         }else{
           aWep.setVisible(false);
         }
 
         if(b.getRightside().isWeaponEquipped()){
+
+
+          //bWep.copyWeapon(bWeapon, Weapon.POSITION.RIGHT_POSITION);
+            LCell c = row3.getLCellForActor(bWep.getTable());
+            if(c != null) {
+                c.setActor(bWeapon.getTable());
+                bWep = bWeapon;
+            }
           bWep.setVisible(true);
-          bWep.copyWeapon(bWeapon, Weapon.POSITION.RIGHT_POSITION);
         }else{
             bWep.setVisible(false);
         }

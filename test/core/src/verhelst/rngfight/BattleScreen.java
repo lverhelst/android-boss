@@ -56,6 +56,11 @@ public class BattleScreen implements Screen, InputProcessor {
 
         bView = new BattleView(btl);
 
+        Weapon aWep = btl.getLeftside().getEquipped_weapon();
+        Weapon bWep = btl.getRightside().getEquipped_weapon();
+
+        bView.updateCharacterWeapons(aWep, bWep);
+
         Gdx.input.setInputProcessor(this);
     }
 
@@ -189,9 +194,9 @@ public class BattleScreen implements Screen, InputProcessor {
 
 
             System.out.println("Touch down before actor check");
-            if(tActor != null && tActor.getName() != null) {
-                System.out.println("Touchdown " + tActor.getName() + " " + bView.lootActor.getName());
-                if (tActor.getName().equals(bView.lootActor.getName())) {
+            //Get width * 2 accounts for the extra text in the weapon actor
+            if(vec.x >= bView.lootActor.getX() && vec.x <= bView.lootActor.getX() + bView.lootActor.getWidth() * 2
+                      && vec.y >= bView.lootActor.getY() && vec.y <= bView.lootActor.getY() + bView.lootActor.getHeight()) {
                     //Copy the weapon so that we aren't passing the reference
                     System.out.println("Touch down in loot actor");
 
@@ -213,7 +218,7 @@ public class BattleScreen implements Screen, InputProcessor {
 
                 }
             }
-        }
+
         return false;
     }
 
