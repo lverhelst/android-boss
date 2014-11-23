@@ -153,7 +153,7 @@ public class BattleView {
 
         rootTable.addActor(row3);
         rootTable.addRow();
-        rootTable.addRow();
+        //rootTable.addRow();
         row4 = new LTable(0,0,100,100);
 
         Table statsTable = new Table();
@@ -181,7 +181,7 @@ public class BattleView {
         row4.addActor(statsTable);
         row4.addActor(new Label("", skin));
         //.getTable(skin)
-        row4.addActor(lootActor);//.center().top().expand().fill();//.pad(PADDING); //LOOT
+        row4.addActor(((Weapon)lootActor).getTable());//.center().top().expand().fill();//.pad(PADDING); //LOOT
         row4.addActor(new Label("", skin));//.expand().fill();
         row4.addActor(new Label("", skin));//.expand().fill();
         rootTable.addActor(row4);//.expand().fill();
@@ -206,17 +206,23 @@ public class BattleView {
 
     public void setLoot(Actor newloot){
         LCell c =  row4.getLCellForActor(lootActor);
-        System.out.println("Setting loot");
+        if(lootActor instanceof  Weapon){
+            System.out.println("Searching for weapon table");
+            c = row4.getLCellForActorName(((Weapon)lootActor).getTable().getName());
+        }
 
         System.out.println(lootActor);
         if(c != null) {
             System.out.println("Cell found");
             if(newloot instanceof  Weapon) {
-                c.setActor(newloot);
+                c.setActor(((Weapon) newloot).getTable());
              //   System.out.println("Weapon max dmaage" + ((Weapon)newloot).getMax_damage());
+
             }
             else {
                 c.setActor(newloot);
+
+
             }
             lootActor = newloot;
         }

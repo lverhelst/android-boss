@@ -20,7 +20,7 @@ public class BattleResultHandler {
         List<BattleResult> resultsList = new ArrayList<BattleResult>();
         //Decide winner
 
-
+        int aoriglvl = a.getLevel();
 
         if(a.getHealth() > 0 && b.getHealth() <= 0){
             resultsList.add(BattleResult.Player1Win);
@@ -47,13 +47,11 @@ public class BattleResultHandler {
             b.resetWins();
         }
 
-        if(hitcount % 2 == 1 || true) {
+        if(hitcount % 4 == 1 || aoriglvl != a.getLevel()) {
             resultsList.add(BattleResult.Player1GetsLoot);
         }
 
-        resultsList.add(BattleResult.ShowStaticLoot);
 
-        //resultsList.add(BattleResult.HeadLoot);
 
         //Deal with hitcount
         if(hitcount == 101)

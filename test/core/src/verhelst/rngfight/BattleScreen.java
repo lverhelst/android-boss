@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import verhelst.Comp.LTable;
+
 /**
  * Created by Leon I. Verhelst on 10/30/2014.
  */
@@ -204,8 +206,11 @@ public class BattleScreen implements Screen, InputProcessor {
                         dragme = new Weapon();
 
                         ((Weapon)dragme).copyWeapon((Weapon) bView.lootActor, Weapon.POSITION.RIGHT_POSITION);
-                        dragme.setSize(((Weapon) bView.lootActor).dragx/2, ((Weapon) bView.lootActor).dragy/2);
-                        //System.out.println(((Weapon) bView.lootActor).dragx + " " +  ((Weapon) bView.lootActor).dragy);
+                        dragme = ((Weapon) dragme).getTable();
+
+
+                        dragme.setSize(((Weapon) bView.lootActor).getWidth()/2, ((Weapon) bView.lootActor).getHeight()/2);
+                        System.out.println(((Weapon) bView.lootActor).getMax_damage() + " " +  ((Weapon) bView.lootActor).dragy);
                     }
                     if(bView.lootActor instanceof HeadSpriteActor){
                         dragme = new HeadSpriteActor();

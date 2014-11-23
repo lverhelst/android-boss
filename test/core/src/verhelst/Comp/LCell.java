@@ -54,6 +54,7 @@ public class LCell extends Actor {
 
         if(!keep_aspect_ratio){
             actor.setSize(width, height);
+            actor.setPosition(x_coord, y_coord);
         }else{
             //keep aspect ratio of actor
             float w = actor.getWidth();
@@ -67,19 +68,23 @@ public class LCell extends Actor {
 //            System.out.println("w " + w + " h " + h + " xs " + x_scale + " ys " + y_scale + " s " + scale);
 
             actor.setSize(w * scale, h * scale);
+            actor.setPosition(x_coord + (width - (w * scale))/2, y_coord + (height - (h * scale))/2);
         }
 
-        actor.setPosition(x_coord, y_coord);
+
         if(actor.isVisible())
             actor.draw(batch, parentAlpha);
      //   System.out.println(actor.toString() + " x: " + x_coord + " y: " + y_coord + " w: " + width + " h: " + height);
-        batch.end();
-        if(sr == null)
-            sr = new ShapeRenderer();
-        sr.begin(ShapeRenderer.ShapeType.Line);
-        sr.rect(x_coord, y_coord, width, height);
-        sr.end();
-        batch.begin();
+       //TODO: Add debug
+        if(false) {
+            batch.end();
+            if (sr == null)
+                sr = new ShapeRenderer();
+            sr.begin(ShapeRenderer.ShapeType.Line);
+            sr.rect(x_coord, y_coord, width, height);
+            sr.end();
+            batch.begin();
+        }
     }
 
     ShapeRenderer sr;

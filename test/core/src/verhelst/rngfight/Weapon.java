@@ -146,6 +146,7 @@ public class Weapon extends Actor {
 //        System.out.println(this.getName() + " copy from " + to_copy.getName());
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         lldmg = new Label(dmgstring, skin);
+
         lldmg.setText(dmgstring);
         llhrt = new Label(heartstring, skin);
         llhrt.setText(heartstring);
@@ -252,28 +253,36 @@ public class Weapon extends Actor {
     //TODO: move to a view class
     LTable root;
     public LTable getTable(){
-        if(root == null)
-            root = new LTable(0,0,100,100);
+        if(root == null) {
+            root = new LTable(0, 0, 100, 100);
+            root.setName("WeaponRoot" + System.currentTimeMillis());
+        }
         else{
             root.removeChildren();
         }
-        root.setName("WeaponRoot");
+
         //else
         //    root.clearChildren();
 
         LTable dataTable = new LTable(0,0,100,100);
         //dataTable.columnDefaults(1).width(32);
         //dataTable.setDebug(true);
-        dataTable.addActor(lldmg);//.center().pad(5).expand().fill();
+        lldmg.setFontScale(Gdx.graphics.getDensity());
+
+
         dataTable.addActor(new Image(Assets.dmgIconTxture),true);//.center().pad(5).fill().expand();
+        dataTable.addActor(lldmg);//.center().pad(5).expand().fill();
         dataTable.addRow();
-        dataTable.addActor(llhrt);//.center().pad(5).expand().fill();
+        llhrt.setFontScale(Gdx.graphics.getDensity());
         dataTable.addActor(new Image(Assets.hrtIconTxture),true);//.center().pad(5).fill().expand();
+        dataTable.addActor(llhrt);//.center().pad(5).expand().fill();
+
         if(posi != POSITION.RIGHT_POSITION) {
+
+            root.addActor(new WepSpriteActor(), true);//.uniform().expand().fill();
             root.addActor(dataTable);//.uniform().expand().fill();
-            root.addActor(new WepSpriteActor(),true);//.uniform().expand().fill();
         }else{
-            root.addActor(new WepSpriteActor(),true);//.uniform().expand().fill();
+            root.addActor(new WepSpriteActor(), true);//.uniform().expand().fill();
             root.addActor(dataTable);//.uniform().expand().fill();
         }
         return root;
@@ -304,4 +313,31 @@ public class Weapon extends Actor {
     }
 
 
+    @Override
+    public float getY() {
+        if(root != null)
+            return root.getY();
+        return super.getY();
+    }
+
+    @Override
+    public float getX() {
+        if(root != null)
+            return root.getX();
+        return super.getX();
+    }
+
+    @Override
+    public float getWidth() {
+        if(root != null)
+            return root.getWidth();
+        return super.getWidth();
+    }
+
+    @Override
+    public float getHeight() {
+        if(root != null)
+            return root.getHeight();
+        return super.getHeight();
+    }
 }

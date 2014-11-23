@@ -105,7 +105,7 @@ public class Character extends Actor {
         //else{
             victim.applyDamageOrHealth(dmgOrHealth);
             //simulate lifesteal
-            this.applyDamageOrHealth(-1 * Math.abs((int)(dmgOrHealth * 0.01)));
+            this.applyDamageOrHealth(-1 * Math.abs((int)(dmgOrHealth * 0.011)));
         //}
         return dmgOrHealth;
     }

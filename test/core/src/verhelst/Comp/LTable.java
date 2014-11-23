@@ -116,6 +116,19 @@ public class LTable extends Actor {
         return null;
     }
 
+    public LCell getLCellForActorName(String name){
+        for(LCell cell : sortedCells){
+            if(cell.getActor().getName() != null){
+                System.out.println("Search names " + name + " " + cell.getActor().getName());
+                if(cell.getActor().getName().equals(name)) {
+                    return cell;
+                }
+            }
+        }
+        return null;
+    }
+
+
     public void removeChildren(){
         table.clear();
         table.add(new ArrayList<LCell>());
