@@ -44,7 +44,7 @@ public class BattleView {
 
 
 
-    boolean debug = true;
+    boolean debug = false;
 
     public BattleView(Battle battle){
         rng = new Random();
@@ -76,12 +76,14 @@ public class BattleView {
 
         /*** Battle Peices ***/
         r2c1 = new LeonLabel("ABCD", skin); //Right - bottom alight, left half
+        r2c1.isHUD = true;
         Label r2c2 = new Label("", skin); //Empty Right half
 
         endMessageLbl = new LeonLabel("End Message Here", skin);
         endMessageLbl.setWrap(true);
 
         r3c2  = new LeonLabel("R3C2", skin); //Left stars
+        r3c2.isHUD = true;
 
        // Label r3c3 = new Label("R3C3", skin); //Left Char
         Label r3c4 = new Label("R3C4", skin); //Middle space
@@ -94,7 +96,7 @@ public class BattleView {
         Label r6c1 = new Label("R6C1", skin); //Centre- top align, loot weapon & bottom row
 
         rootTable = new Table();
-        Table healthbarstable = new Table();
+        /*Table healthbarstable = new Table();
         healthbarstable.add(one).expand().fill().align(Align.left);
         healthbarstable.row();
        // healthbarstable.add(oneLbl).expand().fill().align(Align.left);
@@ -105,6 +107,7 @@ public class BattleView {
        // healthbarstable.row();
         healthbarstable.setDebug(debug);
         rootTable.add(healthbarstable).expandX().fillX();
+        */
         rootTable.row();
 
 
@@ -127,17 +130,12 @@ public class BattleView {
         //rootTable.row();
 
         Table row2 = new Table();
-            Table row2pt2 = new Table();
-            row2pt2.add(r2c1).expand().top().right();
-            row2pt2.row();
-            row2pt2.add(r3c2).expand().right();
-            row2pt2.row();
-            row2pt2.setDebug(debug);
-        row2.add(row2pt2).expand().fill(); //Stars A
+
+        row2.add(one).expand().fill(); //Stars A
 
         row2.add(battle.getLeftside()).expand().fill().left();  //Char A
         row2.add(battle.getRightside()).expand().fill().right(); //Char B
-        row2.add(r3c5).expand().left(); //Stars B
+        row2.add(two).expand().fill(); //Stars B
         row2.setDebug(debug);
         rootTable.add(row2).expand().fill();
         rootTable.row();
@@ -160,10 +158,21 @@ public class BattleView {
         row4 = new Table();
 
         Table statsTable = new Table();
-        statsTable.add(highscore).expand().align(Align.left);
+        statsTable.add(r2c1).expand().top().left();
+        statsTable.row();
+        statsTable.add(r3c2).expand().top().left();
+        statsTable.row();
+        statsTable.add(highscore).expand().align(Align.left).top();
         statsTable.row();
         statsTable.add(hitcount).expand().align(Align.left).top();
         statsTable.row();
+        /*Table row2pt2 = new Table();
+        row2pt2.add(r2c1).expand().top().right();
+        row2pt2.row();
+        row2pt2.add(r3c2).expand().right();
+        row2pt2.row();
+        row2pt2.setDebug(debug);*/
+
         statsTable.setDebug(debug);
 
         lootActor = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION);

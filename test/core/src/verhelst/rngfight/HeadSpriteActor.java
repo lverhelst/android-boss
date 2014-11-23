@@ -14,7 +14,7 @@ public class HeadSpriteActor extends Actor {
 
     public HeadSpriteActor(){
         headSprite = new Sprite(Assets.getHeadSprite());
-
+        setName("HSA" + System.currentTimeMillis());
     }
 
     public Sprite getSprite(){
@@ -23,7 +23,7 @@ public class HeadSpriteActor extends Actor {
 
     public void copyHSA(HeadSpriteActor hsa){
         this.headSprite = new Sprite(hsa.getSprite());
-
+        setName(hsa.getName());
     }
 
     @Override

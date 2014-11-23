@@ -188,11 +188,12 @@ public class BattleScreen implements Screen, InputProcessor {
 
 
 
-
+            System.out.println("Touch down before actor check");
             if(tActor != null && tActor.getName() != null) {
-                System.out.println(tActor.getName() + " " + bView.lootActor.getName());
+                System.out.println("Touchdown " + tActor.getName() + " " + bView.lootActor.getName());
                 if (tActor.getName().equals(bView.lootActor.getName())) {
                     //Copy the weapon so that we aren't passing the reference
+                    System.out.println("Touch down in loot actor");
 
                     if(bView.lootActor instanceof Weapon) {
                         dragme = new Weapon();
@@ -204,6 +205,7 @@ public class BattleScreen implements Screen, InputProcessor {
                     if(bView.lootActor instanceof HeadSpriteActor){
                         dragme = new HeadSpriteActor();
                         ((HeadSpriteActor)dragme).copyHSA((HeadSpriteActor)bView.lootActor);
+                        dragme.setSize(bView.lootActor.getWidth()/2, bView.lootActor.getHeight()/2);
                     }
 
                     dragme.setPosition(dragme.getX() - dragme.getWidth()/2, dragme.getY() - dragme.getHeight()/2);
@@ -323,6 +325,8 @@ public class BattleScreen implements Screen, InputProcessor {
         if(dragme != null) {
 
             dragme.setPosition(screenX - dragme.getWidth()/2, Gdx.graphics.getHeight() - screenY - dragme.getHeight()/2);
+
+
         }
         return false;
 

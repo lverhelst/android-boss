@@ -255,10 +255,10 @@ public class Weapon extends Actor {
         else
             root.clearChildren();
 
-        root.setDebug(true);
+        root.setDebug(false);
         Table dataTable = new Table(skin);
         dataTable.columnDefaults(1).width(32);
-        dataTable.setDebug(true);
+        dataTable.setDebug(false);
         dataTable.add(lldmg).center().pad(5).expand().fill();
         dataTable.add(new Image(Assets.dmgIconTxture)).center().pad(5).fill().expand();
         dataTable.row();
