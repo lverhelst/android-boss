@@ -142,14 +142,14 @@ public class BattleView {
         aWep = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.LEFT_POSITION);
         aWep.setVisible(false);
 
-        row3.addActor(r5c3);//.expand().fill();
-        row3.addActor(aWep.getTable());//.right().expand().fill();//.pad(PADDING); //A Weapon
+        row3.addActor(r5c3).setWidth_percent(10);//.expand().fill();
+        row3.addActor(aWep.getTable()).setWidth_percent(35);//.right().expand().fill();//.pad(PADDING); //A Weapon
 
-        row3.addActor(r5c3);//.expand();         //Space
+        row3.addActor(r5c3).setWidth_percent(10);//.expand();         //Space
         bWep = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.RIGHT_POSITION);
         bWep.setVisible(false);
-        row3.addActor(bWep.getTable());//.left().expand().fill();//.pad(PADDING); //B Weapon
-        row3.addActor(r5c3);//.expand().fill();
+        row3.addActor(bWep.getTable()).setWidth_percent(35);//.left().expand().fill();//.pad(PADDING); //B Weapon
+        row3.addActor(r5c3).setWidth_percent(10);//.expand().fill();
 
         rootTable.addActor(row3);
         rootTable.addRow();
@@ -179,10 +179,10 @@ public class BattleView {
 
 
         row4.addActor(statsTable);
-        row4.addActor(new Label("", skin));
+       // row4.addActor(new Label("", skin));
         //.getTable(skin)
         row4.addActor(((Weapon)lootActor).getTable());//.center().top().expand().fill();//.pad(PADDING); //LOOT
-        row4.addActor(new Label("", skin));//.expand().fill();
+       // row4.addActor(new Label("", skin));//.expand().fill();
         row4.addActor(new Label("", skin));//.expand().fill();
         rootTable.addActor(row4);//.expand().fill();
 

@@ -12,14 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import java.util.Random;
 
-import verhelst.Comp.LTable;
-
 /**
  * Created by Orion on 10/23/2014.
  */
 
 
-public class Weapon extends Actor {
+public class Weapon extends Actor implements Loot {
 
     enum DAMAGETYPE{
         NORMAL,
@@ -48,10 +46,6 @@ public class Weapon extends Actor {
 
 
     private final static Random rng = new Random();
-
-    private String nm;
-    public Skin skin;
-
 
     public static Weapon generateRandomWeapon(int lvl, Sprite tempSprite, POSITION position)
     {
@@ -82,13 +76,6 @@ public class Weapon extends Actor {
         this.sprite_initWidth = (int)sprite.getWidth();
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
         this.posi = POSITION.LOOT_POSITION;
-        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-
-        lldmg = new Label(dmgstring, skin);
-        //lldmg.setText(dmgstring);
-        llhrt = new Label(heartstring, skin);
-        //llhrt.setText(heartstring);
-        root = getTable();
     }
 
 
@@ -102,13 +89,10 @@ public class Weapon extends Actor {
         this.sprite_initWidth = (int)sprite.getWidth();
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
         this.posi = position;
-        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-        root = getTable();
     }
 
     public Weapon(int mindmg, int maxdmg, DAMAGETYPE dmg_type, int hp_multiplier, float life_steal, Sprite sprite, POSITION position){
         this.setName("Weap" + System.currentTimeMillis());
-        this.nm = this.getName();
         this.min_damage = mindmg;
         this.max_damage = maxdmg;
         this.extra_type = dmg_type;
@@ -121,13 +105,12 @@ public class Weapon extends Actor {
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
         this.dmgstring = min_damage + "-" + max_damage;
         this.heartstring = hp_multiplier +"";
-        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         lldmg = new Label(dmgstring, skin);
         lldmg.setText(dmgstring);
         llhrt = new Label(heartstring, skin);
         llhrt.setText(heartstring);
-        root = getTable();
-     }
+    }
 
     public void copyWeapon(Weapon to_copy, POSITION posit){
         this.max_damage = to_copy.getMax_damage();
@@ -143,14 +126,9 @@ public class Weapon extends Actor {
         this.dmgstring = min_damage + "-" + max_damage;
         this.heartstring = hp_multiplier +"";
 
-//        System.out.println(this.getName() + " copy from " + to_copy.getName());
-        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-        lldmg = new Label(dmgstring, skin);
-
         lldmg.setText(dmgstring);
-        llhrt = new Label(heartstring, skin);
+
         llhrt.setText(heartstring);
-        root = getTable();
 
     }
 
@@ -178,12 +156,11 @@ public class Weapon extends Actor {
         return extra_type;
     }
 
-    public int dragx = 0, dragy = 0;
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
          //System.out.println(this.getName());
-
+        /*
 
         Sprite spr = sprite;
 
@@ -193,9 +170,6 @@ public class Weapon extends Actor {
         spr.setPosition(getX(), getY());
 
         spr.setSize(getWidth() - padding, getHeight() - padding);
-
-        dragx = (int)getWidth();
-        dragy = (int)getHeight();
 
         Sprite wdi = new Sprite(Assets.weapon_data_icon);
 
@@ -236,63 +210,63 @@ public class Weapon extends Actor {
         }
 
         spr.draw(batch);
-
-        //System.out.println("weapon draw");
-
-
-
-
-        //if(root != null) {
-            //root.setPosition(getX(), getY());
-          //  root.draw(batch, parentAlpha);
-     //       System.out.println("Drawing table.");
-//        /}
+*/
+        System.out.println("weapon draw");
+        //root.draw(batch, parentAlpha);
 
     }
 
     //TODO: move to a view class
-    LTable root;
-    public LTable getTable(){
-        if(root == null) {
-            root = new LTable(0, 0, 100, 100);
-            root.setName("WeaponRoot" + System.currentTimeMillis());
-        }
-        else{
-            root.removeChildren();
-        }
+    Table root;
+    public Table getTable(Skin skin){
+        root = new Table();
 
-        //else
-        //    root.clearChildren();
+        root.setDebug(true);
+        Table dataTable = new Table(skin);
+        dataTable.columnDefaults(1).width(32);
+        dataTable.setDebug(false);
 
-        LTable dataTable = new LTable(0,0,100,100);
-        //dataTable.columnDefaults(1).width(32);
-        //dataTable.setDebug(true);
-        lldmg.setFontScale((float)(Gdx.graphics.getDensity() * 1.25));
+        dataTable.add(lldmg).center().pad(5);
+        dataTable.add(new Image(Assets.dmgIconTxture)).center().pad(5).fill().expand();
+        dataTable.row();
 
-
-        dataTable.addActor(new Image(Assets.dmgIconTxture),true);//.center().pad(5).fill().expand();
-        dataTable.addActor(lldmg);//.center().pad(5).expand().fill();
-        dataTable.addRow();
-        llhrt.setFontScale((float)(Gdx.graphics.getDensity() * 1.25));
-        dataTable.addActor(new Image(Assets.hrtIconTxture),true);//.center().pad(5).fill().expand();
-        dataTable.addActor(llhrt);//.center().pad(5).expand().fill();
-
+        dataTable.add(llhrt).center().pad(5);
+        dataTable.add(new Image(Assets.hrtIconTxture)).center().pad(5).fill().expand();
         if(posi != POSITION.RIGHT_POSITION) {
-
-            root.addActor(new WepSpriteActor(), true);//.uniform().expand().fill();
-            root.addActor(dataTable);//.uniform().expand().fill();
+            root.add(dataTable).uniform();
+            root.add(new WepSpriteActor()).uniform().fill();
         }else{
-            root.addActor(new WepSpriteActor(), true);//.uniform().expand().fill();
-            root.addActor(dataTable);//.uniform().expand().fill();
+            root.add(new WepSpriteActor()).uniform().fill();
+            root.add(dataTable).uniform();
         }
         return root;
     }
 
+<<<<<<< HEAD
+=======
+    private class WDIActor extends Actor{
+        Sprite wdi;
+
+        public WDIActor(int icon){
+            if(icon == 1)
+                wdi = new Sprite(Assets.dmgIcon);
+            else if(icon == 2)
+                wdi = new Sprite(Assets.hrtIcon);
+            else
+                wdi = new Sprite(Assets.weapon_data_icon);
+        }
+
+        @Override
+        public void draw(Batch batch, float parentAlpha) {
+            wdi.setSize(getWidth(), getHeight());
+            wdi.setPosition(getX(), getY());
+            wdi.draw(batch);
+        }
+    }
+
+>>>>>>> fad75bcb225994036e6b06da32f05edd7f38294f
     private class WepSpriteActor extends Actor{
 
-        public WepSpriteActor(){
-            setSize(32,32);
-        }
 
         @Override
         public void draw(Batch batch, float parentAlpha){
@@ -314,30 +288,12 @@ public class Weapon extends Actor {
 
 
     @Override
-    public float getY() {
-        if(root != null)
-            return root.getY();
-        return super.getY();
+    public Actor getActor() {
+        return this;
     }
 
     @Override
-    public float getX() {
-        if(root != null)
-            return root.getX();
-        return super.getX();
-    }
-
-    @Override
-    public float getWidth() {
-        if(root != null)
-            return root.getWidth();
-        return super.getWidth();
-    }
-
-    @Override
-    public float getHeight() {
-        if(root != null)
-            return root.getHeight();
-        return super.getHeight();
+    public void setActor(Actor actor) {
+        //do nothing
     }
 }

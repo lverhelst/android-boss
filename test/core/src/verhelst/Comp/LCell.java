@@ -12,6 +12,7 @@ public class LCell extends Actor {
     int x_coord, y_coord;
     int width, height;
     int draw_position;
+    int width_percent;
     boolean keep_aspect_ratio;
 
     Actor actor;
@@ -40,6 +41,14 @@ public class LCell extends Actor {
 
     public int getDraw_position(){
         return draw_position;
+    }
+
+    public void setWidth_percent(int width_percent){
+        this.width_percent = width_percent;
+    }
+
+    public int getWidth_percent(){
+        return this.width_percent;
     }
 
     public void setBounds(int x, int y, int width, int height){

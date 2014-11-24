@@ -36,16 +36,17 @@ public class LTable extends Actor {
         computeSizes();
     }
 
-    public void addActor(Actor actor){
+    public LCell addActor(Actor actor){
         int last_row_index = table.size() -1;
         ArrayList<LCell> row = table.get(last_row_index);
         LCell cell = new LCell();
         cell.setActor(actor);
         row.add(cell);
         computeSizes();
+        return cell;
     }
 
-    public void addActor(Actor actor, int draworder){
+    public LCell addActor(Actor actor, int draworder){
         int last_row_index = table.size() -1;
         ArrayList<LCell> row = table.get(last_row_index);
         LCell cell = new LCell();
@@ -53,9 +54,10 @@ public class LTable extends Actor {
         cell.setDraw_position(draworder);
         row.add(cell);
         computeSizes();
+        return cell;
     }
 
-    public void addActor(Actor actor, boolean keep_aspect_ratio){
+    public LCell addActor(Actor actor, boolean keep_aspect_ratio){
         int last_row_index = table.size() -1;
         ArrayList<LCell> row = table.get(last_row_index);
         LCell cell = new LCell();
@@ -63,24 +65,50 @@ public class LTable extends Actor {
         cell.setKeep_aspect_ratio(keep_aspect_ratio);
         row.add(cell);
         computeSizes();
+        return cell;
     }
 
     //Iterate over table list and compute sizes
     private void computeSizes(){
         //Uniform row heights (for now)
         int rowheight = h/table.size();
-        int columnWidth = w;
+        int columnWidth;
         int rowindex = 1;
+
+
+
+
         for(ArrayList<LCell> row : table){
             //uniform cell sizes for now
-            if(row.size() > 0)
-                columnWidth = w/row.size();
-            else
-                columnWidth = w;
 
-            for(int i = 0; i < row.size(); i++) {
-                LCell lc = row.get(i);
-                lc.setBounds(x + (columnWidth * i), y + h - (rowheight * rowindex), columnWidth, rowheight);
+            //check if widthpercent is set
+            boolean widthp = false;
+            for(LCell lc : row){
+               // System.out.println(lc.toString() + " " +lc.getWidth_percent());
+                 widthp |= (lc.getWidth_percent() != 0);
+            }
+            //System.out.println("All percents set? " + widthp);
+
+            if(!widthp) {
+                if (row.size() > 0)
+                    columnWidth = w / row.size();
+                else
+                    columnWidth = w;
+
+                for (int i = 0; i < row.size(); i++) {
+                    LCell lc = row.get(i);
+                    lc.setBounds(x + (columnWidth * i), y + h - (rowheight * rowindex), columnWidth, rowheight);
+                }
+            }else{
+                int currentw = x;
+                for (int i = 0; i < row.size(); i++) {
+                    LCell lc = row.get(i);
+
+                    columnWidth = (int)((lc.getWidth_percent()/100.0) * w);
+                    System.out.println("CW: " + columnWidth + " actual width: " + w + " percent: " + lc.getWidth_percent()/100);
+                    lc.setBounds(currentw, y + h - (rowheight * rowindex), columnWidth, rowheight);
+                    currentw += columnWidth;
+                }
             }
             rowindex++;
         }
