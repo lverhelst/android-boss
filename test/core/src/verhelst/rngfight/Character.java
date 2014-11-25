@@ -259,7 +259,7 @@ public class Character extends Actor {
 
     private void drawAttack(Batch batch, double rot)        {
 
-            Sprite test = Assets.arm;
+            Sprite test = Assets.dead_face;
             test.setSize(100,10);
 
             int joint1x = (int)(getX() + getWidth()/2);

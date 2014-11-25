@@ -23,8 +23,7 @@ public class Assets {
     public static Sprite weapon_data_icon;
     public static Sprite resting_face;
     public static Sprite dead_face;
-    public static Sprite arm, pants, shirt, tempface, shoulder;
-    public static Sprite[] faces;
+    public static Sprite[] arms, pants, shirts, shoulders, faces;
     public static BitmapFont wepNumFnt;
     public static BitmapFont dmgNumFnt;
     public static BitmapFont bf;
@@ -32,9 +31,24 @@ public class Assets {
     public static Texture dmgIconTxture, hrtIconTxture;
     public static Sprite dmgIcon, hrtIcon;
 
+    private static int armcount, pantcount, shirtcount, shouldercount, facecount;
+    private static Random rng = new Random();
+
     public Assets(){
         weapons_sprites = new ArrayList<Sprite>();
-        faces = new Sprite[5];
+        facecount = 11;
+        armcount = 2;
+        pantcount = 2;
+        shirtcount = 2;
+        shouldercount = 2;
+
+        faces = new Sprite[facecount];
+        pants = new Sprite[pantcount];
+        shirts = new Sprite[shirtcount];
+        arms = new Sprite[armcount];
+        shoulders = new Sprite[shouldercount];
+
+
         loadAssets();
     }
     //Load graphical assets
@@ -44,20 +58,29 @@ public class Assets {
         TextureAtlas ta = new TextureAtlas(Gdx.files.internal("face_sprites\\sprite.pack"));
         //TextureRegion[] hairframes = {new TextureRegion(ta.findRegion("face11")),new TextureRegion(ta.findRegion("face12")),new TextureRegion(ta.findRegion("face13")),new TextureRegion(ta.findRegion("face14"))};
         //face_anim = new Animation(0.075f, hairframes);
-        resting_face = new Sprite(ta.findRegion("face5"));
-        dead_face = new Sprite(ta.findRegion("face5"));
-        //for(int i = ; i <= 9; i++){
-        //    faces[i-2] = new Sprite(ta.findRegion("face" + i));
-        //}
-        faces[0] = new Sprite(ta.findRegion("face5"));
+        resting_face = new Sprite(ta.findRegion("face1"));
+        dead_face = new Sprite(ta.findRegion("face1"));
+        //faces
+        for(int i = 0; i <= facecount; i++){
+            faces[i] = new Sprite(ta.findRegion("face" + i));
+        }
+        //torsos
+        for(int i = 0; i <= shirtcount; i++){
+            shirts[i] = new Sprite(ta.findRegion("torso" + i));
+        }
+        //legs
+        for(int i = 0; i <= pantcount; i++){
+            pants[i] = new Sprite(ta.findRegion("legs" + i));
+        }
+        //shoulders
+        for(int i = 0; i <= armcount; i++){
+            arms[i] = new Sprite(ta.findRegion("elbow" + i));
+        }
+        //elbows
+        for(int i = 0; i <= shouldercount; i++){
+            shoulders[i] = new Sprite(ta.findRegion("shoulder" + i));
+        }
 
-        faces[1] = new Sprite(ta.findRegion("face6"));
-
-        faces[2] = new Sprite(ta.findRegion("face8"));
-
-        faces[3] = new Sprite(ta.findRegion("face10"));
-
-        faces[4] = new Sprite(ta.findRegion("face11"));
 
         //Load Weapon Sprites
         //TODO: Make more weapon sprites
@@ -76,20 +99,6 @@ public class Assets {
             }
         }
 
-      //  Texture wepimg = new Texture("swurd.png");
-      //  wepimg.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        Texture armImg = new Texture(Gdx.files.internal("In Development\\arm.png"));
-        armImg.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        arm = new Sprite(armImg);
-
-      //  Sprite weptemp = new Sprite(wepimg);
-     //   weapons_sprites.add(weptemp);
-        //Weapon Data Icon (For UI)
-        shoulder = new Sprite(new Texture(Gdx.files.internal("In Development\\shoulder.png")));
-        pants =  new Sprite(new Texture(Gdx.files.internal("In Development\\pants.png")));
-        shirt =  new Sprite(new Texture(Gdx.files.internal("In Development\\Shirt.png")));
-        tempface =  new Sprite(new Texture(Gdx.files.internal("In Development\\tempface.png")));
         weapon_data_icon = new Sprite(new Texture(Gdx.files.internal("wepdataicon.png")));
 
         dmgIcon = new Sprite(new Texture(Gdx.files.internal("In Development\\DmgIcon.png")));
@@ -113,26 +122,40 @@ public class Assets {
     }
 
     public static Sprite getWeaponSprite(){
-        Random rng = new Random();
         return weapons_sprites.get(rng.nextInt(weapons_sprites.size()));
     }
 
     public static Sprite findSpriteForName(String name){
         if(name.equals("head"))
-            return tempface;
+            return resting_face;
         if(name.equals("shoulder"))
-            return shoulder;
+            return shoulders[0];
         if(name.equals("leg"))
-            return pants;
+            return  pants[0];
         if(name.equals("torso"))
-            return shirt;
+            return shirts[0];
         if(name.equals("wrist"))
             return getWeaponSprite();
-        return arm;
+        return arms[0];
     }
 
     public static Sprite getHeadSprite(){
-        Random rng = new Random();
         return faces[rng.nextInt(faces.length)];
+    }
+
+    public static Sprite getShoulderSprite(){
+        return shoulders[rng.nextInt(shoulders.length)];
+    }
+
+    public static Sprite getLegSprite(){
+        return pants[rng.nextInt(pants.length)];
+    }
+
+    public static Sprite getTorsoSprite(){
+        return shirts[rng.nextInt(shirts.length)];
+    }
+
+    public static Sprite getElbowSprite(){
+        return arms[rng.nextInt(arms.length)];
     }
 }
