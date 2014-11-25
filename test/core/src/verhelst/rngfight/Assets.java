@@ -28,7 +28,7 @@ public class Assets {
     public static BitmapFont dmgNumFnt;
     public static BitmapFont bf;
     public static BitmapFont HUDbf;
-    public static Texture dmgIconTxture, hrtIconTxture;
+    public static Texture dmgIconTxture, hrtIconTxture, glow;
     public static Sprite dmgIcon, hrtIcon;
 
     private static int armcount, pantcount, shirtcount, shouldercount, facecount;
@@ -61,24 +61,24 @@ public class Assets {
         resting_face = new Sprite(ta.findRegion("face1"));
         dead_face = new Sprite(ta.findRegion("face1"));
         //faces
-        for(int i = 0; i <= facecount; i++){
-            faces[i] = new Sprite(ta.findRegion("face" + i));
+        for(int i = 1; i <= facecount; i++){
+            faces[i - 1] = new Sprite(ta.findRegion("face" + i));
         }
         //torsos
-        for(int i = 0; i <= shirtcount; i++){
-            shirts[i] = new Sprite(ta.findRegion("torso" + i));
+        for(int i = 1; i <= shirtcount; i++){
+            shirts[i - 1] = new Sprite(ta.findRegion("torso" + i));
         }
         //legs
-        for(int i = 0; i <= pantcount; i++){
-            pants[i] = new Sprite(ta.findRegion("legs" + i));
+        for(int i = 1; i <= pantcount; i++){
+            pants[i - 1] = new Sprite(ta.findRegion("legs" + i));
         }
         //shoulders
-        for(int i = 0; i <= armcount; i++){
-            arms[i] = new Sprite(ta.findRegion("elbow" + i));
+        for(int i = 1; i <= armcount; i++){
+            arms[i - 1] = new Sprite(ta.findRegion("elbow" + i));
         }
         //elbows
-        for(int i = 0; i <= shouldercount; i++){
-            shoulders[i] = new Sprite(ta.findRegion("shoulder" + i));
+        for(int i = 1; i <= shouldercount; i++){
+            shoulders[i - 1] = new Sprite(ta.findRegion("shoulder" + i));
         }
 
 
@@ -105,6 +105,8 @@ public class Assets {
         dmgIconTxture = new Texture(Gdx.files.internal("In Development\\DmgIcon.png"));
         hrtIcon = new Sprite(new Texture(Gdx.files.internal("In Development\\HrtIcon.png")));
         hrtIconTxture = new Texture(Gdx.files.internal("In Development\\HrtIcon.png"));
+
+        glow = new Texture(Gdx.files.internal("In Development\\glow.png"));
 
         FreeTypeFontGenerator ftfg = new FreeTypeFontGenerator(Gdx.files.internal("game_font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter ftfp = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -157,5 +159,22 @@ public class Assets {
 
     public static Sprite getElbowSprite(){
         return arms[rng.nextInt(arms.length)];
+    }
+
+    public static Sprite[] getSuitForLevel(int lvl){
+        int index = lvl/10;
+
+        Sprite[] suit = new Sprite[5];
+        //head
+        suit[0] = faces[Math.min(index, facecount - 1)];
+        //torso
+        suit[1] = shirts[Math.min(index, shirtcount - 1)];
+        //leg
+        suit[2] = pants[Math.min(index, pantcount -1 )];
+        //arm
+        suit[3] = shoulders[Math.min(index, shouldercount - 1)];
+        //elbow
+        suit[4] = arms[Math.min(index, armcount -1 )];
+        return suit;
     }
 }

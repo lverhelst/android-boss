@@ -181,7 +181,7 @@ public class BattleView {
         row4.addActor(statsTable);
        // row4.addActor(new Label("", skin));
         //.getTable(skin)
-        row4.addActor(((Weapon)lootActor).getTable());//.center().top().expand().fill();//.pad(PADDING); //LOOT
+        row4.addActor(((Weapon)lootActor).getTable(),true);//.center().top().expand().fill();//.pad(PADDING); //LOOT
        // row4.addActor(new Label("", skin));//.expand().fill();
         row4.addActor(new Label("", skin));//.expand().fill();
         rootTable.addActor(row4);//.expand().fill();
@@ -216,11 +216,13 @@ public class BattleView {
             System.out.println("Cell found");
             if(newloot instanceof  Weapon) {
                 c.setActor(((Weapon) newloot).getTable());
+                c.setKeep_aspect_ratio(false);
              //   System.out.println("Weapon max dmaage" + ((Weapon)newloot).getMax_damage());
 
             }
             else {
                 c.setActor(newloot);
+                c.setKeep_aspect_ratio(true);
 
 
             }

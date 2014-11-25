@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import verhelst.Comp.LTable;
-
 /**
  * Created by Leon I. Verhelst on 10/30/2014.
  */
@@ -104,8 +102,14 @@ public class BattleScreen implements Screen, InputProcessor {
                         break;
                     case HeadLoot:
                         showLoot = true;
-                        HeadSpriteActor hsa = new HeadSpriteActor();
+
+                        int types= BodyPartActor.BodyPartType.values().length;
+
+                        BodyPartActor hsa = new BodyPartActor(BodyPartActor.BodyPartType.values()[rng.nextInt(types)]);
                         bView.setLoot(hsa);
+                        break;
+                    case Player1NewSuit:
+                        btl.getLeftside().equipSuit();
                         break;
                 }
             }
@@ -212,13 +216,13 @@ public class BattleScreen implements Screen, InputProcessor {
                         dragme.setSize(((Weapon) bView.lootActor).getWidth()/2, ((Weapon) bView.lootActor).getHeight()/2);
                         System.out.println(((Weapon) bView.lootActor).getMax_damage() + " " +  ((Weapon) bView.lootActor).dragy);
                     }
-                    if(bView.lootActor instanceof HeadSpriteActor){
-                        dragme = new HeadSpriteActor();
-                        ((HeadSpriteActor)dragme).copyHSA((HeadSpriteActor)bView.lootActor);
+                    if(bView.lootActor instanceof BodyPartActor){
+                        dragme = new BodyPartActor();
+                        ((BodyPartActor)dragme).copyHSA((BodyPartActor)bView.lootActor);
                         dragme.setSize(bView.lootActor.getWidth()/2, bView.lootActor.getHeight()/2);
                     }
 
-                    dragme.setPosition(dragme.getX() - dragme.getWidth()/2, dragme.getY() - dragme.getHeight()/2);
+                    dragme.setPosition(vec.x + dragme.getX() - dragme.getWidth()/2, vec.y + dragme.getY() - dragme.getHeight()/2);
                     bView.getStage().addActor(dragme);
 
                 }
@@ -230,6 +234,7 @@ public class BattleScreen implements Screen, InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
+        btl.getRightside().setGlow(false);
         if(showLoot){
 
             if(dragme != null) {
@@ -245,7 +250,7 @@ public class BattleScreen implements Screen, InputProcessor {
                 float rectay2 = btl.getRightside().otherY + btl.getRightside().getHeight();
                 float rectby1 = dragme.getY();
 
-                if (rectax1 <= rectbx1 && rectax2 >= rectbx2
+                if (rectax1 <= rectbx2 && rectax2 >= rectbx1
                         && rectay1 <= rectby2 && rectay2 >= rectby1) {
                     System.out.println("DRAGME OVERLAPS CHARACHTER RIGHT");
                     //Copy the weapon so that we aren't passing the reference
@@ -260,9 +265,9 @@ public class BattleScreen implements Screen, InputProcessor {
 
                         System.out.println("QUEIROASDAS");
                     }
-                    if(bView.lootActor instanceof HeadSpriteActor){
+                    if(bView.lootActor instanceof BodyPartActor){
                         System.out.println("EQUIP HEAD HERE PLEASE");
-                        btl.getRightside().setHead((HeadSpriteActor)bView.lootActor);
+                        btl.getRightside().setBodyPart((BodyPartActor) bView.lootActor);
 
                     }
                 }
@@ -336,6 +341,28 @@ public class BattleScreen implements Screen, InputProcessor {
 
             dragme.setPosition(screenX - dragme.getWidth()/2, Gdx.graphics.getHeight() - screenY - dragme.getHeight()/2);
 
+            float rectax1 = btl.getRightside().getX();
+
+            float rectbx2 = dragme.getX() + dragme.getWidth();
+
+            float rectax2 = btl.getRightside().getX() + btl.getRightside().getWidth();
+            float rectbx1 = dragme.getX();
+
+            float rectay1 = btl.getRightside().otherY;
+            float rectby2 = dragme.getY() + dragme.getHeight();
+
+            float rectay2 = btl.getRightside().otherY + btl.getRightside().getHeight();
+            float rectby1 = dragme.getY();
+
+
+            if (rectax1 <= rectbx2 && rectax2 >= rectbx1
+                    && rectay1 <= rectby2 && rectay2 >= rectby1) {
+
+
+                btl.getRightside().setGlow(true);
+            }else{
+                btl.getRightside().setGlow(false);
+            }
 
         }
         return false;

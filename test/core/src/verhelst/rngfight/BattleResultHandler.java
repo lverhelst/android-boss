@@ -11,6 +11,8 @@ import javax.rmi.CORBA.Tie;
 public class BattleResultHandler {
 
 
+    int boss_suit;
+
     public BattleResultHandler(){
 
     }
@@ -19,6 +21,7 @@ public class BattleResultHandler {
     public BattleResult[] getResults(Character a, Character b, int hitcount){
         List<BattleResult> resultsList = new ArrayList<BattleResult>();
         //Decide winner
+        boss_suit = a.max_level;
 
         int aoriglvl = a.getLevel();
 
@@ -35,8 +38,8 @@ public class BattleResultHandler {
             b.incrementWins();
             b.resetLosses();
 
-            if(hitcount % 3  == 0) {
-                resultsList.add(BattleResult.ShowStaticLoot);
+            if(hitcount % 3  == 0 ) {
+               resultsList.add(BattleResult.ShowStaticLoot);
             }else if(hitcount % 7 == 0) {
                 resultsList.add(BattleResult.HeadLoot);
             }
@@ -47,10 +50,16 @@ public class BattleResultHandler {
             b.resetWins();
         }
 
-        if(hitcount % 4 == 1 || aoriglvl != a.getLevel()) {
-            resultsList.add(BattleResult.Player1GetsLoot);
-        }
+          if (hitcount % 4 == 1 || aoriglvl != a.getLevel())
+                resultsList.add(BattleResult.Player1GetsLoot);
 
+
+        System.out.println("BOSSSSUIT : " + boss_suit + " max: " + a.max_level + " ");
+        if(boss_suit % 10 == 9 && a.max_level % 10 == 0){
+
+
+            resultsList.add(BattleResult.Player1NewSuit);
+        }
 
 
         //Deal with hitcount
@@ -58,7 +67,7 @@ public class BattleResultHandler {
             resultsList.add(BattleResult.CustomMode_ioi);
 
         System.out.print(resultsList);
-        System.out.println("        CL " + a.getLevel() + " ws " + a.getWin_streak() + " ml" + a.max_level + " mwtl" + a.max_wtnl + " ls " + a.getLose_streak() + " lscheck" + a.getLose_streak() % (a.wins_to_level + 1));
+       // System.out.println("        CL " + a.getLevel() + " ws " + a.getWin_streak() + " ml" + a.max_level + " mwtl" + a.max_wtnl + " ls " + a.getLose_streak() + " lscheck" + a.getLose_streak() % (a.wins_to_level + 1));
         return resultsList.toArray(new BattleResult[resultsList.size()]);
     }
 

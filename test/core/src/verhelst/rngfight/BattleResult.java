@@ -11,7 +11,8 @@ public enum BattleResult {
         ShowRandomLoot,
         CustomMode_ioi,
         Player1GetsLoot,
-        HeadLoot
+        HeadLoot,
+        Player1NewSuit
 
 
 

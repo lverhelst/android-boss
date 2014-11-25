@@ -23,7 +23,7 @@ public class Model {
 
     public Model(int abs_x, int abs_y, boolean flip, float height){
 
-        scale = (float) Math.max(height/96, 2.25);
+        scale = (float) Math.max(height/96, 2.75);
 
       //  scale = (float) Math.max(height/96, 2.5);
         System.out.println("Scale" + scale);
@@ -37,10 +37,11 @@ public class Model {
         root = new Joint(0,0 * scale, "root", flip,0);
         root.addChild(new Joint(-90, 32 * scale, "torso", flip,0));
         root.children.get(0).addChild(new Joint(-90,32 * scale, "leg", flip,0));
-        root.addChild(new Joint(-90,32 * scale, "shoulder", flip, 32/4 * scale));
-        root.children.get(1).addChild(new Joint(180,32 * scale,"elbow", flip, 32/4 * scale));
-        root.children.get(1).children.get(0).addChild(new Joint(180,32 * scale, "wrist", flip, 32/5 * scale));
         root.addChild(new Joint(90,32 * scale, "head",flip,0));
+        root.addChild(new Joint(-90,32 * scale, "shoulder", flip, 32/4 * scale));
+        root.children.get(2).addChild(new Joint(180,32 * scale,"elbow", flip, 32/4 * scale));
+        root.children.get(2).children.get(0).addChild(new Joint(180,32 * scale, "wrist", flip, 32/5 * scale));
+
         root.print();
 
     }
@@ -51,7 +52,7 @@ public class Model {
 
 
 
-        Joint shoulder = root.children.get(1);
+        Joint shoulder = root.children.get(2);
         if(!isFlipped){
             if(Math.abs(shoulder.getAngle()) < 180 && BattleScreen.battling){
                 shoulder.adjustAngle(-30);
@@ -113,8 +114,11 @@ public class Model {
             float jw = j.testS.getWidth();
             float jh = j.testS.getHeight();
 
+
             Sprite temp = new Sprite(sprite);
+
             temp.setSize(jw,jh);
+            temp.flip(false, isFlipped);
             j.testS = temp;
         }
 

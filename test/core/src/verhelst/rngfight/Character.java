@@ -1,10 +1,7 @@
 package verhelst.rngfight;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.ArrayList;
@@ -39,6 +36,7 @@ public class Character extends Actor {
     int wins_to_level = 2;
     private int win_streak = 0;
     private int lose_streak = 0;
+    private boolean glow;
 
     //GetY() wasn't working in the BattleView
     //GetHeight() and getX() both worked...wierd.
@@ -150,11 +148,40 @@ public class Character extends Actor {
 
     }
 
-    public void setHead(HeadSpriteActor hsa){
+    public void setBodyPart(BodyPartActor hsa){
         Sprite toequip = new Sprite(hsa.getSprite());
-        toequip.rotate90(true);
+        switch(hsa.getBtype()){
+            case HEAD:
+                toequip.rotate90(true);
+                m.updateSprite("head", toequip);
+                break;
+            case SHOULDER:
+                m.updateSprite( "shoulder" , toequip);
+                break;
+            case TORSO:
+                m.updateSprite("torso", toequip);
+                break;
+            case LEGS:
+                m.updateSprite("leg", toequip);
+                break;
+            case ELBOW:
+                m.updateSprite("elbow", toequip);
+                break;
+        }
+    }
 
-        m.updateSprite("head", toequip);
+    public void equipSuit(){
+        System.out.println("EQUIP SUUUUUIT *********************");
+        Sprite[] sprites = Assets.getSuitForLevel(max_level);
+        Sprite head = new Sprite(sprites[0]);
+        head.rotate90(true);
+        head.flip(false, true);
+        m.isFlipped = true;
+        m.updateSprite("head", head);
+        m.updateSprite( "shoulder" , sprites[3]);
+        m.updateSprite("torso", sprites[1]);
+        m.updateSprite("leg", sprites[2]);
+        m.updateSprite("elbow", sprites[4]);
     }
 
     public boolean isWeaponEquipped()
@@ -247,12 +274,22 @@ public class Character extends Actor {
             this.drawAttack(batch, rotation = 0);
 
         */
+
+
+        if(glow){
+            batch.draw(Assets.glow, getX(), getY(), getWidth(), getHeight());
+        }
+
         otherY = (int)getY();
         m.originx = (int)(getX() + getWidth()/2);
         m.originy = (int)(getY() + getHeight()/2);
         renderDamageNumbers(batch);
         m.render(batch);
 
+    }
+
+    public void setGlow(boolean glow){
+        this.glow = glow;
     }
 
     double rotation = 0;
@@ -284,10 +321,6 @@ public class Character extends Actor {
                 test2.draw(batch);
             }
             test.draw(batch);
-
-
-
-
         }
 
 

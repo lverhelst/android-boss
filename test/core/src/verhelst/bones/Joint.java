@@ -34,6 +34,9 @@ public class Joint {
             this.adjustment = adjustment;
 
             testS = new Sprite(Assets.findSpriteForName(name));
+            if(name.equals("head")){
+                testS.rotate90(!flip);
+            }
             testS.flip(false, flip);
             testS.setSize(testS.getWidth() * Model.scale, testS.getHeight() * Model.scale);
             this.isFlipped = flip;

@@ -4,6 +4,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import verhelst.rngfight.BodyPartActor;
+
+import static verhelst.rngfight.BodyPartActor.BodyPartType.*;
+
 /**
  * Created by Leon I. Verhelst on 11/22/2014.
  */
@@ -73,8 +77,15 @@ public class LCell extends Actor {
             float y_scale = height/h;
 
             float scale  = Math.min(x_scale, y_scale);
+            if(actor instanceof BodyPartActor) {
+                //   System.out.println("w " + w + " h " + h + " xs " + x_scale + " ys " + y_scale + " s " + scale + "\r\n " + "x_coor " + x_coord + " witdh" + width + "ycoord " + y_coord + " " + height +
+                       // "\r\n w" + (w * scale) + " h" + (h * scale));
+                scale *= 0.75;
+                if(((BodyPartActor)actor).getBtype() == SHOULDER || ((BodyPartActor)actor).getBtype() == ELBOW ){
+                    scale *= 0.55;
+                }
 
-//            System.out.println("w " + w + " h " + h + " xs " + x_scale + " ys " + y_scale + " s " + scale);
+            }
 
             actor.setSize(w * scale, h * scale);
             actor.setPosition(x_coord + (width - (w * scale))/2, y_coord + (height - (h * scale))/2);
