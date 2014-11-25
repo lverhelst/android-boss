@@ -34,7 +34,7 @@ public class Assets {
 
     public Assets(){
         weapons_sprites = new ArrayList<Sprite>();
-        faces = new Sprite[8];
+        faces = new Sprite[5];
         loadAssets();
     }
     //Load graphical assets
@@ -42,13 +42,22 @@ public class Assets {
 
         //Load character images & animation
         TextureAtlas ta = new TextureAtlas(Gdx.files.internal("face_sprites\\sprite.pack"));
-        TextureRegion[] hairframes = {new TextureRegion(ta.findRegion("face11")),new TextureRegion(ta.findRegion("face12")),new TextureRegion(ta.findRegion("face13")),new TextureRegion(ta.findRegion("face14"))};
-        face_anim = new Animation(0.075f, hairframes);
-        resting_face = new Sprite(ta.findRegion("face4"));
-        dead_face = new Sprite(ta.findRegion("face1"));
-        for(int i = 2; i <= 9; i++){
-            faces[i-2] = new Sprite(ta.findRegion("face" + i));
-        }
+        //TextureRegion[] hairframes = {new TextureRegion(ta.findRegion("face11")),new TextureRegion(ta.findRegion("face12")),new TextureRegion(ta.findRegion("face13")),new TextureRegion(ta.findRegion("face14"))};
+        //face_anim = new Animation(0.075f, hairframes);
+        resting_face = new Sprite(ta.findRegion("face5"));
+        dead_face = new Sprite(ta.findRegion("face5"));
+        //for(int i = ; i <= 9; i++){
+        //    faces[i-2] = new Sprite(ta.findRegion("face" + i));
+        //}
+        faces[0] = new Sprite(ta.findRegion("face5"));
+
+        faces[1] = new Sprite(ta.findRegion("face6"));
+
+        faces[2] = new Sprite(ta.findRegion("face8"));
+
+        faces[3] = new Sprite(ta.findRegion("face10"));
+
+        faces[4] = new Sprite(ta.findRegion("face11"));
 
         //Load Weapon Sprites
         //TODO: Make more weapon sprites
