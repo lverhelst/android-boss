@@ -11,7 +11,6 @@ import javax.rmi.CORBA.Tie;
 public class BattleResultHandler {
 
 
-    int boss_suit;
 
     public BattleResultHandler(){
 
@@ -21,7 +20,7 @@ public class BattleResultHandler {
     public BattleResult[] getResults(Character a, Character b, int hitcount){
         List<BattleResult> resultsList = new ArrayList<BattleResult>();
         //Decide winner
-        boss_suit = a.max_level;
+
 
         int aoriglvl = a.getLevel();
 
@@ -54,11 +53,11 @@ public class BattleResultHandler {
                 resultsList.add(BattleResult.Player1GetsLoot);
 
 
-        System.out.println("BOSSSSUIT : " + boss_suit + " max: " + a.max_level + " ");
-        if(boss_suit % 10 == 9 && a.max_level % 10 == 0){
-
+        System.out.println("BOSSSSUIT : " + aoriglvl + " max: " + a.max_level + " ");
+        if((int)(aoriglvl / 10) != (int)(a.getLevel() /10)){
 
             resultsList.add(BattleResult.Player1NewSuit);
+
         }
 
 

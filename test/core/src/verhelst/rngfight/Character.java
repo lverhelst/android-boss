@@ -172,7 +172,7 @@ public class Character extends Actor {
 
     public void equipSuit(){
         System.out.println("EQUIP SUUUUUIT *********************");
-        Sprite[] sprites = Assets.getSuitForLevel(max_level);
+        Sprite[] sprites = Assets.getSuitForLevel(level);
         Sprite head = new Sprite(sprites[0]);
         head.rotate90(true);
         head.flip(false, true);
