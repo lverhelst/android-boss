@@ -5,105 +5,119 @@ filter: Nearest,Nearest
 repeat: none
 face1
   rotate: false
-  xy: 1, 19
+  xy: 1, 87
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face10
   rotate: false
-  xy: 35, 19
+  xy: 1, 53
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face11
   rotate: false
-  xy: 69, 19
+  xy: 35, 87
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face2
   rotate: false
-  xy: 103, 19
+  xy: 1, 19
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face3
   rotate: false
-  xy: 137, 19
+  xy: 35, 53
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face4
   rotate: false
-  xy: 171, 19
+  xy: 69, 87
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face5
   rotate: false
-  xy: 205, 19
+  xy: 35, 19
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face6
   rotate: false
-  xy: 239, 19
+  xy: 69, 53
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face7
   rotate: false
-  xy: 273, 19
+  xy: 103, 87
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face8
   rotate: false
-  xy: 307, 19
+  xy: 69, 19
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 face9
   rotate: false
-  xy: 341, 19
+  xy: 103, 53
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 legs1
   rotate: false
-  xy: 375, 19
+  xy: 137, 87
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 legs2
   rotate: false
-  xy: 409, 19
+  xy: 103, 19
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+legs3
+  rotate: false
+  xy: 137, 53
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 torso1
   rotate: false
-  xy: 443, 19
+  xy: 171, 87
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 torso2
   rotate: false
-  xy: 477, 19
+  xy: 137, 19
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+torso3
+  rotate: false
+  xy: 171, 53
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
@@ -117,21 +131,35 @@ elbow1
   index: -1
 elbow2
   rotate: false
-  xy: 35, 1
+  xy: 205, 103
+  size: 32, 16
+  orig: 32, 16
+  offset: 0, 0
+  index: -1
+elbow3
+  rotate: false
+  xy: 171, 35
   size: 32, 16
   orig: 32, 16
   offset: 0, 0
   index: -1
 shoulder1
   rotate: false
-  xy: 69, 1
+  xy: 35, 1
   size: 32, 16
   orig: 32, 16
   offset: 0, 0
   index: -1
 shoulder2
   rotate: false
-  xy: 103, 1
+  xy: 205, 85
+  size: 32, 16
+  orig: 32, 16
+  offset: 0, 0
+  index: -1
+shoulder3
+  rotate: false
+  xy: 69, 1
   size: 32, 16
   orig: 32, 16
   offset: 0, 0

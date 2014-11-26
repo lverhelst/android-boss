@@ -34,21 +34,22 @@ public class Model {
         this.originx = abs_x;
         this.originy = abs_y;
 
-        root = new Joint(0,0 * scale, "root", flip,0);
-        root.addChild(new Joint(-90, 32 * scale, "torso", flip,0));
-        root.children.get(0).addChild(new Joint(-90,32 * scale, "leg", flip,0));
-        root.addChild(new Joint(90,32 * scale, "head",flip,0));
-        root.addChild(new Joint(-90,32 * scale, "shoulder", flip, 32/4 * scale));
-        root.children.get(2).addChild(new Joint(180,32 * scale,"elbow", flip, 32/4 * scale));
-        root.children.get(2).children.get(0).addChild(new Joint(180,32 * scale, "wrist", flip, 32/5 * scale));
+        root = new Joint(0,0 * scale, "root", flip,0,0);
+        root.addChild(new Joint(-90, 32 * scale, "torso", flip,0,0));
+        root.children.get(0).addChild(new Joint(-90,32 * scale, "leg", flip,0,0));
+        root.addChild(new Joint(90,32 * scale, "head",flip,0,0));
+        root.addChild(new Joint(-90,32 * scale, "shoulder", flip, 0, (32 * scale)/2));
+        root.children.get(2).addChild(new Joint(180,32 * scale,"elbow", flip, 32/2 * scale,0));
+        root.children.get(2).children.get(0).addChild(new Joint(180,32 * scale, "wrist", flip, 32/5 * scale, -(16 * scale/2)));
+
+        root.children.get(2).children.get(0).isRenderChildrenFirst = true; //make sure weapon is drawn under elbow sprite
 
         root.print();
 
     }
 
     public void render(Batch batch){
-//        batch.end();
-//        sr.begin(ShapeRenderer.ShapeType.Line);
+
 
 
 
@@ -69,7 +70,7 @@ public class Model {
             }
         }else{
             if(shoulder.getAngle() < 0 && BattleScreen.battling){
-                shoulder.adjustAngle(10);
+                shoulder.adjustAngle(30);
 
             }else{
 
@@ -79,20 +80,22 @@ public class Model {
             //System.out.println(shoulder.getAngle());
             //  System.out.println(elbow.getAngle());
             if(Math.abs(elbow.getAngle()) < 45 && BattleScreen.battling){
-                 elbow.adjustAngle(5);
+                // elbow.adjustAngle(5);
 
             }else
             {
                 elbow.setAngle(0);
             }
         }
-
-//        root.renderSkeleton(sr, originx, originy);
-
-
-//        sr.end();
-//        batch.begin();
         root.renderWithSprites(batch, originx, originy);
+        if(false) {
+            batch.end();
+            sr.begin(ShapeRenderer.ShapeType.Line);
+            root.renderSkeleton(sr, originx, originy);
+            sr.end();
+            batch.begin();
+        }
+
     }
 
     public void flip(){

@@ -37,10 +37,10 @@ public class Assets {
     public Assets(){
         weapons_sprites = new ArrayList<Sprite>();
         facecount = 11;
-        armcount = 2;
-        pantcount = 2;
-        shirtcount = 2;
-        shouldercount = 2;
+        armcount = 3;
+        pantcount = 3;
+        shirtcount = 3;
+        shouldercount = 3;
 
         faces = new Sprite[facecount];
         pants = new Sprite[pantcount];

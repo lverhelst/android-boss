@@ -22,16 +22,18 @@ public class Joint {
         String name;
         Joint parent;
         ArrayList<Joint> children;
-        boolean isFlipped, isVisible;
-        float adjustment;
+        boolean isFlipped, isVisible, isRenderChildrenFirst;
+        float x_adj, y_adj;
 
-        public Joint(double angle_degrees, double length, String name, boolean flip, float adjustment){
+
+        public Joint(double angle_degrees, double length, String name, boolean flip, float x_adj, float y_adj){
 
             this.children = new ArrayList<Joint>();
             this.angle = angle_degrees;
             this.length = length;
             this.name = name;
-            this.adjustment = adjustment;
+            this.x_adj = x_adj;
+            this.y_adj = y_adj;
 
             testS = new Sprite(Assets.findSpriteForName(name));
             if(name.equals("head")){
@@ -60,10 +62,11 @@ public class Joint {
                 j.adjustAngle(deg);
         }
 
+
           Random rc = new Random();
           Color c = new Color();
         public void renderSkeleton(ShapeRenderer sr, float x, float y){
-            x += (adjustment * (isFlipped ? -1 : 1));
+            x += (x_adj * (isFlipped ? -1 : 1));
 
             float offx = x + (float)(Math.cos(Math.toRadians(this.angle)) * length);
             float offy = y + (float)(Math.sin(Math.toRadians(this.angle)) * length);
@@ -90,25 +93,53 @@ public class Joint {
 
         public void renderWithSprites(Batch batch, float x, float y){
 
-            x += (adjustment * (isFlipped ? -1 : 1));
+
+
+
+            x += (x_adj * (isFlipped ? -1 : 1));
+
+
+
+            y += (y_adj); //Do not flip, flipping is only horizonatal (x-axis)
             float offx = x + (float)(Math.cos(Math.toRadians(this.angle)) * length);
             float offy = y + (float)(Math.sin(Math.toRadians(this.angle)) * length);
 
-            this.testS.setOrigin(0,0 + testS.getHeight()/2);
+            if(name.equals("shoulder")){
+
+                if(isFlipped){
+                    this.testS.setOrigin(0, 0 + testS.getHeight());
+                    this.testS.setPosition(x, y - this.testS.getHeight());
+                }else{
+                    this.testS.setOrigin(0,0);
+                    this.testS.setPosition(x, y);
+                }
+
+            }else {
+                this.testS.setOrigin(0, 0 + testS.getHeight() / 2);
+                this.testS.setPosition(x, y);
+            }
 
 
 
-            this.testS.setPosition(x, y);
+
             this.testS.setRotation((float)angle);
 
-            if(!name.equals("root") && isVisible)
-                this.testS.draw(batch);
+            if(isRenderChildrenFirst){
+                for(Joint j : children) {
 
+                    j.renderWithSprites(batch, offx, offy);
+                }
+                if(!name.equals("root") && isVisible)
+                    this.testS.draw(batch);
+            }
+            else {
+                if (!name.equals("root") && isVisible)
+                    this.testS.draw(batch);
 
+                for (Joint j : children) {
 
-            for(Joint j : children) {
-
-                j.renderWithSprites(batch, offx, offy);
+                    j.renderWithSprites(batch, offx, offy);
+                }
             }
 
         }
@@ -137,7 +168,7 @@ public class Joint {
         public void setAngle(double angle) {
 
             int adjustment = (int)(angle - this.angle);
-          //  System.out.println("adj: " + adjustment);
+          //  System.out.println("adj: " + x_adj);
             this.adjustAngle(adjustment);
 
         }
