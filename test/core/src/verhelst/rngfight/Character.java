@@ -175,7 +175,7 @@ public class Character extends Actor {
         Sprite[] sprites = Assets.getSuitForLevel(level);
         Sprite head = new Sprite(sprites[0]);
         head.rotate90(true);
-        head.flip(false, true);
+        head.flip(true, true);
         m.isFlipped = true;
         m.updateSprite("head", head);
         m.updateSprite("torso", sprites[1]);

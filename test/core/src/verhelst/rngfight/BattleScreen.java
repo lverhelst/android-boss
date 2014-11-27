@@ -292,13 +292,9 @@ public class BattleScreen implements Screen, InputProcessor {
             message = "";
             battling = true;
             showLoot = false;
-            //reset fighters (can be put into battle maybe?)
-            btl.getRightside().reset();
-            btl.getLeftside().reset();
-            //Clear Battle-Consuming Queue
-            bswNumList.clear();
+
             //execute the battle();
-            btl.run();
+            new Thread(btl).start();
             //Create a new thread to consume the battle
             new Thread(new Runnable() {
                 @Override

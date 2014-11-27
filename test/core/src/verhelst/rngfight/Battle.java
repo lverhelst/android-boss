@@ -38,8 +38,11 @@ public class Battle implements Runnable {
     @Override
     public void run() {
         String results2 = "";
-        Character rightside = this.getRightside();
-        Character leftside = this.getLeftside();
+        //reset fighters (can be put into battle maybe?)
+        rightside.reset();
+        leftside.reset();
+        //Clear Battle-Consuming Queue
+        dmgNumListA.clear();
         int dmgtoboss = 0;
         int dmgtoplayer = 0;
         int hitcount = 0;
@@ -67,7 +70,7 @@ public class Battle implements Runnable {
             }
 
             hitcount++;
-            if(hitcount > 49999){
+            if(hitcount > 2147483647){
                 if(leftside.getHealth() <= rightside.getHealth()){
                     leftside.setHealth(0);
                 }else{
@@ -75,7 +78,7 @@ public class Battle implements Runnable {
                 }
             }
 
-
+            System.out.println(hitcount);
         } while (leftside.getHealth() > 0 && rightside.getHealth() > 0);
 
 
