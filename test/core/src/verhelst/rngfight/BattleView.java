@@ -203,6 +203,15 @@ public class BattleView {
         return camera;
     }
 
+    public LCell getCellForLoot(){
+        LCell c =  row4.getLCellForActor(lootActor);
+        if(lootActor instanceof  Weapon){
+            System.out.println("Searching for weapon table");
+            c = row4.getLCellForActorName(((Weapon)lootActor).getTable().getName());
+        }
+        return c;
+    }
+
 
     public void setLoot(Actor newloot){
         LCell c =  row4.getLCellForActor(lootActor);

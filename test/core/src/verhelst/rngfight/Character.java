@@ -152,7 +152,7 @@ public class Character extends Actor {
         Sprite toequip = new Sprite(hsa.getSprite());
         switch(hsa.getBtype()){
             case HEAD:
-                toequip.rotate90(true);
+                toequip.rotate90(!name.equals("Enemy"));
                 m.updateSprite("head", toequip);
                 break;
             case SHOULDER:
@@ -178,9 +178,9 @@ public class Character extends Actor {
         head.flip(false, true);
         m.isFlipped = true;
         m.updateSprite("head", head);
-        m.updateSprite( "shoulder" , sprites[3]);
         m.updateSprite("torso", sprites[1]);
         m.updateSprite("leg", sprites[2]);
+        m.updateSprite( "shoulder" , sprites[3]);
         m.updateSprite("elbow", sprites[4]);
     }
 

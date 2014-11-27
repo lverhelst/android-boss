@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import verhelst.Comp.LCell;
+
 /**
  * Created by Leon I. Verhelst on 10/30/2014.
  */
@@ -107,6 +109,8 @@ public class BattleScreen implements Screen, InputProcessor {
 
                         BodyPartActor hsa = new BodyPartActor(BodyPartActor.BodyPartType.values()[rng.nextInt(types)]);
                         bView.setLoot(hsa);
+
+
                         break;
                     case Player1NewSuit:
                         btl.getLeftside().equipSuit();
@@ -201,8 +205,12 @@ public class BattleScreen implements Screen, InputProcessor {
 
             System.out.println("Touch down before actor check");
             //Get width * 2 accounts for the extra text in the weapon actor
-            if(vec.x >= bView.lootActor.getX() && vec.x <= bView.lootActor.getX() + bView.lootActor.getWidth() * 2
-                      && vec.y >= bView.lootActor.getY() && vec.y <= bView.lootActor.getY() + bView.lootActor.getHeight()) {
+            LCell lCell = bView.getCellForLoot();
+            System.out.println("Lcell " + lCell.getX() + " " + lCell.getWidth() + " y " + lCell.getY() + " " + lCell.getHeight());
+
+
+            if(vec.x >= lCell.getX() && vec.x <= lCell.getX() + lCell.getWidth()
+                      && vec.y >= lCell.getY() && vec.y <= lCell.getY() + lCell.getHeight()) {
                     //Copy the weapon so that we aren't passing the reference
                     System.out.println("Touch down in loot actor");
 
@@ -220,6 +228,7 @@ public class BattleScreen implements Screen, InputProcessor {
                         dragme = new BodyPartActor();
                         ((BodyPartActor)dragme).copyHSA((BodyPartActor)bView.lootActor);
                         dragme.setSize(bView.lootActor.getWidth()/2, bView.lootActor.getHeight()/2);
+
                     }
 
                     dragme.setPosition(vec.x + dragme.getX() - dragme.getWidth()/2, vec.y + dragme.getY() - dragme.getHeight()/2);

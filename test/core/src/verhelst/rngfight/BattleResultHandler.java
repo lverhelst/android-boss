@@ -59,8 +59,6 @@ public class BattleResultHandler {
             resultsList.add(BattleResult.Player1NewSuit);
 
         }
-
-
         //Deal with hitcount
         if(hitcount == 101)
             resultsList.add(BattleResult.CustomMode_ioi);

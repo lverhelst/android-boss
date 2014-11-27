@@ -96,7 +96,7 @@ public class LCell extends Actor {
             actor.draw(batch, parentAlpha);
      //   System.out.println(actor.toString() + " x: " + x_coord + " y: " + y_coord + " w: " + width + " h: " + height);
        //TODO: Add debug
-        if(false) {
+        if(true) {
             batch.end();
             if (sr == null)
                 sr = new ShapeRenderer();
@@ -113,5 +113,25 @@ public class LCell extends Actor {
     public void setVisible(boolean visible) {
         this.actor.setVisible(visible);
         super.setVisible(visible);
+    }
+
+    @Override
+    public float getX() {
+        return x_coord;
+    }
+
+    @Override
+    public float getY() {
+        return y_coord;
+    }
+
+    @Override
+    public float getWidth() {
+        return width;
+    }
+
+    @Override
+    public float getHeight() {
+        return height;
     }
 }
