@@ -62,9 +62,9 @@ public class BattleResultHandler {
 
         }
         //Deal with hitcount
-        if(hitcount == 101)
+        if(hitcount % 101 == 0)
             resultsList.add(BattleResult.CustomMode_ioi);
-
+        
         if(max_hitcount == -1 || hitcount > max_hitcount)
         {
             resultsList.add(BattleResult.NewMaxHitCount);

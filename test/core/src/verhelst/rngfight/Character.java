@@ -336,15 +336,45 @@ public class Character extends Actor {
 
 
     //Adds a new damage number to the appropriate damage list
-    private void addDmgNum(int num, int x, int y, DmgListSide side){
-        DamageNumber dn = new DamageNumber(num, x, y);
+    private void addDmgNum(String num, int x, int y, DmgListSide side){
+            DamageNumber dn;
+            if(isInteger(num)) {
+                dn = new DamageNumber(Integer.parseInt(num), x, y);
+            }else{
+                dn = new DamageNumber(num, x, y);
+            }
             synchronized (dnListA) {
                 dnListA.add(dn);
             }
 
     }
 
-    public void consumeDmgNumPost(int num, DmgListSide side){
+    //FROM: http://stackoverflow.com/questions/237159/whats-the-best-way-to-check-to-see-if-a-string-represents-an-integer-in-java (for speed)
+    public boolean isInteger(String str) {
+        if (str == null) {
+            return false;
+        }
+        int length = str.length();
+        if (length == 0) {
+            return false;
+        }
+        int i = 0;
+        if (str.charAt(0) == '-') {
+            if (length == 1) {
+                return false;
+            }
+            i = 1;
+        }
+        for (; i < length; i++) {
+            char c = str.charAt(i);
+            if (c <= '/' || c >= ':') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void consumeDmgNumPost(String num, DmgListSide side){
 
         float y = otherY + getHeight()/2;// + (rng.nextBoolean() ? - 1 : 1) * rng.nextInt((int)b.getLeftside().getHeight()/2);
         float x = getX() + getWidth()/2;// + (rng.nextBoolean() ? - 1 : 1) * rng.nextInt((int)b.getRightside().getWidth()/4);

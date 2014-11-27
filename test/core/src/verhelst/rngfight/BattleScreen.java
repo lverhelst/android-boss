@@ -40,6 +40,8 @@ public class BattleScreen implements Screen, InputProcessor {
     int display_cap = Integer.MAX_VALUE;
     Actor dragme;
 
+    boolean custom_mode_on;
+    String custom_mode_string;
 
 
     public BattleScreen(){
@@ -68,6 +70,8 @@ public class BattleScreen implements Screen, InputProcessor {
     }
 
     private void handleBattleResults(){
+        custom_mode_on = false;
+        custom_mode_string = "";
         if(!battling && results.length > 0){
             //This can probably be done without a switch, I just don't know how yet.
             for(BattleResult br : results){
@@ -92,8 +96,8 @@ public class BattleScreen implements Screen, InputProcessor {
                         //renderWeapon(loot = Weapon.generateRandomWeapon(a.getLevel(),assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION), (int) w/2, (int) h/4, 0);
                         break;
                     case CustomMode_ioi:
-                        //isDmgNumOverridden = true;
-                        //dmgNumberOverride = 101;
+                        custom_mode_on = true;
+                        custom_mode_string = "ioi";
                         break;
                     case Player1GetsLoot:
                         btl.getLeftside().setEquipped_weapon(Weapon.generateScaledWeapon(a.getLevel(), Assets.getWeaponSprite(), Weapon.POSITION.LEFT_POSITION));
@@ -311,8 +315,9 @@ public class BattleScreen implements Screen, InputProcessor {
 
                             lst = bswNumList.poll();
 
-                            btl.getLeftside().consumeDmgNumPost(lst.get(0), Character.DmgListSide.LEFT);
-                            btl.getRightside().consumeDmgNumPost(lst.get(1), Character.DmgListSide.RIGHT);
+                            btl.getLeftside().consumeDmgNumPost( (custom_mode_on ? custom_mode_string: "" + lst.get(0)), Character.DmgListSide.LEFT);
+                            btl.getRightside().consumeDmgNumPost((custom_mode_on ? custom_mode_string: "" + lst.get(1)), Character.DmgListSide.RIGHT);
+
                             anim_h1 = lst.get(2);
                             anim_h2 = lst.get(3);
                             hits = lst.get(4);
@@ -334,6 +339,7 @@ public class BattleScreen implements Screen, InputProcessor {
                         }
 
                     }
+
                     results = brh.getResults(btl.getLeftside(),btl.getRightside(),hits);
                 }
             }).start();

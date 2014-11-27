@@ -59,12 +59,35 @@ public class DamageNumber {
         }
     }
 
+    public DamageNumber(String value, int screenx, int screeny){
+
+        this.value = Integer.MAX_VALUE;
+        this.x= screenx;
+        this.y=screeny;
+        this.render_iterations = 0;
+        this.alpha = 1.0f;
+
+
+        this.isRemoveable = false;
+        cs = "" + value;
+        this.random = new Random();
+        this.rand_force = random.nextGaussian();
+        rand_force = (rand_force > 0 ? rand_force * 2 : rand_force/2);
+        //set angle in degrees, convert to radians
+        this.angle = (float)Math.toRadians(random.nextInt(120) + 30);//+ 30;
+        //White colour
+        this.red = 1.0f;
+        this.green = 1.0f;
+        this.blue = 1.0f;
+    }
+
     public void update(){
 
         this.x += Math.cos(this.angle) * Gdx.graphics.getDensity();  //CAH
         //use the alpha value to pull the number down, this gives a nice curve without complicated computations
         //the * 1.1 is just to adjust the intensity of the (-1 + alpha) portion
-        this.y += (Math.sin(this.angle) + (-1 + this.alpha) + 1/(value == 0? 1: value) + rand_force)* Gdx.graphics.getDensity(); //SOH
+        //+ 1/(value == 0? 1: value)
+        this.y += (Math.sin(this.angle) + (-1 + this.alpha)  + rand_force)* Gdx.graphics.getDensity(); //SOH
         this.alpha += -0.01f;
         //at an alpha < 0, the random number can be removed from where it is displayed
         //since it will be invisible
