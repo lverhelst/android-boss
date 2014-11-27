@@ -274,8 +274,8 @@ public class BattleView {
 
 
     public void update(int lefthp, int righthp, boolean showLoot, int aMax, String message, int hits){
-        b.getLeftside().setHealth(lefthp);
-        b.getRightside().setHealth(righthp);
+        b.getLeftside().setDisplay_hp(lefthp);
+        b.getRightside().setDisplay_hp(righthp);
 
         lootActor.setVisible(showLoot);
 

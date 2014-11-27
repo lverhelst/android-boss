@@ -10,10 +10,12 @@ import javax.rmi.CORBA.Tie;
  */
 public class BattleResultHandler {
 
+    private int max_hitcount, min_hitcount;
 
 
     public BattleResultHandler(){
-
+        max_hitcount = -1;
+        min_hitcount = -1;
     }
 
 
@@ -62,6 +64,17 @@ public class BattleResultHandler {
         //Deal with hitcount
         if(hitcount == 101)
             resultsList.add(BattleResult.CustomMode_ioi);
+
+        if(max_hitcount == -1 || hitcount > max_hitcount)
+        {
+            resultsList.add(BattleResult.NewMaxHitCount);
+            max_hitcount = hitcount;
+        }
+        if(min_hitcount == -1 || hitcount < min_hitcount){
+            resultsList.add(BattleResult.NewMinHitCount);
+            min_hitcount = hitcount;
+        }
+
 
         System.out.print(resultsList);
        // System.out.println("        CL " + a.getLevel() + " ws " + a.getWin_streak() + " ml" + a.max_level + " mwtl" + a.max_wtnl + " ls " + a.getLose_streak() + " lscheck" + a.getLose_streak() % (a.wins_to_level + 1));

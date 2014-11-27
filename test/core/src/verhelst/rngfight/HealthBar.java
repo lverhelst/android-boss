@@ -69,7 +69,7 @@ public class HealthBar extends Actor {
         //background.draw(batch, getX(), getY(), getWidth(), character.getInitial_health()/character.getBase_health() * getScaleX());
         if(health_value > 0 ) {
             //This gets the health value AS IF it waas the base health
-            float hh =  (character.getHealth() / (character.getInitial_health() / character.getBase_health()));
+            float hh =  (character.getDisplay_hp() / (character.getInitial_health() / character.getBase_health()));
             //We need to scale the base health to getHeight
             float scaler = getHeight()/character.getBase_health();
 
@@ -78,7 +78,7 @@ public class HealthBar extends Actor {
 
             foreground.draw(batch, getX(), getY(), getWidth(), hh * scaler);
         }
-                Assets.HUDbf.draw(batch, /*this.name + ": " +*/ "" + ( character.getHealth()  > 0 ?  character.getHealth()  : 0), getX() + getWidth()/10, getY() + Assets.HUDbf.getBounds( character.getName()).height + 1);
+        Assets.HUDbf.draw(batch, /*this.name + ": " +*/ "" + ( character.getDisplay_hp()  > 0 ?  character.getDisplay_hp()  : 0), getX() + getWidth()/10, getY() + Assets.HUDbf.getBounds( character.getName()).height + 1);
     }
 
     @Override

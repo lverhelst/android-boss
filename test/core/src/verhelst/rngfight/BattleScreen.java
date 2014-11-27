@@ -37,6 +37,7 @@ public class BattleScreen implements Screen, InputProcessor {
     public static float statetime;
     int hits = 0, anim_h1, anim_h2;
 
+    int display_cap = Integer.MAX_VALUE;
     Actor dragme;
 
 
@@ -315,10 +316,18 @@ public class BattleScreen implements Screen, InputProcessor {
                             anim_h1 = lst.get(2);
                             anim_h2 = lst.get(3);
                             hits = lst.get(4);
-                            if (lst.get(2) <= 0 || lst.get(3) <= 0) {
-                                btl.getLeftside().setHealth(lst.get(2));
-                                btl.getRightside().setHealth(lst.get(3));
+                            if ((lst.get(2) <= 0 || lst.get(3) <= 0)) {
+                                btl.getLeftside().setDisplay_hp(lst.get(2));
+                                btl.getRightside().setDisplay_hp(lst.get(3));
                                 battling = false;
+                                break;
+                            }
+                            if(hits > display_cap){
+
+                                System.out.println("Past Display Cap. TODO: Make display cap into an option");
+
+                                battling = false;
+
                                 break;
                             }
 

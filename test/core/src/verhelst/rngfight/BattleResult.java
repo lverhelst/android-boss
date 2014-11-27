@@ -12,7 +12,9 @@ public enum BattleResult {
         CustomMode_ioi,
         Player1GetsLoot,
         HeadLoot,
-        Player1NewSuit
+        Player1NewSuit,
+        NewMaxHitCount,
+        NewMinHitCount
 
 
 

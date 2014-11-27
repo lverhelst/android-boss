@@ -70,7 +70,7 @@ public class Battle implements Runnable {
             }
 
             hitcount++;
-            if(hitcount > 2147483647){
+            if(hitcount > Integer.MAX_VALUE - 1){
                 if(leftside.getHealth() <= rightside.getHealth()){
                     leftside.setHealth(0);
                 }else{
@@ -78,9 +78,9 @@ public class Battle implements Runnable {
                 }
             }
 
-            System.out.println(hitcount);
-        } while (leftside.getHealth() > 0 && rightside.getHealth() > 0);
 
+        } while (leftside.getHealth() > 0 && rightside.getHealth() > 0);
+        System.out.println(hitcount);
 
         final List<Integer> chunk = new ArrayList<Integer>();
         chunk.add(dmgtoboss);

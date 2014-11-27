@@ -22,6 +22,7 @@ public class Character extends Actor {
     private int min_dmg;
     private int max_dmg;
     int max_level, max_wtnl;
+    int display_hp;
     private static final int BASE_HEALTH = 200;
     private int initial_health;
     private int level;
@@ -256,6 +257,14 @@ public class Character extends Actor {
     }
     public int getLose_streak() {
         return lose_streak;
+    }
+
+    public int getDisplay_hp(){
+        return  display_hp;
+    }
+
+    public void setDisplay_hp(int display_hp){
+        this.display_hp = display_hp;
     }
 
 
