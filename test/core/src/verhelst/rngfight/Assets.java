@@ -91,9 +91,9 @@ public class Assets {
         int y_offset = 1;
         int width = 32;
         int height = 32;
-        for(int i = 0; i < 2; i++){
-            for(int j = 0; j < 6; j++) {
-                if(i == 1 && j > 1)
+        for(int i = 0; i < 3; i++){
+            for(int j = 0; j < 7; j++) {
+                if(i == 2 && j > 1)
                     break;
                 weapons_sprites.add(new Sprite(wep_sprites[i][j]));
             }
