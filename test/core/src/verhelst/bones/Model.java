@@ -23,7 +23,7 @@ public class Model {
 
     public Model(int abs_x, int abs_y, boolean flip, float height){
 
-        scale = (float) Math.max(height/96, 2.75);
+        scale = (float) Math.max(height/96, 1.5);//2.75);
 
       //  scale = (float) Math.max(height/96, 2.5);
         System.out.println("Scale" + scale);
@@ -41,7 +41,6 @@ public class Model {
         root.addChild(new Joint(-90,32 * scale, "shoulder", flip, 0, (32 * scale)/2));
         root.children.get(2).addChild(new Joint(180,32 * scale,"elbow", flip, 32/2 * scale,0));
         root.children.get(2).children.get(0).addChild(new Joint(180,32 * scale, "wrist", flip, 32/5 * scale, -(16 * scale/2)));
-
         root.children.get(2).children.get(0).isRenderChildrenFirst = true; //make sure weapon is drawn under elbow sprite
 
         root.print();

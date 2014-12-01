@@ -39,6 +39,8 @@ public class Joint {
             if(name.equals("head")){
                 testS.rotate90(!flip);
             }
+
+            
             testS.flip(false, flip);
             testS.setSize(testS.getWidth() * Model.scale, testS.getHeight() * Model.scale);
             this.isFlipped = flip;
