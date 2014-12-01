@@ -1,5 +1,6 @@
 package verhelst.rngfight;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -314,10 +315,11 @@ public class BattleScreen implements Screen, InputProcessor {
                         if (!bswNumList.isEmpty()) {
 
                             lst = bswNumList.poll();
-
-                            btl.getLeftside().consumeDmgNumPost( (custom_mode_on ? custom_mode_string: "" + lst.get(0)), Character.DmgListSide.LEFT);
-                            btl.getRightside().consumeDmgNumPost((custom_mode_on ? custom_mode_string: "" + lst.get(1)), Character.DmgListSide.RIGHT);
-
+                            //Since the laptop isn't performant with the damage numbers...they may have to be rethought.
+                            if(Gdx.app.getType() == Application.ApplicationType.Android) {
+                                btl.getLeftside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst.get(0)), Character.DmgListSide.LEFT);
+                                btl.getRightside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst.get(1)), Character.DmgListSide.RIGHT);
+                            }
                             anim_h1 = lst.get(2);
                             anim_h2 = lst.get(3);
                             hits = lst.get(4);
