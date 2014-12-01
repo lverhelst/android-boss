@@ -23,7 +23,7 @@ public class Model {
 
     public Model(int abs_x, int abs_y, boolean flip, float height){
 
-        scale = (float) Math.max(height/96, 1.5);//2.75);
+        scale = (float) Math.max(height/96, 2.75);//2.75);
 
       //  scale = (float) Math.max(height/96, 2.5);
         System.out.println("Scale" + scale);
