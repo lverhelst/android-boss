@@ -119,9 +119,21 @@ public class Model {
 
             Sprite temp = new Sprite(sprite);
 
-            temp.setSize(jw,jh);
-            temp.flip(false, isFlipped);
+
+            if(name.equals("wrist")) {
+                temp.flip(false, isFlipped);
+                temp.setSize(temp.getWidth() * scale, temp.getHeight() * scale );
+                //centre according to weapon sprite
+                j.y_adj = 0;//(-temp.getHeight()/2);
+            }
+            else {
+                temp.flip(false, isFlipped);
+                temp.setSize(jw,jh);
+
+            }
+
             j.testS = temp;
+
         }
 
     }

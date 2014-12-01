@@ -266,7 +266,7 @@ public class BattleView {
                 c.setActor(bWeapon.getTable());
                 bWep = bWeapon;
             }
-          bWep.setVisible(true);
+            bWep.setVisible(true);
         }else{
             bWep.setVisible(false);
         }

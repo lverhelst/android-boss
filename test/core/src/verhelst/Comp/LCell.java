@@ -1,10 +1,12 @@
 package verhelst.Comp;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import verhelst.rngfight.BodyPartActor;
+import verhelst.rngfight.Weapon;
 
 import static verhelst.rngfight.BodyPartActor.BodyPartType.*;
 
@@ -86,8 +88,8 @@ public class LCell extends Actor {
                 }
 
             }
-
             actor.setSize(w * scale, h * scale);
+            actor.setOrigin(w * scale /2, h * scale /2);
             actor.setPosition(x_coord + (width - (w * scale))/2, y_coord + (height - (h * scale))/2);
         }
 
@@ -101,7 +103,11 @@ public class LCell extends Actor {
             if (sr == null)
                 sr = new ShapeRenderer();
             sr.begin(ShapeRenderer.ShapeType.Line);
+            sr.setColor(Color.WHITE);
             sr.rect(x_coord, y_coord, width, height);
+            sr.setColor(Color.RED);
+            sr.rect(actor.getX(), actor.getY(), actor.getWidth(), actor.getHeight());
+
             sr.end();
             batch.begin();
         }

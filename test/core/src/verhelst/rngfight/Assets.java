@@ -86,7 +86,7 @@ public class Assets {
         //Load Weapon Sprites
         //TODO: Make more weapon sprites
 
-        ta = new TextureAtlas(Gdx.files.internal("In Development\\weapon.pack"));
+        ta = new TextureAtlas(Gdx.files.internal("In Development\\weaponFullSize.pack"));
 
         for (int i = 1; i <= weaponcount; i++) {
             weapons_sprites.add(new Sprite(ta.findRegion("weapon" + String.format("%02d", i))));

@@ -51,7 +51,7 @@ public class BattleResultHandler {
             b.resetWins();
         }
 
-          if (hitcount % 4 == 1 || aoriglvl != a.getLevel())
+          if (hitcount % 4 == 1 || (aoriglvl != a.getLevel() && a.getLevel() % 2 ==0 ))
                 resultsList.add(BattleResult.Player1GetsLoot);
 
 

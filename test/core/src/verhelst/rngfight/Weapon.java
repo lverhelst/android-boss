@@ -35,7 +35,7 @@ public class Weapon extends Actor {
     }
 
 
-    private Sprite sprite;
+    private Sprite sprite, displaysprite;
     private Label lldmg, llhrt;
     private String dmgstring, heartstring;
 
@@ -80,6 +80,7 @@ public class Weapon extends Actor {
         this.setName("DummyWeap" + System.currentTimeMillis());
         this.sprite = Assets.getWeaponSprite();
         this.sprite_initWidth = (int)sprite.getWidth();
+
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
         this.posi = POSITION.LOOT_POSITION;
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
@@ -99,6 +100,7 @@ public class Weapon extends Actor {
         this.min_damage = min_damage;
         this.life_steal = life_steal;
         this.sprite  = new Sprite(sprite);
+
         this.sprite_initWidth = (int)sprite.getWidth();
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
         this.posi = position;
@@ -117,6 +119,7 @@ public class Weapon extends Actor {
         this.posi = position;
         //Copy the sprite so we aren't dependant on the external sprite
         this.sprite = new Sprite(sprite);
+
         this.sprite_initWidth = (int)sprite.getWidth();
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
         this.dmgstring = min_damage + "-" + max_damage;
@@ -138,7 +141,10 @@ public class Weapon extends Actor {
         this.life_steal = to_copy.life_steal;
         this.posi = posit;
         this.sprite = new Sprite(to_copy.getSprite());
+
+
         this.sprite_initWidth = (int)to_copy.sprite_initWidth;
+
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
         this.dmgstring = min_damage + "-" + max_damage;
         this.heartstring = hp_multiplier +"";
@@ -277,32 +283,46 @@ public class Weapon extends Actor {
         dataTable.addActor(new Image(Assets.hrtIconTxture),true);//.center().pad(5).fill().expand();
         dataTable.addActor(llhrt);//.center().pad(5).expand().fill();
 
-        if(posi != POSITION.RIGHT_POSITION) {
+        //if(posi != POSITION.RIGHT_POSITION) {
 
             root.addActor(new WepSpriteActor(), true);//.uniform().expand().fill();
             root.addActor(dataTable);//.uniform().expand().fill();
-        }else{
-            root.addActor(new WepSpriteActor(), true);//.uniform().expand().fill();
-            root.addActor(dataTable);//.uniform().expand().fill();
-        }
+       // }else{
+         //   root.addActor(new WepSpriteActor(), true);//.uniform().expand().fill();
+           // root.addActor(dataTable);//.uniform().expand().fill();
+        //}
         return root;
     }
 
-    private class WepSpriteActor extends Actor{
+    public class WepSpriteActor extends Actor{
+
 
         public WepSpriteActor(){
-            setSize(32,32);
+            displaysprite = new Sprite(sprite);
+            setSize(displaysprite.getWidth(),displaysprite.getHeight());
+            displaysprite.setFlip(false, true);
+            displaysprite.setRotation(45);
+
         }
 
         @Override
         public void draw(Batch batch, float parentAlpha){
-            sprite.setSize(getWidth(), getHeight());
-            sprite.setPosition(getX(), getY());
-            sprite.setOrigin(getWidth()/2, getHeight()/2);
-            sprite.setRotation(45);
-            sprite.draw(batch);
+            displaysprite.draw(batch);
         }
 
+        @Override
+        public void setSize(float width, float height) {
+            displaysprite.setSize(width, height);
+            displaysprite.setOrigin(width / 2, height/ 2);
+            super.setSize(width, height);
+        }
+
+        @Override
+        public void setPosition(float x, float y) {
+            displaysprite.setPosition(x, y);
+
+            super.setPosition(x, y);
+        }
     }
 
     @Override

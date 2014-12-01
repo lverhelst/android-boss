@@ -144,7 +144,8 @@ public class Character extends Actor {
         this.max_dmg = base_maxdmg + weapon.getMax_damage();
         this.health = this.BASE_HEALTH * weapon.getHp_multiplier();// * this.level;
 
-        m.updateSprite("wrist", weapon.getSprite());
+
+        m.updateSprite("wrist", new Sprite(weapon.getSprite()));
         m.showWeapon();
 
     }
