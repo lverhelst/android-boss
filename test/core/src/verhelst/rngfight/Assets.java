@@ -31,7 +31,7 @@ public class Assets {
     public static Texture dmgIconTxture, hrtIconTxture, glow;
     public static Sprite dmgIcon, hrtIcon;
 
-    private static int armcount, pantcount, shirtcount, shouldercount, facecount;
+    private static int armcount, pantcount, shirtcount, shouldercount, facecount,weaponcount;
     private static Random rng = new Random();
 
     public Assets(){
@@ -41,6 +41,7 @@ public class Assets {
         pantcount = 7;
         shirtcount = 7;
         shouldercount = 7;
+        weaponcount = 16;
 
         faces = new Sprite[facecount];
         pants = new Sprite[pantcount];
@@ -84,21 +85,12 @@ public class Assets {
 
         //Load Weapon Sprites
         //TODO: Make more weapon sprites
-        Texture wepspritepack = new Texture(Gdx.files.internal("In Development\\Weapon_Sprites_PaintNet.png"));
-        TextureRegion wep_temp = new TextureRegion(wepspritepack);
-        TextureRegion[][] wep_sprites = wep_temp.split(33,34);
-        int x_offset = 1;
-        int y_offset = 1;
-        int width = 32;
-        int height = 32;
-        for(int i = 0; i < 3; i++){
-            for(int j = 0; j < 7; j++) {
-                if(i == 2 && j > 1)
-                    break;
-                weapons_sprites.add(new Sprite(wep_sprites[i][j]));
-            }
-        }
 
+        ta = new TextureAtlas(Gdx.files.internal("In Development\\weapon.pack"));
+
+        for (int i = 1; i <= weaponcount; i++) {
+            weapons_sprites.add(new Sprite(ta.findRegion("weapon" + String.format("%02d", i))));
+        }
         weapon_data_icon = new Sprite(new Texture(Gdx.files.internal("wepdataicon.png")));
 
         dmgIcon = new Sprite(new Texture(Gdx.files.internal("In Development\\DmgIcon.png")));

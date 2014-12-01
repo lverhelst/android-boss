@@ -1,0 +1,117 @@
+
+weapon.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+weapon01
+  rotate: false
+  xy: 1, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon02
+  rotate: false
+  xy: 35, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon03
+  rotate: false
+  xy: 69, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon04
+  rotate: false
+  xy: 103, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon05
+  rotate: false
+  xy: 137, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon06
+  rotate: false
+  xy: 171, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon07
+  rotate: false
+  xy: 205, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon08
+  rotate: false
+  xy: 239, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon09
+  rotate: false
+  xy: 273, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon10
+  rotate: false
+  xy: 307, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon12
+  rotate: false
+  xy: 341, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon13
+  rotate: false
+  xy: 375, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon14
+  rotate: false
+  xy: 409, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon15
+  rotate: false
+  xy: 443, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon16
+  rotate: false
+  xy: 477, 25
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+weapon11
+  rotate: false
+  xy: 1, 1
+  size: 32, 22
+  orig: 32, 22
+  offset: 0, 0
+  index: -1
