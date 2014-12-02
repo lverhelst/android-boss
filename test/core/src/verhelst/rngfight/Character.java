@@ -294,6 +294,7 @@ public class Character extends Actor {
         m.originx = (int)(getX() + getWidth()/2);
         m.originy = (int)(getY() + getHeight()/2);
         renderDamageNumbers(batch);
+
         m.render(batch);
 
     }
@@ -402,4 +403,9 @@ public class Character extends Actor {
 
     }
 
+    @Override
+    public void setScale(float scaleXY) {
+        m.modifyScale(scaleXY);
+        super.setScale(scaleXY);
+    }
 }

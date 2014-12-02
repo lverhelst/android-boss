@@ -18,12 +18,13 @@ public class Joint {
         Sprite testS;
 
         private double angle;
-        double length;
+        double length, baselength;
         String name;
         Joint parent;
         ArrayList<Joint> children;
         boolean isFlipped, isVisible, isRenderChildrenFirst;
         float x_adj, y_adj;
+        private float origh, origw;
 
 
         public Joint(double angle_degrees, double length, String name, boolean flip, float x_adj, float y_adj){
@@ -31,6 +32,7 @@ public class Joint {
             this.children = new ArrayList<Joint>();
             this.angle = angle_degrees;
             this.length = length;
+            this.baselength = length;
             this.name = name;
             this.x_adj = x_adj;
             this.y_adj = y_adj;
@@ -43,6 +45,10 @@ public class Joint {
             
             testS.flip(false, flip);
             testS.setSize(testS.getWidth() * Model.scale, testS.getHeight() * Model.scale);
+            origh = testS.getHeight();
+            origw = testS.getWidth();
+
+
             this.isFlipped = flip;
             this.isVisible = true;
         }
@@ -174,6 +180,12 @@ public class Joint {
             this.adjustAngle(adjustment);
 
         }
+
+        public void multiplyScale(float multiplicationFactor){
+            length = baselength * multiplicationFactor;
+            testS.setSize(origw * (Model.scale * multiplicationFactor), origh *  (Model.scale * multiplicationFactor));
+        }
+
 
         public boolean getIsVisible(){
             return isVisible;

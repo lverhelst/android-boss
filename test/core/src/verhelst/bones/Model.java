@@ -164,4 +164,16 @@ public class Model {
         writ.setIsVisible(false);
     }
 
+    public void modifyScale(float scaleVal) {
+        modifyJointScale(root, scaleVal);
+    }
+
+    private void modifyJointScale(Joint j, float scaleval){
+        j.multiplyScale(scaleval);
+        for(Joint j2 : j.children){
+            modifyJointScale(j2, scaleval);
+        }
+    }
+
+
 }
