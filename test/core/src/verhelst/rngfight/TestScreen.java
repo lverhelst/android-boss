@@ -22,9 +22,10 @@ public class TestScreen implements Screen {
     Model m;
     LTable table;
     LCoverFlow lcf;
+    RngFight game;
 
-
-    public TestScreen(){
+    public TestScreen(RngFight game){
+        this.game = game;
         //m = new Model(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, false, 96);
         Character a = new Character("Enemy", Assets.getHeadSprite());
         a.setLevel(1);

@@ -44,8 +44,10 @@ public class BattleScreen implements Screen, InputProcessor {
     boolean custom_mode_on;
     String custom_mode_string;
 
+    RngFight fight;
 
-    public BattleScreen(){
+    public BattleScreen(RngFight rf){
+        this.fight = rf;
         a = new Character("Enemy", Assets.resting_face);
         a2 = new Character("Enemy2", Assets.resting_face);
 
@@ -248,6 +250,12 @@ public class BattleScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
+        if(screenX > Gdx.graphics.getWidth()/4 && Gdx.graphics.getHeight() - screenY < Gdx.graphics.getHeight()/4){
+            fight.switchScreens(1);
+        }
+
+
 
         btl.getRightside().setGlow(false);
         if(showLoot){

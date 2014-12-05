@@ -28,9 +28,9 @@ public class LCoverFlow extends Actor implements InputProcessor {
     long target_time;
     long start_drag, end_drag;
     DIRECTION currentDirection;
-    int x_start, x_end;
+    int x_start, x_end, x_current, x_last;
     int velocity;
-    boolean isScroll;
+    boolean isScroll, isDrag;
     int shiftedcount;
 
 
@@ -63,115 +63,98 @@ public class LCoverFlow extends Actor implements InputProcessor {
 
 
        items.get(index).setSize((float) (getWidth() / 5.0), (float) (getHeight()));
-        items.get(index).setScale(calculateScale(offset));
-        switch(offset){
-            case -2:
-                //60%
-                //centered in first 1/5th
-                //from x: 0 + ((1/5) * width)/2 <-- that's center of the item
 
+      //  System.out.println("o " + offset + " " + calculateScale(offset));
 
+       items.get(index).setScale(calculateScale(offset));
 
-                items.get(index).setPosition((float)0 + calculatePositionDuringAnimation(), 0);
+       items.get(index).setPosition((float)(0 + (((offset + visibleItems/2) / 5.0) * getWidth()) + calculatePosition()), 0);
 
-
-                break;
-            case -1:
-                //80%
-                //centered in 2/5th
-                //from x: (1/5) * width + ((1/5) * width)/2
-
-                items.get(index).setPosition((float)(0 + ((1.0 / 5.0) * getWidth()) + calculatePositionDuringAnimation()), 0);
-                break;
-            case 0:
-                //Full size
-                //Position = centered
-                //from x: width/2
-
-                items.get(index).setPosition((float)(0 + ((2.0 / 5.0) * getWidth())+ calculatePositionDuringAnimation()), 0);
-                break;
-            case 1:
-                //80% size
-                //Centered in 4/5th
-                //from X: (3/5) * width + ((1/5) * width)/2
-
-                items.get(index).setPosition((float)(0 + ((3.0 / 5.0) * getWidth())+ calculatePositionDuringAnimation()), 0);
-                break;
-
-            case 2:
-                //50
-                //Centered in last fifth
-                //from X: (4/5) * width + ((1/5) * width)/2
-
-                items.get(index).setPosition((float)(0 + ((4.0 / 5.0) * getWidth())+ calculatePositionDuringAnimation()), 0);
-                break;
-        }
     }
 
     private float calculateScale(int offset){
+
         float thyme = target_time - current_time;
         float percent_offset = (move_anim_time_ms - thyme)/move_anim_time_ms;
-
-
-        switch(offset){
-            case -2:
-                switch (currentDirection){
-                    case STILL: return (float)0.6;
-                    case LEFT: return (float)0.0;//(float)0.6 - (float)(0.2 * percent_offset);
-                    case RIGHT: return (float)0.6 + (float)(0.2 * percent_offset);
-                }
-                break;
-            case -1:
-                switch (currentDirection){
-                    case STILL: return (float)0.8;
-                    case LEFT: return (float)0.8 - (float)(0.2 * percent_offset);
-                    case RIGHT: return (float)0.8 + (float)(0.2 * percent_offset);
-                }
-                break;
-            case 0:
-                switch (currentDirection){
-                    case STILL: return (float)1;
-                    case LEFT: return (float)1- (float)(0.2 * percent_offset);
-                    case RIGHT: return (float)1- (float)(0.2 * percent_offset);
-                }
-                break;
-            case 1:
-                switch (currentDirection){
-                    case STILL: return (float)0.8;
-                    case LEFT: return (float)0.8 + (float)(0.2 * percent_offset);
-                    case RIGHT: return (float)0.8 - (float)(0.2 * percent_offset);
-                }
-                break;
-            case 2:
-                switch (currentDirection){
-                    case STILL: return (float)0.6;
-                    case LEFT: return (float)0.6 + (float)(0.2 * percent_offset);
-                    case RIGHT: return (float)0.0;// (float)0.6 - (float)(0.2 * percent_offset);
-                }
-                break;
+        if(isDrag){
+            percent_offset = Math.abs((float)((float)(x_start - x_current) / (float)(getWidth()/5.0)));
         }
+
+        switch(currentDirection){
+            case STILL: return (float)(1 - Math.abs(offset) * 0.25);
+            case LEFT:
+                if(offset == 0){
+                    return (float)(1 - 0.25 * percent_offset);
+                }
+                else if(offset < 0 ){
+                    return (float)(1 -  Math.abs(offset) * 0.25 - 0.25 * percent_offset);
+                }else{
+                    return (float)(1 -  Math.abs(offset) * 0.25 + 0.25 * percent_offset);
+                }
+            case RIGHT:
+                if(offset == 0){
+                    return (float)(1 - 0.25 * percent_offset);
+                }else if (offset < 0 ){
+                    return (float)(1 -  Math.abs(offset) * 0.25 + 0.25 * percent_offset);
+                }else{
+                    return (float)(1 -  Math.abs(offset) * 0.25 - 0.25 * percent_offset);
+                }
+        }
+
+
         return (float)1.0;
     }
 
 
     private float calculatePositionDuringAnimation(){
         float thyme = target_time - current_time;
-        float percent_offset = (move_anim_time_ms - thyme)/move_anim_time_ms;
+
+     //   move_anim_time_ms -= Math.abs((float)((float)(x_start - x_current) / (float)(getWidth()/5.0)));
+
+
+        float percent_offset = (move_anim_time_ms - thyme)/move_anim_time_ms;// + Math.abs((float)((x_current - x_start)/(getWidth()/5.0)));
+      //  move_anim_time_ms = 1000;
+      //  System.out.println("During anm " + target_time + ": " + percent_offset);
+
+        float drag_offset = (float)((x_current - x_start)/(getWidth()/5.0));
+        percent_offset += drag_offset;
+        if(percent_offset > 1) {
+            target_time = System.currentTimeMillis() - 10;
+            return 0;
+        }
+
+      //  System.out.println("anuim " + (x_current - x_start) + " adj percent offset: " + drag_offset + " " + percent_offset);
         if(currentDirection == DIRECTION.LEFT){
-            return (float)(getWidth()/5.0 * -percent_offset);
+            return (float)((getWidth()/5.0) * -percent_offset);
 
         }
+
         if(currentDirection == DIRECTION.RIGHT){
-            return (float)(getWidth()/5.0 * percent_offset);
+            return (float)((getWidth()/5.0) * percent_offset);
 
         }
+
         if(currentDirection == DIRECTION.STILL){
             return 0;
         }
         return 0;
     }
 
+    private void snapToGrid(){
+        if(x_current - x_start > getWidth()/10){
+            moveIndex();
+        }else if(x_current - x_start < -(getWidth()/10)){
+            moveIndex();
+        }
+    }
 
+    private float calculatePosition(){
+        return  (isDrag? calculatePositionDuringDrag() : calculatePositionDuringAnimation());
+    }
+
+    private float calculatePositionDuringDrag(){
+        return x_current - x_start;
+    }
 
     @Override
     public boolean keyDown(int keycode) {
@@ -197,46 +180,90 @@ public class LCoverFlow extends Actor implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
         x_end = screenX;
-
-
-
 
         current_time = System.currentTimeMillis();
         end_drag = System.currentTimeMillis();
 
+       if(end_drag - start_drag < 150){
+           isDrag = false;
+        }
 
 
-        velocity = (int)((x_end - x_start)/(float)((end_drag - start_drag)/100));
-        isScroll = Math.abs(velocity) > 0;
-        target_time = current_time + move_anim_time_ms;
+        if(!isDrag){
+            x_end = x_start = x_current = x_last = 0;
+        }
+
+
+
+
+
+
+        //velocity = (int)((x_end - x_start)/(float)((end_drag - start_drag)/100));
+        //velocity = 0;
+       /// isScroll = Math.abs(velocity) > 0;
+
+        target_time = current_time + (move_anim_time_ms);// * (isDrag ? (long)((x_end - x_start) / (getWidth()/5)) : 1) );
         //Move by one unless we are scrolling
-        if(!isScroll) {
+        if (isDrag){
+            isDrag = false;
+            snapToGrid();
+            currentDirection = DIRECTION.STILL;
+        }
+        else {
             if (screenX < getWidth() / 2) {
                 //Move right
-                currentDirection = DIRECTION.RIGHT;
-
+                currentDirection = DIRECTION.LEFT;
             }
 
             if (screenX > getWidth() / 2) {
                 //Move left
-                currentDirection = DIRECTION.LEFT;
-
-
-            }
-        }else{
-            if(velocity > 0)
                 currentDirection = DIRECTION.RIGHT;
-            else
-                currentDirection = DIRECTION.LEFT;
-        }
+            }
 
+        }
+       /* else
+        {
+                if(velocity > 0)
+                    currentDirection = DIRECTION.RIGHT;
+                else
+                    currentDirection = DIRECTION.LEFT;
+
+         }*/
+
+        isDrag = false;
         return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        x_end = screenX;
+        isDrag = true;
+        x_last = x_current;
+        x_current = screenX;
+        if(x_last < x_current){
+            currentDirection = DIRECTION.RIGHT;
+        }else if(x_last > x_current){
+            currentDirection = DIRECTION.LEFT;
+        }else    {
+            currentDirection = DIRECTION.STILL;
+        }
+
+
+
+        if(x_current - x_start > getWidth()/5){
+            x_start = x_current;
+
+          //  currentDirection = DIRECTION.RIGHT;
+            moveIndex();
+        }
+        if(x_current - x_start < -getWidth()/5){
+            x_start = x_current;
+
+            //currentDirection = DIRECTION.LEFT;
+            moveIndex();
+        }
+
         return false;
     }
 
@@ -252,10 +279,17 @@ public class LCoverFlow extends Actor implements InputProcessor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+
+
         current_time = System.currentTimeMillis();
+        if(currentDirection != DIRECTION.STILL && !isDrag && !isScroll && current_time > target_time){
+
+            moveIndex();
+            currentDirection = DIRECTION.STILL;
+        }
         //i is the offset
         int index;
-        for(int i = visibleItems/2 - (visibleItems % 2 == 0? 1:0) ; i >= -visibleItems/2; i--){
+        for(int i = (visibleItems + 2)/2 - (visibleItems % 2 == 0? 1:0) ; i >= -(visibleItems + 2)/2; i--){
             index = currentIndex + i;
             if(index < 0){
                 index = items.size() + index;
@@ -266,37 +300,12 @@ public class LCoverFlow extends Actor implements InputProcessor {
             computeSizeAndPosition(i, index);
             items.get(index).draw(batch, parentAlpha);
         }
-
-        if(!isScroll && current_time > target_time){
-
-            moveIndex();
-            currentDirection = DIRECTION.STILL;
-        }
-
-        velocity/=1.1;
-        if(Math.abs(velocity) > 0 && current_time > target_time){
-
-            target_time = current_time + move_anim_time_ms;// * ++shiftedcount;
-
-            moveIndex();
-
-        }else{
-            isScroll = Math.abs(velocity) > 0;
-            if(!isScroll){
-                shiftedcount = 0;
-                move_anim_time_ms = 100;
-            }
-        }
-
-
-
-
         //super.draw(batch, parentAlpha);
     }
 
     private void moveIndex(){
         if (currentDirection == DIRECTION.RIGHT){
-            if (currentIndex - 1 > 0) {
+            if (currentIndex - 1 >= 0) {
                 currentIndex--;
             } else {
                 currentIndex = items.size() - 1;

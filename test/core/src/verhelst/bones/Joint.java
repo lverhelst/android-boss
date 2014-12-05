@@ -23,7 +23,7 @@ public class Joint {
         Joint parent;
         ArrayList<Joint> children;
         boolean isFlipped, isVisible, isRenderChildrenFirst;
-        float x_adj, y_adj;
+        float x_adj, y_adj, origxadj, origyadj;
         private float origh, origw;
 
 
@@ -36,7 +36,8 @@ public class Joint {
             this.name = name;
             this.x_adj = x_adj;
             this.y_adj = y_adj;
-
+            origxadj = x_adj;
+            origyadj = y_adj;
             testS = new Sprite(Assets.findSpriteForName(name));
             if(name.equals("head")){
                 testS.rotate90(!flip);
@@ -183,6 +184,8 @@ public class Joint {
 
         public void multiplyScale(float multiplicationFactor){
             length = baselength * multiplicationFactor;
+            x_adj = origxadj * multiplicationFactor;
+            y_adj = origyadj * multiplicationFactor;
             testS.setSize(origw * (Model.scale * multiplicationFactor), origh *  (Model.scale * multiplicationFactor));
         }
 
