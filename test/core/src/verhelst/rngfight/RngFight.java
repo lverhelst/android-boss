@@ -1,5 +1,6 @@
 package verhelst.rngfight;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
@@ -24,7 +25,7 @@ public class RngFight extends com.badlogic.gdx.Game{
         batch = new SpriteBatch();
 
         viewerAndStats = new TestScreen(this);
-     //   gameScreen = new BattleScreen(this);
+        gameScreen = new BattleScreen(this);
 
        // setScreen(new BattleScreen());
       //  setScreen(new TestScreen());
@@ -34,10 +35,13 @@ public class RngFight extends com.badlogic.gdx.Game{
 
     public void switchScreens(int screen){
         if(screen == 1){
-            setScreen(viewerAndStats);
-
+            viewerAndStats.updateLabels(gameScreen.brh.max_hitcount, gameScreen.brh.min_hitcount, gameScreen.brh.player2wins,
+                    gameScreen.brh.player2losses, gameScreen.brh.draws, gameScreen.brh.games, gameScreen.brh.max_level_reached);
+                    setScreen(viewerAndStats);
+            Gdx.input.setInputProcessor(viewerAndStats.im);
         }else{
             setScreen(gameScreen);
+            Gdx.input.setInputProcessor(gameScreen);
         }
     }
 

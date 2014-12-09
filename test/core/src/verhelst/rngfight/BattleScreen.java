@@ -251,114 +251,113 @@ public class BattleScreen implements Screen, InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
-        if(screenX > Gdx.graphics.getWidth()/4 && Gdx.graphics.getHeight() - screenY < Gdx.graphics.getHeight()/4){
+        if(screenX > 3 * Gdx.graphics.getWidth()/4 && Gdx.graphics.getHeight() - screenY < Gdx.graphics.getHeight()/4){
             fight.switchScreens(1);
-        }
+        }else {
 
 
+            btl.getRightside().setGlow(false);
+            if (showLoot) {
 
-        btl.getRightside().setGlow(false);
-        if(showLoot){
+                if (dragme != null) {
+                    float rectax1 = btl.getRightside().getX();
+                    float rectbx2 = dragme.getX() + dragme.getWidth();
 
-            if(dragme != null) {
-                float rectax1 = btl.getRightside().getX();
-                float rectbx2 = dragme.getX() + dragme.getWidth();
+                    float rectax2 = btl.getRightside().getX() + btl.getRightside().getWidth();
+                    float rectbx1 = dragme.getX();
 
-                float rectax2 = btl.getRightside().getX() + btl.getRightside().getWidth();
-                float rectbx1 = dragme.getX();
+                    float rectay1 = btl.getRightside().otherY;
+                    float rectby2 = dragme.getY() + dragme.getHeight();
 
-                float rectay1 = btl.getRightside().otherY;
-                float rectby2 = dragme.getY() + dragme.getHeight();
+                    float rectay2 = btl.getRightside().otherY + btl.getRightside().getHeight();
+                    float rectby1 = dragme.getY();
 
-                float rectay2 = btl.getRightside().otherY + btl.getRightside().getHeight();
-                float rectby1 = dragme.getY();
+                    if (rectax1 <= rectbx2 && rectax2 >= rectbx1
+                            && rectay1 <= rectby2 && rectay2 >= rectby1) {
+                        System.out.println("DRAGME OVERLAPS CHARACHTER RIGHT");
+                        //Copy the weapon so that we aren't passing the reference
+                        if (bView.lootActor instanceof Weapon) {
+                            Weapon newWep = new Weapon();
+                            newWep.copyWeapon((Weapon) bView.lootActor, Weapon.POSITION.RIGHT_POSITION);
+                            btl.getRightside().setEquipped_weapon(newWep);
+                            Weapon aWep = btl.getLeftside().getEquipped_weapon();
+                            Weapon bWep = btl.getRightside().getEquipped_weapon();
 
-                if (rectax1 <= rectbx2 && rectax2 >= rectbx1
-                        && rectay1 <= rectby2 && rectay2 >= rectby1) {
-                    System.out.println("DRAGME OVERLAPS CHARACHTER RIGHT");
-                    //Copy the weapon so that we aren't passing the reference
-                    if(bView.lootActor instanceof Weapon) {
-                        Weapon newWep = new Weapon();
-                        newWep.copyWeapon((Weapon)bView.lootActor, Weapon.POSITION.RIGHT_POSITION);
-                        btl.getRightside().setEquipped_weapon(newWep);
-                        Weapon aWep = btl.getLeftside().getEquipped_weapon();
-                        Weapon bWep = btl.getRightside().getEquipped_weapon();
+                            bView.updateCharacterWeapons(aWep, bWep);
 
-                        bView.updateCharacterWeapons(aWep, bWep);
+                            System.out.println("QUEIROASDAS");
+                        }
+                        if (bView.lootActor instanceof BodyPartActor) {
+                            System.out.println("EQUIP HEAD HERE PLEASE");
+                            btl.getRightside().setBodyPart((BodyPartActor) bView.lootActor);
 
-                        System.out.println("QUEIROASDAS");
+                        }
                     }
-                    if(bView.lootActor instanceof BodyPartActor){
-                        System.out.println("EQUIP HEAD HERE PLEASE");
-                        btl.getRightside().setBodyPart((BodyPartActor) bView.lootActor);
+                    System.out.println("Ax1 " + rectax1 + " x2 " + rectax2 + " y1 " + rectay1 + " y2  " + rectay2);
 
-                    }
+                    System.out.println("Bx1 " + rectbx1 + " x2 " + rectbx2 + " y1 " + rectby1 + " y2  " + rectby2);
                 }
-                System.out.println("Ax1 " + rectax1 + " x2 " + rectax2 + " y1 " + rectay1 + " y2  " + rectay2);
-
-                System.out.println("Bx1 " + rectbx1 + " x2 " + rectbx2 + " y1 " + rectby1 + " y2  " + rectby2);
             }
-        }
-        if(dragme != null)
-             dragme.remove();
-        dragme = null;
-        if(!battling){
-            message = "";
-            battling = true;
-            showLoot = false;
+            if (dragme != null)
+                dragme.remove();
+            dragme = null;
+            if (!battling) {
+                message = "";
+                battling = true;
+                showLoot = false;
 
-            //execute the battle();
-            new Thread(btl).start();
-            //Create a new thread to consume the battle
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (battling) {
-                        try {
-                            //Slow down consuming the battle to AT LEAST visible
-                            Thread.currentThread().sleep(1);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                //execute the battle();
+                new Thread(btl).start();
+                //Create a new thread to consume the battle
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        while (battling) {
+                            try {
+                                //Slow down consuming the battle to AT LEAST visible
+                                Thread.currentThread().sleep(1);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            if (!bswNumList.isEmpty()) {
+
+                                lst = bswNumList.poll();
+                                //Since the laptop isn't performant with the damage numbers...they may have to be rethought.
+                                if (Gdx.app.getType() == Application.ApplicationType.Android) {
+                                    btl.getLeftside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst.get(0)), Character.DmgListSide.LEFT);
+                                    btl.getRightside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst.get(1)), Character.DmgListSide.RIGHT);
+                                }
+                                anim_h1 = lst.get(2);
+                                anim_h2 = lst.get(3);
+                                hits = lst.get(4);
+                                if ((lst.get(2) <= 0 || lst.get(3) <= 0)) {
+                                    btl.getLeftside().setDisplay_hp(lst.get(2));
+                                    btl.getRightside().setDisplay_hp(lst.get(3));
+                                    battling = false;
+                                    break;
+                                }
+                                if (hits > display_cap) {
+
+                                    System.out.println("Past Display Cap. TODO: Make display cap into an option");
+
+                                    battling = false;
+
+                                    break;
+                                }
+
+                            }
+
                         }
-                        if (!bswNumList.isEmpty()) {
 
-                            lst = bswNumList.poll();
-                            //Since the laptop isn't performant with the damage numbers...they may have to be rethought.
-                            if(Gdx.app.getType() == Application.ApplicationType.Android) {
-                                btl.getLeftside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst.get(0)), Character.DmgListSide.LEFT);
-                                btl.getRightside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst.get(1)), Character.DmgListSide.RIGHT);
-                            }
-                            anim_h1 = lst.get(2);
-                            anim_h2 = lst.get(3);
-                            hits = lst.get(4);
-                            if ((lst.get(2) <= 0 || lst.get(3) <= 0)) {
-                                btl.getLeftside().setDisplay_hp(lst.get(2));
-                                btl.getRightside().setDisplay_hp(lst.get(3));
-                                battling = false;
-                                break;
-                            }
-                            if(hits > display_cap){
-
-                                System.out.println("Past Display Cap. TODO: Make display cap into an option");
-
-                                battling = false;
-
-                                break;
-                            }
-
-                        }
-
+                        results = brh.getResults(btl.getLeftside(), btl.getRightside(), hits);
                     }
-
-                    results = brh.getResults(btl.getLeftside(),btl.getRightside(),hits);
-                }
-            }).start();
+                }).start();
 
 
-            return true;
+                return true;
+            }
+
         }
-
-
         return false;
     }
 

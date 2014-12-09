@@ -31,15 +31,16 @@ public class LCoverFlow extends Actor implements InputProcessor {
     DIRECTION currentDirection;
     int x_start, x_end, x_current, x_last;
     int velocity;
-    boolean isScroll, isDrag, inBoundingBox;
+    boolean isScroll, isDrag, inBoundingBox, keepAspectRatio;
     int shiftedcount;
 
 
 
-    public LCoverFlow(List<Actor> displayItems, int width, int height){
+    public LCoverFlow(List<Actor> displayItems, int width, int height, boolean keepAspectRatio){
         this.items = displayItems;
         this.currentIndex = displayItems.size()/2;
         this.visibleItems = 5;
+        this.keepAspectRatio = keepAspectRatio;
         setSize(width, height);
         setPosition(0, 0);
         setBounds(0, 0, width, height);
@@ -62,15 +63,31 @@ public class LCoverFlow extends Actor implements InputProcessor {
         if(index <  0  || index >= items.size())
             return;
 
+        //Aspect ratio maybe
+        //keep aspect ratio of actor
+        if(keepAspectRatio) {
+            float w = items.get(index).getWidth();
+            float h = items.get(index).getHeight();
 
+            float x_scale = (getWidth() / 5) / w;
+            float y_scale = (getWidth() / 5) / h;
 
-       items.get(index).setSize((float) (getWidth() / 5.0), (float) (getHeight()));
+            float scale = Math.min(x_scale, y_scale);
 
-      //  System.out.println("o " + offset + " " + calculateScale(offset));
+            float left_edge_offset = (float) ((getWidth() / 5.0 - Math.min(w,h) * scale));
+            System.out.println(left_edge_offset + " " + items.get(index).getWidth());
+            items.get(index).setSize(w * scale, h * scale);
+            //items.get(index).setOrigin(w * scale/2,h * scale);
+            items.get(index).setRotation(90);
+            items.get(index).setPosition((float)(0 + (((offset + visibleItems/2) / 5.0) * getWidth() + left_edge_offset) + calculatePosition()), getY());
 
-       items.get(index).setScale(calculateScale(offset));
+            //  System.out.println("o " + offset + " " + calculateScale(offset));
+        }else {
+            items.get(index).setSize((float) (getWidth() / 5.0), getHeight());
+            items.get(index).setPosition((float)(0 + (((offset + visibleItems/2) / 5.0) * getWidth()) + calculatePosition()), getY());
 
-       items.get(index).setPosition((float)(0 + (((offset + visibleItems/2) / 5.0) * getWidth()) + calculatePosition()), getY());
+        }
+        items.get(index).setScale(calculateScale(offset));
 
     }
 

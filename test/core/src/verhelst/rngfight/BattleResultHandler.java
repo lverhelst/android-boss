@@ -10,16 +10,21 @@ import javax.rmi.CORBA.Tie;
  */
 public class BattleResultHandler {
 
-    private int max_hitcount, min_hitcount;
+    protected int max_hitcount, min_hitcount, max_level_reached, games, player2wins, player2losses, draws;
 
 
     public BattleResultHandler(){
         max_hitcount = -1;
         min_hitcount = -1;
+        games = 0;
+        player2wins = 0;
+        player2losses = 0;
+        draws = 0;
     }
 
 
     public BattleResult[] getResults(Character a, Character b, int hitcount){
+        games++;
         List<BattleResult> resultsList = new ArrayList<BattleResult>();
         //Decide winner
 
@@ -32,13 +37,14 @@ public class BattleResultHandler {
             a.resetLosses();
             b.resetWins();
             b.incrementLosses();
+            player2losses++;
         }else if(a.getHealth() <= 0 && b.getHealth() > 0){
             resultsList.add(BattleResult.Player2Win);
             a.incrementLosses();
             a.resetWins();
             b.incrementWins();
             b.resetLosses();
-
+            player2wins++;
             if(hitcount % 3  == 0 ) {
                resultsList.add(BattleResult.ShowStaticLoot);
             }else if(hitcount % 7 == 0) {
@@ -49,8 +55,8 @@ public class BattleResultHandler {
             resultsList.add(BattleResult.Tie);
             a.resetWins();
             b.resetWins();
+            draws++;
         }
-
           if (hitcount % 4 == 1 || (aoriglvl != a.getLevel() && a.getLevel() % 2 ==0 ))
                 resultsList.add(BattleResult.Player1GetsLoot);
 
@@ -75,7 +81,7 @@ public class BattleResultHandler {
             min_hitcount = hitcount;
         }
 
-
+        max_level_reached = b.max_level;
         System.out.print(resultsList);
        // System.out.println("        CL " + a.getLevel() + " ws " + a.getWin_streak() + " ml" + a.max_level + " mwtl" + a.max_wtnl + " ls " + a.getLose_streak() + " lscheck" + a.getLose_streak() % (a.wins_to_level + 1));
         return resultsList.toArray(new BattleResult[resultsList.size()]);

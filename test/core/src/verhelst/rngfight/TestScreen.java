@@ -1,6 +1,7 @@
 package verhelst.rngfight;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -28,10 +29,13 @@ public class TestScreen implements Screen {
     LTable table;
     LTable t;
     LCoverFlow lcf;
-    RngFight game;
+    final RngFight game2;
+    Label maxlbl, minlbl, wlrg, maxlvl;
+    InputMultiplexer im;
+
 
     public TestScreen(RngFight game){
-        this.game = game;
+        this.game2 = game;
         //m = new Model(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, false, 96);
         Character a = new Character("Enemy", Assets.getHeadSprite());
         a.setLevel(1);
@@ -107,7 +111,7 @@ public class TestScreen implements Screen {
         }
 
 
-       lcf = new LCoverFlow(actor, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/2);
+       lcf = new LCoverFlow(actor, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/2,false);
 
        List<Actor> las = new ArrayList<Actor>();
 
@@ -121,7 +125,7 @@ public class TestScreen implements Screen {
         }
 
 
-       LCoverFlow wCF = new LCoverFlow(las, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/2);
+       LCoverFlow wCF = new LCoverFlow(las, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/2, true);
 
        t = new LTable(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
        t.addActor(lcf);
@@ -131,26 +135,44 @@ public class TestScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
        LTable statsTable = new LTable(0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/2);
-       statsTable.addActor(new Label("Max Hit Count", skin));
+       maxlbl = new Label("Max Hits: 0", skin);
+       statsTable.addActor(maxlbl);
        statsTable.addRow();
-       statsTable.addActor(new Label("Min Hit Count", skin));
+       minlbl = new Label("Min Hit: 0", skin);
+       statsTable.addActor(minlbl);
        statsTable.addRow();
-       statsTable.addActor(new Label("8 wins, 12 losses, 3 draws, 21 games", skin));
+       wlrg = new Label("0 wins, 0 losses, 0 draws, 0 games", skin);
+       statsTable.addActor(wlrg);
        statsTable.addRow();
-       statsTable.addActor(new Label("Max Level Reached: 10", skin));
+       maxlvl = new Label("Max Level Reached: 1", skin);
+       statsTable.addActor(maxlvl);
        statsTable.addActor(new Image(Assets.weapon_data_icon), true); //TODO: Back button
        t.addActor(statsTable);
 
 
-        InputMultiplexer im = new InputMultiplexer();
+
+        im = new InputMultiplexer();
         im.addProcessor(lcf);
         im.addProcessor(wCF);
+        im.addProcessor(new InputAdapter(){
+            @Override
+            public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+                System.out.println(screenX + " " + (Gdx.graphics.getHeight() - screenY));
+                if(screenX > 3 * Gdx.graphics.getWidth()/4 && (Gdx.graphics.getHeight() - screenY) < Gdx.graphics.getHeight()/4){
+                    game2.switchScreens(0);
+                }
+                return false;
+            }
+        });
         Gdx.input.setInputProcessor(im);
-
-
-
     }
 
+    public void updateLabels(int maxhits, int minhits, int wins, int losses, int draws, int games, int maxlevel){
+        maxlbl.setText("Max hits: " + maxhits);
+        minlbl.setText("Min hits: " + minhits);
+        wlrg.setText("Wins: " + wins + " Losses: " + losses + " Draws: " + draws + " Games: " + games);
+        maxlvl.setText("Highest level reached: " + maxlevel);
+    }
 
 
     @Override
