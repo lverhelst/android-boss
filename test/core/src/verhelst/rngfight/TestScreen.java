@@ -1,11 +1,16 @@
 package verhelst.rngfight;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +26,7 @@ public class TestScreen implements Screen {
 
     Model m;
     LTable table;
+    LTable t;
     LCoverFlow lcf;
     RngFight game;
 
@@ -60,6 +66,9 @@ public class TestScreen implements Screen {
 
 
 
+
+
+
         table = new LTable(0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
 
@@ -77,27 +86,68 @@ public class TestScreen implements Screen {
         //table.addRow();
         int i = 0;
         for(Sprite s: Assets.weapons_sprites){
-            if(i % 10 == 0){
-                table.addRow();
-            }
+
             Image img = new Image(s);
             img.setRotation(90);
             table.addActor(img,true);
             i++;
         }
-        List<Actor> actor = new ArrayList<Actor>();
-        actor.add(a);
-        actor.add(b);
-        actor.add(c);
-        actor.add(d);
-        actor.add(e);
-        actor.add(f);
-        actor.add(g);
-        actor.add(h);
-        actor.add(i2);
-        actor.add(j);
 
-       lcf = new LCoverFlow(actor, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+
+
+
+        List<Actor> actor = new ArrayList<Actor>();
+        Character chara;
+        for(int k = 0; k < Assets.faces.length; k++){
+            chara = new Character("Enemy", Assets.getHeadSprite());
+            chara.setLevel(10 * k + 1);
+            chara.equipSuit();
+            actor.add(chara);
+        }
+
+
+       lcf = new LCoverFlow(actor, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/2);
+
+       List<Actor> las = new ArrayList<Actor>();
+
+        for(Sprite s: Assets.weapons_sprites){
+
+            Image img = new Image(s);
+           // img.setOrigin(img.getWidth()/2, img.getHeight()/2);
+           // img.setRotation(45);
+            las.add(img);
+            i++;
+        }
+
+
+       LCoverFlow wCF = new LCoverFlow(las, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/2);
+
+       t = new LTable(0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+       t.addActor(lcf);
+       t.addRow();
+       t.addActor(wCF);
+       t.addRow();
+        Skin skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+
+       LTable statsTable = new LTable(0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/2);
+       statsTable.addActor(new Label("Max Hit Count", skin));
+       statsTable.addRow();
+       statsTable.addActor(new Label("Min Hit Count", skin));
+       statsTable.addRow();
+       statsTable.addActor(new Label("8 wins, 12 losses, 3 draws, 21 games", skin));
+       statsTable.addRow();
+       statsTable.addActor(new Label("Max Level Reached: 10", skin));
+       statsTable.addActor(new Image(Assets.weapon_data_icon), true); //TODO: Back button
+       t.addActor(statsTable);
+
+
+        InputMultiplexer im = new InputMultiplexer();
+        im.addProcessor(lcf);
+        im.addProcessor(wCF);
+        Gdx.input.setInputProcessor(im);
+
+
 
     }
 
@@ -108,8 +158,8 @@ public class TestScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         RngFight.batch.begin();
       //  m.render(RngFight.batch);
-       // table.draw(RngFight.batch, 1);
-        lcf.draw(RngFight.batch, 1);
+        t.draw(RngFight.batch, 1);
+       // lcf.draw(RngFight.batch, 1);
         RngFight.batch.end();
     }
 

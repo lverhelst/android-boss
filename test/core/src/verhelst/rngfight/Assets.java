@@ -36,7 +36,7 @@ public class Assets {
 
     public Assets(){
         weapons_sprites = new ArrayList<Sprite>();
-        facecount = 12;
+        facecount = 19;
         armcount = 7;
         pantcount = 7;
         shirtcount = 7;

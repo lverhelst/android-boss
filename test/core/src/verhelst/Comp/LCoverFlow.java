@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Created by Orion on 12/1/2014.
+ * TODO: Add keep aspect ratio
  */
 public class LCoverFlow extends Actor implements InputProcessor {
 
@@ -30,7 +31,7 @@ public class LCoverFlow extends Actor implements InputProcessor {
     DIRECTION currentDirection;
     int x_start, x_end, x_current, x_last;
     int velocity;
-    boolean isScroll, isDrag;
+    boolean isScroll, isDrag, inBoundingBox;
     int shiftedcount;
 
 
@@ -43,8 +44,9 @@ public class LCoverFlow extends Actor implements InputProcessor {
         setPosition(0, 0);
         setBounds(0, 0, width, height);
         currentDirection = DIRECTION.STILL;
-        Gdx.input.setInputProcessor(this);
+        //Gdx.input.setInputProcessor(this);
         shiftedcount = 0;
+        inBoundingBox = false;
     }
 
 /*
@@ -68,7 +70,7 @@ public class LCoverFlow extends Actor implements InputProcessor {
 
        items.get(index).setScale(calculateScale(offset));
 
-       items.get(index).setPosition((float)(0 + (((offset + visibleItems/2) / 5.0) * getWidth()) + calculatePosition()), 0);
+       items.get(index).setPosition((float)(0 + (((offset + visibleItems/2) / 5.0) * getWidth()) + calculatePosition()), getY());
 
     }
 
@@ -175,54 +177,55 @@ public class LCoverFlow extends Actor implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         x_start = screenX;
         start_drag = System.currentTimeMillis();
+        float y = Gdx.graphics.getHeight() - screenY;
+
+        inBoundingBox = screenX > getX() && screenX < getX() + getWidth() && y > getY() && y < getY() + getHeight();
+
+        System.out.println(inBoundingBox + " x" + screenX + " y "  + y );
+
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if(inBoundingBox) {
+            x_end = screenX;
 
-        x_end = screenX;
+            current_time = System.currentTimeMillis();
+            end_drag = System.currentTimeMillis();
 
-        current_time = System.currentTimeMillis();
-        end_drag = System.currentTimeMillis();
-
-       if(end_drag - start_drag < 150){
-           isDrag = false;
-        }
-
-
-        if(!isDrag){
-            x_end = x_start = x_current = x_last = 0;
-        }
-
-
-
-
-
-
-        //velocity = (int)((x_end - x_start)/(float)((end_drag - start_drag)/100));
-        //velocity = 0;
-       /// isScroll = Math.abs(velocity) > 0;
-
-        target_time = current_time + (move_anim_time_ms);// * (isDrag ? (long)((x_end - x_start) / (getWidth()/5)) : 1) );
-        //Move by one unless we are scrolling
-        if (isDrag){
-            isDrag = false;
-            snapToGrid();
-            currentDirection = DIRECTION.STILL;
-        }
-        else {
-            if (screenX < getWidth() / 2) {
-                //Move right
-                currentDirection = DIRECTION.LEFT;
+            if (end_drag - start_drag < 150) {
+                isDrag = false;
             }
 
-            if (screenX > getWidth() / 2) {
-                //Move left
-                currentDirection = DIRECTION.RIGHT;
+
+            if (!isDrag) {
+                x_end = x_start = x_current = x_last = 0;
             }
 
-        }
+
+            //velocity = (int)((x_end - x_start)/(float)((end_drag - start_drag)/100));
+            //velocity = 0;
+            /// isScroll = Math.abs(velocity) > 0;
+
+            target_time = current_time + (move_anim_time_ms);// * (isDrag ? (long)((x_end - x_start) / (getWidth()/5)) : 1) );
+            //Move by one unless we are scrolling
+            if (isDrag) {
+                isDrag = false;
+                snapToGrid();
+                currentDirection = DIRECTION.STILL;
+            } else {
+                if (screenX < getWidth() / 2) {
+                    //Move right
+                    currentDirection = DIRECTION.LEFT;
+                }
+
+                if (screenX > getWidth() / 2) {
+                    //Move left
+                    currentDirection = DIRECTION.RIGHT;
+                }
+
+            }
        /* else
         {
                 if(velocity > 0)
@@ -231,39 +234,40 @@ public class LCoverFlow extends Actor implements InputProcessor {
                     currentDirection = DIRECTION.LEFT;
 
          }*/
-
+        }
         isDrag = false;
-        return true;
+        inBoundingBox = false;
+        return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        isDrag = true;
-        x_last = x_current;
-        x_current = screenX;
-        if(x_last < x_current){
-            currentDirection = DIRECTION.RIGHT;
-        }else if(x_last > x_current){
-            currentDirection = DIRECTION.LEFT;
-        }else    {
-            currentDirection = DIRECTION.STILL;
+        if(inBoundingBox) {
+            isDrag = true;
+            x_last = x_current;
+            x_current = screenX;
+            if (x_last < x_current) {
+                currentDirection = DIRECTION.RIGHT;
+            } else if (x_last > x_current) {
+                currentDirection = DIRECTION.LEFT;
+            } else {
+                currentDirection = DIRECTION.STILL;
+            }
+
+
+            if (x_current - x_start > getWidth() / 5) {
+                x_start = x_current;
+
+                //  currentDirection = DIRECTION.RIGHT;
+                moveIndex();
+            }
+            if (x_current - x_start < -getWidth() / 5) {
+                x_start = x_current;
+
+                //currentDirection = DIRECTION.LEFT;
+                moveIndex();
+            }
         }
-
-
-
-        if(x_current - x_start > getWidth()/5){
-            x_start = x_current;
-
-          //  currentDirection = DIRECTION.RIGHT;
-            moveIndex();
-        }
-        if(x_current - x_start < -getWidth()/5){
-            x_start = x_current;
-
-            //currentDirection = DIRECTION.LEFT;
-            moveIndex();
-        }
-
         return false;
     }
 
