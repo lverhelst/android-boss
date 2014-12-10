@@ -30,7 +30,7 @@ public class TestScreen implements Screen {
     LTable t;
     LCoverFlow lcf;
     final RngFight game2;
-    LeonLabel maxlbl, minlbl, wlrg, maxlvl;
+    LeonLabel maxlbl, minlbl, wlrg, maxlvl, battles;
     InputMultiplexer im;
 
 
@@ -135,19 +135,23 @@ public class TestScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
        LTable statsTable = new LTable(0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight()/2);
-       maxlbl = new LeonLabel("Max Hits: 0", skin);
+       maxlbl = new LeonLabel(" Max Hits: 0", skin);
        maxlbl.isHUD = true;
        statsTable.addActor(maxlbl);
        statsTable.addRow();
-       minlbl = new LeonLabel("Min Hit: 0", skin);
+       minlbl = new LeonLabel(" Min Hit: 0", skin);
        minlbl.isHUD = true;
        statsTable.addActor(minlbl);
        statsTable.addRow();
-       wlrg = new LeonLabel("0 wins, 0 losses, 0 draws, 0 games", skin);
+       wlrg = new LeonLabel("   0 wins, 0 losses, 0 draws, 0 games", skin);
        wlrg.isHUD = true;
        statsTable.addActor(wlrg);
        statsTable.addRow();
-       maxlvl = new LeonLabel("Max Level Reached: 1", skin);
+       battles = new LeonLabel("  0 games ", skin);
+       battles.isHUD = true;
+       statsTable.addActor(battles);
+       statsTable.addRow();
+       maxlvl = new LeonLabel(" Max Level Reached: 1", skin);
        maxlvl.isHUD = true;
        statsTable.addActor(maxlvl);
        statsTable.addActor(new Image(Assets.weapon_data_icon), true); //TODO: Back button
@@ -172,10 +176,11 @@ public class TestScreen implements Screen {
     }
 
     public void updateLabels(int maxhits, int minhits, int wins, int losses, int draws, int games, int maxlevel){
-        maxlbl.setText("Max hits: " + maxhits);
-        minlbl.setText("Min hits: " + minhits);
-        wlrg.setText("Wins: " + wins + " Losses: " + losses + " Draws: " + draws + " Games: " + games);
-        maxlvl.setText("Highest level reached: " + maxlevel);
+        maxlbl.setText("    Max hits: " + maxhits);
+        minlbl.setText("    Min hits: " + minhits);
+        wlrg.setText("  Wins/Losses/Draws:  " +  wins + "/" +  losses +  "/" + draws);
+        battles.setText("   Games: " + games );
+        maxlvl.setText("    Highest level reached: " + maxlevel);
     }
 
 

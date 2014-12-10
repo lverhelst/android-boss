@@ -45,9 +45,10 @@ public class Joint {
 
             
             testS.flip(false, flip);
-            testS.setSize(testS.getWidth() * Model.scale, testS.getHeight() * Model.scale);
             origh = testS.getHeight();
             origw = testS.getWidth();
+            testS.setSize(testS.getWidth() * Model.scale, testS.getHeight() * Model.scale);
+
 
 
             this.isFlipped = flip;
@@ -57,12 +58,10 @@ public class Joint {
         public void addChild(Joint b){
             b.setParent(this);
             children.add(b);
-
         }
 
         public void setParent(Joint par){
             this.parent = par;
-
         }
 
         public void adjustAngle(double deg){
@@ -72,8 +71,9 @@ public class Joint {
         }
 
 
-          Random rc = new Random();
-          Color c = new Color();
+        Random rc = new Random();
+        Color c = new Color();
+
         public void renderSkeleton(ShapeRenderer sr, float x, float y){
             x += (x_adj * (isFlipped ? -1 : 1));
 
@@ -101,14 +101,7 @@ public class Joint {
         }
 
         public void renderWithSprites(Batch batch, float x, float y){
-
-
-
-
             x += (x_adj * (isFlipped ? -1 : 1));
-
-
-
             y += (y_adj); //Do not flip, flipping is only horizonatal (x-axis)
             float offx = x + (float)(Math.cos(Math.toRadians(this.angle)) * length);
             float offy = y + (float)(Math.sin(Math.toRadians(this.angle)) * length);
@@ -127,9 +120,6 @@ public class Joint {
                 this.testS.setOrigin(0, 0 + testS.getHeight() / 2);
                 this.testS.setPosition(x, y);
             }
-
-
-
 
             this.testS.setRotation((float)angle);
 
@@ -186,7 +176,11 @@ public class Joint {
             length = baselength * multiplicationFactor;
             x_adj = origxadj * multiplicationFactor;
             y_adj = origyadj * multiplicationFactor;
+
+            System.out.println(multiplicationFactor + " M " + Model.scale + " " + origw + " " + testS.getHeight());
             testS.setSize(origw * (Model.scale * multiplicationFactor), origh *  (Model.scale * multiplicationFactor));
+
+            System.out.println(multiplicationFactor + " M " + Model.scale + " " + origw + " " + testS.getHeight());
         }
 
 
