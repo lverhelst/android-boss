@@ -1,5 +1,7 @@
 package verhelst.bones;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -22,12 +24,15 @@ public class Model {
     public static float scale;
 
     public Model(int abs_x, int abs_y, boolean flip, float height){
+        if(Gdx.app.getType() == Application.ApplicationType.Android){
 
-        scale = (float) Math.max(height/96, 1.25);//2.75);
+            scale = (float) Math.max(height/96, 2.75);
 
-      //  scale = (float) Math.max(height/96, 2.5);
+        }else{
+
+            scale = (float) Math.max(height/96, 1.25);
+        }
         System.out.println("Scale" + scale);
-
 
         isFlipped = false;
         //Pseudo human torso, side view
@@ -43,7 +48,7 @@ public class Model {
         root.children.get(2).children.get(0).addChild(new Joint(180,32 * scale, "wrist", flip, 32/5 * scale, -(16 * scale/2)));
         root.children.get(2).children.get(0).isRenderChildrenFirst = true; //make sure weapon is drawn under elbow sprite
 
-        root.print();
+        //root.print();
 
     }
 

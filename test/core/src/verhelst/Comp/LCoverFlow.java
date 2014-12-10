@@ -63,6 +63,8 @@ public class LCoverFlow extends Actor implements InputProcessor {
         if(index <  0  || index >= items.size())
             return;
 
+        items.get(index).setScale(calculateScale(offset));
+
         //Aspect ratio maybe
         //keep aspect ratio of actor
         if(keepAspectRatio) {
@@ -74,12 +76,15 @@ public class LCoverFlow extends Actor implements InputProcessor {
 
             float scale = Math.min(x_scale, y_scale);
 
-            float left_edge_offset = (float) ((getWidth() / 5.0 - Math.min(w,h) * scale));
+            float left_edge_offset = (float) (getWidth()/10 + (items.get(index).getHeight()/2));
             System.out.println(left_edge_offset + " " + items.get(index).getWidth());
             items.get(index).setSize(w * scale, h * scale);
             //items.get(index).setOrigin(w * scale/2,h * scale);
             items.get(index).setRotation(90);
-            items.get(index).setPosition((float)(0 + (((offset + visibleItems/2) / 5.0) * getWidth() + left_edge_offset) + calculatePosition()), getY());
+            float y_offset = (float)(getHeight()/2.0 - (items.get(index).getWidth() * items.get(index).getScaleX())/2.0);
+            System.out.println("y off " + y_offset);
+
+            items.get(index).setPosition((float)(0 + (((offset + visibleItems/2) / 5.0) * getWidth() + left_edge_offset) + calculatePosition()), getY() + y_offset);
 
             //  System.out.println("o " + offset + " " + calculateScale(offset));
         }else {
@@ -87,7 +92,6 @@ public class LCoverFlow extends Actor implements InputProcessor {
             items.get(index).setPosition((float)(0 + (((offset + visibleItems/2) / 5.0) * getWidth()) + calculatePosition()), getY());
 
         }
-        items.get(index).setScale(calculateScale(offset));
 
     }
 

@@ -15,7 +15,4 @@ public enum BattleResult {
         Player1NewSuit,
         NewMaxHitCount,
         NewMinHitCount
-
-
-
 }

@@ -81,7 +81,8 @@ public class BattleResultHandler {
             min_hitcount = hitcount;
         }
 
-        max_level_reached = b.max_level;
+        max_level_reached = a.max_level;
+
         System.out.print(resultsList);
        // System.out.println("        CL " + a.getLevel() + " ws " + a.getWin_streak() + " ml" + a.max_level + " mwtl" + a.max_wtnl + " ls " + a.getLose_streak() + " lscheck" + a.getLose_streak() % (a.wins_to_level + 1));
         return resultsList.toArray(new BattleResult[resultsList.size()]);
