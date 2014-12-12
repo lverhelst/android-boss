@@ -38,6 +38,7 @@ public class Character extends Actor {
     private int win_streak = 0;
     private int lose_streak = 0;
     private boolean glow;
+    public int glow_type; // 0 = none, 1 = yellow, 2 = green
 
     //GetY() wasn't working in the BattleView
     //GetHeight() and getX() both worked...wierd.
@@ -287,7 +288,10 @@ public class Character extends Actor {
 
 
         if(glow){
-            batch.draw(Assets.glow, getX(), getY(), getWidth(), getHeight());
+            if(glow_type == 1)
+                batch.draw(Assets.glow_ylw, getX(), getY(), getWidth(), getHeight());
+            if(glow_type == 2)
+                batch.draw(Assets.glow, getX(), getY(), getWidth(), getHeight());
         }
 
         otherY = (int)getY();

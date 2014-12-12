@@ -28,8 +28,9 @@ public class Assets {
     public static BitmapFont dmgNumFnt;
     public static BitmapFont bf;
     public static BitmapFont HUDbf;
-    public static Texture dmgIconTxture, hrtIconTxture, glow;
+    public static Texture dmgIconTxture, hrtIconTxture, glow, glow_ylw;
     public static Sprite dmgIcon, hrtIcon;
+    public static Sprite butterBeaver, landing_pad, back_btn;
 
     private static int armcount, pantcount, shirtcount, shouldercount, facecount,weaponcount;
     private static Random rng = new Random();
@@ -99,6 +100,7 @@ public class Assets {
         hrtIconTxture = new Texture(Gdx.files.internal("In Development\\HrtIcon.png"));
 
         glow = new Texture(Gdx.files.internal("In Development\\glow.png"));
+        glow_ylw = new Texture(Gdx.files.internal("In Development\\glow_ylw.png"));
 
         FreeTypeFontGenerator ftfg = new FreeTypeFontGenerator(Gdx.files.internal("game_font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter ftfp = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -113,6 +115,10 @@ public class Assets {
 
         ftfp.size = Math.round(24 * Gdx.graphics.getDensity());
         HUDbf = ftfg.generateFont(ftfp);
+
+        butterBeaver = new Sprite(new Texture(Gdx.files.internal("In Development\\repBB.png")));
+        landing_pad = new Sprite(new Texture(Gdx.files.internal("In Development\\repOG.png")));
+        back_btn = new Sprite(new Texture(Gdx.files.internal("In Development\\repARW.png")));
     }
 
     public static Sprite getWeaponSprite(){

@@ -154,9 +154,9 @@ public class TestScreen implements Screen {
        maxlvl = new LeonLabel(" Max Level Reached: 1", skin);
        maxlvl.isHUD = true;
        statsTable.addActor(maxlvl);
-       statsTable.addActor(new Image(Assets.weapon_data_icon), true); //TODO: Back button
+       //statsTable.addActor(new Image(Assets.back_btn)); //TODO: Back button (need proper graphics)
        t.addActor(statsTable);
-
+       t.addActor(new Image(Assets.back_btn));
 
 
         im = new InputMultiplexer();

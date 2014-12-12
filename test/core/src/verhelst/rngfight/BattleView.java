@@ -37,8 +37,9 @@ public class BattleView {
     LeonLabel r2c1, r3c2, endMessageLbl;
     Battle b;
     Actor lootActor;
+    public SpriteActor butterbeaver, landingpad;
      Weapon aWep, bWep;
-    LTable rootTable, row3, row4;
+    LTable rootTable, row3, row4, butterTable;
     public final float PADDING;
 
 
@@ -183,7 +184,17 @@ public class BattleView {
         //.getTable(skin)
         row4.addActor(((Weapon)lootActor).getTable(),true);//.center().top().expand().fill();//.pad(PADDING); //LOOT
        // row4.addActor(new Label("", skin));//.expand().fill();
-        row4.addActor(new Label("", skin));//.expand().fill();
+
+        butterTable = new LTable(10,10,10,10);
+        butterbeaver = new SpriteActor(Assets.butterBeaver);
+        butterTable.addActor(butterbeaver, true);
+        butterTable.addActor(new Label("", skin));
+        landingpad = new SpriteActor(Assets.landing_pad);
+        butterTable.addActor(landingpad, true);
+        butterTable.addRow();
+        row4.addActor(butterTable);//.expand().fill();
+
+
         rootTable.addActor(row4);//.expand().fill();
 
         //rootTable.setDebug(debug);

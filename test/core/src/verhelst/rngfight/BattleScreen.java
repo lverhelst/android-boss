@@ -39,7 +39,7 @@ public class BattleScreen implements Screen, InputProcessor {
     int hits = 0, anim_h1, anim_h2;
 
     int display_cap = Integer.MAX_VALUE;
-    Actor dragme;
+    Actor dragme, butterDragMe;
 
     boolean custom_mode_on;
     String custom_mode_string;
@@ -59,8 +59,6 @@ public class BattleScreen implements Screen, InputProcessor {
         results = new BattleResult[0];
         rng = new Random();
         statetime = 0f;
-
-
 
         bView = new BattleView(btl);
 
@@ -204,12 +202,10 @@ public class BattleScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        Vector2 vec = bView.getStage().screenToStageCoordinates(new Vector2(screenX, screenY));
+
         if(showLoot){
             //check to see if touch aligns with displayed loot, if so, equip on player
-            Vector2 vec = bView.getStage().screenToStageCoordinates(new Vector2(screenX, screenY));
-            Actor tActor = bView.getStage().hit(vec.x, vec.y, true);
-
-
 
             System.out.println("Touch down before actor check");
             //Get width * 2 accounts for the extra text in the weapon actor
@@ -244,6 +240,13 @@ public class BattleScreen implements Screen, InputProcessor {
 
                 }
             }
+        if(vec.x >= bView.butterbeaver.getX() && vec.x <= bView.butterbeaver.getX() + bView.butterbeaver.getWidth()
+                && vec.y >= bView.butterbeaver.getY() && vec.y <= bView.butterbeaver.getY() + bView.butterbeaver.getHeight()) {
+            butterDragMe = new SpriteActor(Assets.butterBeaver);
+            butterDragMe.setPosition(vec.x + butterDragMe.getX() - butterDragMe.getWidth()/2, vec.y + butterDragMe.getY() - butterDragMe.getHeight()/2);
+            bView.getStage().addActor(butterDragMe);
+        }
+
 
         return false;
     }
@@ -251,11 +254,27 @@ public class BattleScreen implements Screen, InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
-        if(screenX > 3 * Gdx.graphics.getWidth()/4 && Gdx.graphics.getHeight() - screenY < Gdx.graphics.getHeight()/4){
+
+
+
+        float rectax11 = bView.landingpad.getX();
+
+        float rectbx21 = butterDragMe.getX() + butterDragMe.getWidth();
+
+        float rectax21 = bView.landingpad.getX() + bView.landingpad.getWidth();
+        float rectbx11 = butterDragMe.getX();
+
+        float rectay11 = bView.landingpad.getY();
+        float rectby21 = butterDragMe.getY() + butterDragMe.getHeight();
+
+        float rectay21 = bView.landingpad.getY() + bView.landingpad.getHeight();
+        float rectby11 = butterDragMe.getY();
+
+
+        if (rectax11 <= rectbx21 && rectax21 >= rectbx11
+                && rectay11 <= rectby21 && rectay21 >= rectby11) {
             fight.switchScreens(1);
         }else {
-
-
             btl.getRightside().setGlow(false);
             if (showLoot) {
 
@@ -301,6 +320,7 @@ public class BattleScreen implements Screen, InputProcessor {
             if (dragme != null)
                 dragme.remove();
             dragme = null;
+
             if (!battling) {
                 message = "";
                 battling = true;
@@ -358,6 +378,9 @@ public class BattleScreen implements Screen, InputProcessor {
             }
 
         }
+        if(butterDragMe != null)
+            butterDragMe.remove();
+        butterDragMe = null;
         return false;
     }
 
@@ -387,12 +410,37 @@ public class BattleScreen implements Screen, InputProcessor {
             if (rectax1 <= rectbx2 && rectax2 >= rectbx1
                     && rectay1 <= rectby2 && rectay2 >= rectby1) {
 
-
+                btl.getRightside().glow_type = 2;
                 btl.getRightside().setGlow(true);
             }else{
-                btl.getRightside().setGlow(false);
+                btl.getRightside().glow_type = 1;
+                btl.getRightside().setGlow(true);
             }
 
+        }
+        if(butterDragMe != null) {
+            butterDragMe.setPosition(screenX - butterDragMe.getWidth()/2, Gdx.graphics.getHeight() - screenY - butterDragMe.getHeight()/2);
+
+            float rectax1 = bView.landingpad.getX();
+
+            float rectbx2 = butterDragMe.getX() + butterDragMe.getWidth();
+
+            float rectax2 = bView.landingpad.getX() + bView.landingpad.getWidth();
+            float rectbx1 = butterDragMe.getX();
+
+            float rectay1 = bView.landingpad.getY();
+            float rectby2 = butterDragMe.getY() + butterDragMe.getHeight();
+
+            float rectay2 = bView.landingpad.getY() + bView.landingpad.getHeight();
+            float rectby1 = butterDragMe.getY();
+
+
+            if (rectax1 <= rectbx2 && rectax2 >= rectbx1
+                    && rectay1 <= rectby2 && rectay2 >= rectby1) {
+                //Set some big glowy thing here
+            }else{
+                //Maybe a differeny glowy thing here
+            }
         }
         return false;
 
