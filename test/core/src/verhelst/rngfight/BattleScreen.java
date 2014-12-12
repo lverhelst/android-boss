@@ -255,26 +255,28 @@ public class BattleScreen implements Screen, InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
 
+        if(butterDragMe != null) {
 
+            float rectax11 = bView.landingpad.getX();
 
-        float rectax11 = bView.landingpad.getX();
+            float rectbx21 = butterDragMe.getX() + butterDragMe.getWidth();
 
-        float rectbx21 = butterDragMe.getX() + butterDragMe.getWidth();
+            float rectax21 = bView.landingpad.getX() + bView.landingpad.getWidth();
+            float rectbx11 = butterDragMe.getX();
 
-        float rectax21 = bView.landingpad.getX() + bView.landingpad.getWidth();
-        float rectbx11 = butterDragMe.getX();
+            float rectay11 = bView.landingpad.getY();
+            float rectby21 = butterDragMe.getY() + butterDragMe.getHeight();
 
-        float rectay11 = bView.landingpad.getY();
-        float rectby21 = butterDragMe.getY() + butterDragMe.getHeight();
-
-        float rectay21 = bView.landingpad.getY() + bView.landingpad.getHeight();
-        float rectby11 = butterDragMe.getY();
-
-
-        if (rectax11 <= rectbx21 && rectax21 >= rectbx11
-                && rectay11 <= rectby21 && rectay21 >= rectby11) {
-            fight.switchScreens(1);
-        }else {
+            float rectay21 = bView.landingpad.getY() + bView.landingpad.getHeight();
+            float rectby11 = butterDragMe.getY();
+            if (rectax11 <= rectbx21 && rectax21 >= rectbx11
+                    && rectay11 <= rectby21 && rectay21 >= rectby11) {
+                fight.switchScreens(1);
+            }
+        }
+        if(butterDragMe != null)
+            butterDragMe.remove();
+        butterDragMe = null;
             btl.getRightside().setGlow(false);
             if (showLoot) {
 
@@ -377,10 +379,8 @@ public class BattleScreen implements Screen, InputProcessor {
                 return true;
             }
 
-        }
-        if(butterDragMe != null)
-            butterDragMe.remove();
-        butterDragMe = null;
+
+
         return false;
     }
 
