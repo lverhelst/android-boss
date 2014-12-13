@@ -50,9 +50,9 @@ public class Battle implements Runnable {
         do {
             dmgtoplayer += leftside.attack(rightside, lifesteal);
             dmgtoboss += rightside.attack(leftside, lifesteal);
-            leftside.setHealth(1);
-            rightside.setHealth(1);
-            System.out.println(hitcount + " " + Math.log(hitcount));
+           // leftside.setHealth(1);
+           // rightside.setHealth(1);
+           // System.out.println(hitcount + " " + Math.log(hitcount));
 
             if(hitcount % Math.max(13, Math.log(hitcount)) == 0) {
                 final List<Integer> chunk = new ArrayList<Integer>();
