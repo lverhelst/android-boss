@@ -46,11 +46,12 @@ public class Battle implements Runnable {
         int dmgtoboss = 0;
         int dmgtoplayer = 0;
         int hitcount = 0;
-
+        float lifesteal = (float)0.011;
         do {
-            dmgtoplayer += leftside.attack(rightside);
-            dmgtoboss += rightside.attack(leftside);
-
+            dmgtoplayer += leftside.attack(rightside, lifesteal);
+            dmgtoboss += rightside.attack(leftside, lifesteal);
+            leftside.setHealth(1);
+            rightside.setHealth(1);
             if(hitcount % 13 == 0) {
                 final List<Integer> chunk = new ArrayList<Integer>();
                 chunk.add(dmgtoboss);
@@ -76,6 +77,10 @@ public class Battle implements Runnable {
                 }else{
                     rightside.setHealth(0);
                 }
+            }
+            //reduce lifesteal to ensure games don't run too long
+            if(hitcount%100000 == 0){
+                lifesteal -= 0.001;
             }
 
 
