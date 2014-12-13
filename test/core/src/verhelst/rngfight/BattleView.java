@@ -186,9 +186,10 @@ public class BattleView {
        // row4.addActor(new Label("", skin));//.expand().fill();
 
         butterTable = new LTable(10,10,10,10);
+
+        butterTable.addActor(new Label("", skin));
         butterbeaver = new SpriteActor(Assets.butterBeaver);
         butterTable.addActor(butterbeaver, true);
-        butterTable.addActor(new Label("", skin));
         landingpad = new SpriteActor(Assets.landing_pad);
         butterTable.addActor(landingpad, true);
         butterTable.addRow();
@@ -313,5 +314,13 @@ public class BattleView {
 
         highscore.setText("Streak: " + b.getRightside().getWin_streak());
         hitcount.setText("Hits: " + hits);
+    }
+
+    public void landingPadGlow(boolean pad){
+        if(pad){
+            landingpad.displaysprite = Assets.landing_pad_glow;
+        }else{
+            landingpad.displaysprite = Assets.landing_pad;
+        }
     }
 }

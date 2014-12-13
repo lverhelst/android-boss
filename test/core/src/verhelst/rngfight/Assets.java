@@ -30,7 +30,7 @@ public class Assets {
     public static BitmapFont HUDbf;
     public static Texture dmgIconTxture, hrtIconTxture, glow, glow_ylw;
     public static Sprite dmgIcon, hrtIcon;
-    public static Sprite butterBeaver, landing_pad, back_btn;
+    public static Sprite butterBeaver, landing_pad,landing_pad_glow, back_btn;
 
     private static int armcount, pantcount, shirtcount, shouldercount, facecount,weaponcount;
     private static Random rng = new Random();
@@ -118,6 +118,7 @@ public class Assets {
 
         butterBeaver = new Sprite(new Texture(Gdx.files.internal("In Development\\repBB.png")));
         landing_pad = new Sprite(new Texture(Gdx.files.internal("In Development\\repOG.png")));
+        landing_pad_glow = new Sprite(new Texture(Gdx.files.internal("In Development\\repOG_hover.png")));
         back_btn = new Sprite(new Texture(Gdx.files.internal("In Development\\repARW.png")));
     }
 

@@ -253,7 +253,7 @@ public class BattleScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
+        bView.landingPadGlow(false);
 
         if(butterDragMe != null) {
 
@@ -438,10 +438,15 @@ public class BattleScreen implements Screen, InputProcessor {
             if (rectax1 <= rectbx2 && rectax2 >= rectbx1
                     && rectay1 <= rectby2 && rectay2 >= rectby1) {
                 //Set some big glowy thing here
+                bView.landingPadGlow(true);
             }else{
                 //Maybe a differeny glowy thing here
+                bView.landingPadGlow(false);
             }
+        }else{
+            bView.landingPadGlow(false);
         }
+
         return false;
 
     }

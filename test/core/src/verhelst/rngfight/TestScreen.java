@@ -32,6 +32,7 @@ public class TestScreen implements Screen {
     final RngFight game2;
     LeonLabel maxlbl, minlbl, wlrg, maxlvl, battles;
     InputMultiplexer im;
+    SpriteActor backBtn;
 
 
     public TestScreen(RngFight game){
@@ -156,7 +157,11 @@ public class TestScreen implements Screen {
        statsTable.addActor(maxlvl);
        //statsTable.addActor(new Image(Assets.back_btn)); //TODO: Back button (need proper graphics)
        t.addActor(statsTable);
-       t.addActor(new Image(Assets.back_btn));
+        backBtn = new SpriteActor(Assets.back_btn);
+
+        t.addActor(new Label("",skin));
+        t.addActor(backBtn,2);
+
 
 
         im = new InputMultiplexer();
@@ -166,7 +171,7 @@ public class TestScreen implements Screen {
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
                 System.out.println(screenX + " " + (Gdx.graphics.getHeight() - screenY));
-                if(screenX > 3 * Gdx.graphics.getWidth()/4 && (Gdx.graphics.getHeight() - screenY) < Gdx.graphics.getHeight()/4){
+                if(screenX > backBtn.getX() && (Gdx.graphics.getHeight() - screenY) < backBtn.getY() + backBtn.getHeight()){
                     game2.switchScreens(0);
                 }
                 return false;
