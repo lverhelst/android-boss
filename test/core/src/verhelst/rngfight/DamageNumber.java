@@ -22,7 +22,41 @@ public class DamageNumber {
     private float green;
     private float blue;
 
+    public void setCs(CharSequence cs) {
+        this.cs = cs;
 
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+        this.cs = "" + Math.abs(value);
+        //Damage done = red colour
+        if(this.value > 0){
+            this.red = 0.7f;
+            this.green = 0.15f;
+            this.blue = 0.15f;
+        }
+        //healing done = green colour
+        else if(this.value < 0){
+            this.red = 0.15f;
+            this.green = 0.7f;
+            this.blue = 0.15f;
+        }
+        //0 done = white color
+        else{
+            this.red = 1.0f;
+            this.green = 1.0f;
+            this.blue = 1.0f;
+        }
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
 
     public DamageNumber(int amount, int screenx, int screeny){
         this.value = amount;
@@ -134,5 +168,29 @@ public class DamageNumber {
 
     public float getAlpha(){
         return this.alpha;
+    }
+
+    public DamageNumber reset(){
+
+        this.value = Integer.MAX_VALUE;
+        this.x= -100;
+        this.y= -100;
+        this.render_iterations = 0;
+        this.alpha = 1.0f;
+
+
+        this.isRemoveable = false;
+        cs = "" + value;
+        this.random = new Random();
+        this.rand_force = random.nextGaussian();
+        rand_force = (rand_force > 0 ? rand_force * 2 : rand_force/2);
+        //set angle in degrees, convert to radians
+        this.angle = (float)Math.toRadians(random.nextInt(120) + 30);//+ 30;
+        //White colour
+        this.red = 1.0f;
+        this.green = 1.0f;
+        this.blue = 1.0f;
+
+        return this;
     }
 }

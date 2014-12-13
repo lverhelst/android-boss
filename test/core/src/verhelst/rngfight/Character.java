@@ -4,8 +4,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 import verhelst.bones.Model;
@@ -54,7 +57,7 @@ public class Character extends Actor {
 
     //Damage Numbers during battle
     ArrayList<DamageNumber> dnListA = new ArrayList<DamageNumber>();
-    ArrayList<DamageNumber> dnListB = new ArrayList<DamageNumber>();
+    Queue<DamageNumber> availablepool = new ArrayDeque<DamageNumber>();
 
     //For rendering damage numbers
     Iterator<DamageNumber> i;
@@ -80,6 +83,10 @@ public class Character extends Actor {
         }else
             m = new Model((int)(getX() + getWidth()/2), (int)(getY() + getHeight()), false, getHeight());
         m.hideWeapon();
+
+        for(int i = 0; i < 1000; i++){
+            availablepool.add(new DamageNumber(-9999,-100,-100));
+        }
     }
 
     public void setSprite(Sprite sp){
@@ -93,7 +100,7 @@ public class Character extends Actor {
 
 
 
-    public int attack(Character victim){
+    public int attack(Character victim, float lifesteal){
       //  int dmgOrHealth = (int)(rng.nextGaussian() * (rng.nextInt(max_dmg +min_dmg)));
         int dmgOrHealth = (int)((rng.nextBoolean() ? -1 : 1) * (rng.nextInt(max_dmg +min_dmg)));
 
@@ -105,7 +112,8 @@ public class Character extends Actor {
         //else{
             victim.applyDamageOrHealth(dmgOrHealth);
             //simulate lifesteal
-            this.applyDamageOrHealth(-1 * Math.abs((int)(dmgOrHealth * 0.011)));
+            //0.011
+            this.applyDamageOrHealth(-1 * Math.abs((int)(dmgOrHealth * lifesteal)));
         //}
         return dmgOrHealth;
     }
@@ -198,6 +206,7 @@ public class Character extends Actor {
 
     public void reset(){
         this.health = (isWeaponEquipped()? equipped_weapon.getHp_multiplier() : 1) * this.BASE_HEALTH;// * level;
+
     }
 
     public int getBase_health() {
@@ -344,14 +353,30 @@ public class Character extends Actor {
     //Adds a new damage number to the appropriate damage list
     private void addDmgNum(String num, int x, int y, DmgListSide side){
             DamageNumber dn;
-            if(isInteger(num)) {
-                dn = new DamageNumber(Integer.parseInt(num), x, y);
-            }else{
-                dn = new DamageNumber(num, x, y);
+            if(!availablepool.isEmpty()) {
+                synchronized (availablepool) {
+                    dn = availablepool.poll();
+                }
+                if (isInteger(num)) {
+                    dn.setValue(Integer.parseInt(num));
+
+                } else {
+                    dn.setCs(num);
+                }
+                dn.setX(x);
+                dn.setY(y);
+                synchronized (dnListA) {
+                    dnListA.add(dn);
+                }
             }
-            synchronized (dnListA) {
-                dnListA.add(dn);
+            else {
+                if (isInteger(num)) {
+                    dn = new DamageNumber(Integer.parseInt(num), x, y);
+                } else {
+                    dn = new DamageNumber(num, x, y);
+                }
             }
+
 
     }
 
@@ -396,6 +421,9 @@ public class Character extends Actor {
 
                 DamageNumber dn = i.next();
                 if (dn.isRemoveable()) {
+                    synchronized (availablepool) {
+                        availablepool.add(dn.reset());
+                    }
                     i.remove();
                 } else {
                     Assets.dmgNumFnt.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
@@ -403,6 +431,11 @@ public class Character extends Actor {
                     dn.update();
                 }
             }
+
+            //    System.out.print("dnlistsize: " + dnListA.size());
+             //   System.out.println("    availablepool: " + availablepool.size());
+
+
         }
 
     }
