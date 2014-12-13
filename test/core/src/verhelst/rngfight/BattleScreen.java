@@ -334,6 +334,9 @@ public class BattleScreen implements Screen, InputProcessor {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        int iii = 0;
+                        long time = System.nanoTime();
+
                         while (battling) {
                             try {
                                 //Slow down consuming the battle to AT LEAST visible
@@ -341,14 +344,17 @@ public class BattleScreen implements Screen, InputProcessor {
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+
+                            System.out.println((System.nanoTime() - time) + " " + bswNumList.size()+ " " + iii);
+                            time = System.nanoTime();
                             if (!bswNumList.isEmpty()) {
 
                                 lst = bswNumList.poll();
                                 //Since the laptop isn't performant with the damage numbers...they may have to be rethought.
-                               // if (Gdx.app.getType() == Application.ApplicationType.Android) {
+                                //if (Gdx.app.getType() == Application.ApplicationType.Android) {
                                     btl.getLeftside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst.get(0)), Character.DmgListSide.LEFT);
                                     btl.getRightside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst.get(1)), Character.DmgListSide.RIGHT);
-                               // }
+                                //}
                                 anim_h1 = lst.get(2);
                                 anim_h2 = lst.get(3);
                                 hits = lst.get(4);
@@ -359,14 +365,11 @@ public class BattleScreen implements Screen, InputProcessor {
                                     break;
                                 }
                                 if (hits > display_cap) {
-
                                     System.out.println("Past Display Cap. TODO: Make display cap into an option");
-
                                     battling = false;
-
                                     break;
                                 }
-
+                                iii++;
                             }
 
                         }

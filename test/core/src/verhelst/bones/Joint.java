@@ -177,17 +177,8 @@ public class Joint {
             x_adj = origxadj * multiplicationFactor;
             y_adj = origyadj * multiplicationFactor;
 
-<<<<<<< HEAD
-           // System.out.println(multiplicationFactor + " M " + Model.scale + " " + origw + " " + testS.getHeight());
             testS.setSize(origw * (Model.scale * multiplicationFactor), origh *  (Model.scale * multiplicationFactor));
 
-          //  System.out.println(multiplicationFactor + " M " + Model.scale + " " + origw + " " + testS.getHeight());
-=======
-            //System.out.println(multiplicationFactor + " M " + Model.scale + " " + origw + " " + testS.getHeight());
-            testS.setSize(origw * (Model.scale * multiplicationFactor), origh *  (Model.scale * multiplicationFactor));
-
-           // System.out.println(multiplicationFactor + " M " + Model.scale + " " + origw + " " + testS.getHeight());
->>>>>>> 1e82117cd05613370f56220d5f833eda8e66d29a
         }
 
 

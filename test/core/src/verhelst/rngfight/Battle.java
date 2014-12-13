@@ -52,7 +52,9 @@ public class Battle implements Runnable {
             dmgtoboss += rightside.attack(leftside, lifesteal);
             leftside.setHealth(1);
             rightside.setHealth(1);
-            if(hitcount % 13 == 0) {
+            System.out.println(hitcount + " " + Math.log(hitcount));
+
+            if(hitcount % Math.max(13, Math.log(hitcount)) == 0) {
                 final List<Integer> chunk = new ArrayList<Integer>();
                 chunk.add(dmgtoboss);
                 chunk.add(dmgtoplayer);
@@ -62,7 +64,9 @@ public class Battle implements Runnable {
                 Gdx.app.postRunnable(new Runnable(){
                     @Override
                     public void run(){
-                        dmgNumListA.add(chunk);
+                        synchronized (dmgNumListA) {
+                            dmgNumListA.add(chunk);
+                        }
                     }
 
                 });
@@ -96,7 +100,9 @@ public class Battle implements Runnable {
         Gdx.app.postRunnable(new Runnable(){
             @Override
             public void run(){
-                dmgNumListA.add(chunk);
+                synchronized (dmgNumListA) {
+                    dmgNumListA.add(chunk);
+                }
             }
 
         });
