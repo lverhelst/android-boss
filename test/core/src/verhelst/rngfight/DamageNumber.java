@@ -22,6 +22,8 @@ public class DamageNumber {
     private float green;
     private float blue;
 
+    private static final float densS = Gdx.graphics.getDensity();
+
     public void setCs(CharSequence cs) {
         this.cs = cs;
 
@@ -117,11 +119,11 @@ public class DamageNumber {
 
     public void update(){
 
-        this.x += Math.cos(this.angle) * Gdx.graphics.getDensity();  //CAH
+        this.x += Math.cos(this.angle) * densS;  //CAH
         //use the alpha value to pull the number down, this gives a nice curve without complicated computations
         //the * 1.1 is just to adjust the intensity of the (-1 + alpha) portion
         //+ 1/(value == 0? 1: value)
-        this.y += (Math.sin(this.angle) + (-1 + this.alpha)  + rand_force)* Gdx.graphics.getDensity(); //SOH
+        this.y += (Math.sin(this.angle) + (-1 + this.alpha)  + rand_force)* densS; //SOH
         this.alpha += -0.01f;
         //at an alpha < 0, the random number can be removed from where it is displayed
         //since it will be invisible

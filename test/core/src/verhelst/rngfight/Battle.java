@@ -50,7 +50,7 @@ public class Battle implements Runnable {
 
         int[] chunk;
         do {
-            if(dmgNumListA.size() > 500){
+            /*if(dmgNumListA.size() > 500){
                 try {
 
                     Thread.currentThread().sleep(1);
@@ -58,7 +58,7 @@ public class Battle implements Runnable {
                     //don't do shit all
                 }
                 continue;
-            }
+            }*/
 
 
             dmgtoplayer += leftside.attack(rightside, lifesteal);
@@ -94,30 +94,16 @@ public class Battle implements Runnable {
             }
 
             hitcount++;
-            if(hitcount > Integer.MAX_VALUE - 1){
+            /*if(hitcount > Integer.MAX_VALUE - 1){
                 if(leftside.getHealth() <= rightside.getHealth()){
                     leftside.setHealth(0);
                 }else{
                     rightside.setHealth(0);
                 }
-            }
+            }*/
             //reduce lifesteal to ensure games don't run too long
-            if(hitcount % 1000 == 0 && lifesteal > 0.001){
+            if(hitcount % 100000 == 0 && lifesteal > 0.001){
                 lifesteal -= 0.001;
-
-            }
-            if(hitcount % 10000 == 0){
-                //also wait
-                //we produce far far faster than we consume
-                //if we produce too much we can't deal with the amount produced
-                //when we slow it down a tad it becomes managable, in fact, it gives a massive memory improvement as well
-                //since we don't have to store so many chunks
-               /* try {
-
-                    Thread.currentThread().sleep(1);
-                }catch(Exception e){
-                    //don't do shit all
-                }*/
             }
 
         } while (leftside.getHealth() > 0 && rightside.getHealth() > 0);

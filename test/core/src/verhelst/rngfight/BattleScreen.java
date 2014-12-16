@@ -354,8 +354,8 @@ public class BattleScreen implements Screen, InputProcessor {
                                 lst = bswNumList.poll();
                                 //Since the laptop isn't performant with the damage numbers...they may have to be rethought.
                                 //if (Gdx.app.getType() == Application.ApplicationType.Android) {
-                                btl.getLeftside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst[0]), Character.DmgListSide.LEFT);
-                                btl.getRightside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst[1]), Character.DmgListSide.RIGHT);
+                                    btl.getLeftside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst[0]), Character.DmgListSide.LEFT);
+                                    btl.getRightside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst[1]), Character.DmgListSide.RIGHT);
                                 //}
                                 anim_h1 = lst[2];
                                 anim_h2 = lst[3];
@@ -366,7 +366,7 @@ public class BattleScreen implements Screen, InputProcessor {
                                     battling = false;
                                     break;
                                 }
-                                System.out.println("Consumer " + lst[4]);
+                               // System.out.println("Consumer " + lst[4]);
                                 /*if (hits > display_cap) {
                                     System.out.println("Past Display Cap. TODO: Make display cap into an option");
                                     battling = false;
@@ -378,6 +378,7 @@ public class BattleScreen implements Screen, InputProcessor {
                         }
 
                         results = brh.getResults(btl.getLeftside(), btl.getRightside(), hits);
+                        return;
                     }
                 }).start();
 

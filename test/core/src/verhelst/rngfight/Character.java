@@ -84,7 +84,7 @@ public class Character extends Actor {
             m = new Model((int)(getX() + getWidth()/2), (int)(getY() + getHeight()), false, getHeight());
         m.hideWeapon();
 
-        for(int i = 0; i < 1000; i++){
+        for(int i = 0; i < 5000; i++){
             availablepool.add(new DamageNumber(-9999,-100,-100));
         }
     }
