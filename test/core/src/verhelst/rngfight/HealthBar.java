@@ -78,7 +78,15 @@ public class HealthBar extends Actor {
 
             foreground.draw(batch, getX(), getY(), getWidth(), hh * scaler);
         }
-        Assets.HUDbf.draw(batch, /*this.name + ": " +*/ "" + ( character.getDisplay_hp()  > 0 ?  character.getDisplay_hp()  : 0), getX() + getWidth()/10, getY() + Assets.HUDbf.getBounds( character.getName()).height + 1);
+        Assets.HUDbf.draw(batch,displayCharHpString(), getX() + getWidth()/10, getY() + Assets.HUDbf.getBounds( character.getName()).height + 1);
+    }
+
+    private String displayCharHpString(){
+        if(character.getDisplay_hp() <= 0)
+            return "0";
+        else if (character.getDisplay_hp() >= 100000)
+            return character.getDisplay_hp() % 1000 + "k";
+        else return character.getDisplay_hp() + "";
     }
 
     @Override
