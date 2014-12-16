@@ -167,7 +167,7 @@ public class Joint {
         public void setAngle(double angle) {
 
             int adjustment = (int)(angle - this.angle);
-          //  System.out.println("adj: " + x_adj);
+         //  System.out.println(name + " adj: " + x_adj + "  " + this.angle + "  " + angle);
             this.adjustAngle(adjustment);
 
         }

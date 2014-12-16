@@ -16,9 +16,9 @@ public class Battle implements Runnable {
     private Character rightside;
     private boolean battling = false;
 
-    private final ConcurrentLinkedQueue<List<Integer>> dmgNumListA;
+    private final ConcurrentLinkedQueue<int[]> dmgNumListA;
 
-    public Battle(Character challenger, Character challengee,ConcurrentLinkedQueue<List<Integer>> dmgNumListA){
+    public Battle(Character challenger, Character challengee,ConcurrentLinkedQueue<int[]> dmgNumListA){
         this.leftside = challenger;
         this.rightside = challengee;
         this.dmgNumListA = dmgNumListA;
@@ -47,29 +47,48 @@ public class Battle implements Runnable {
         int dmgtoplayer = 0;
         int hitcount = 0;
         float lifesteal = (float)0.011;
+
+        int[] chunk;
         do {
+            if(dmgNumListA.size() > 500){
+                try {
+
+                    Thread.currentThread().sleep(1);
+                }catch(Exception e){
+                    //don't do shit all
+                }
+                continue;
+            }
+
+
             dmgtoplayer += leftside.attack(rightside, lifesteal);
             dmgtoboss += rightside.attack(leftside, lifesteal);
-           // leftside.setHealth(1);
-           // rightside.setHealth(1);
-           // System.out.println(hitcount + " " + Math.log(hitcount));
+            /*leftside.setHealth(1);
+            rightside.setHealth(1);
+            if(hitcount > 30000000){
+                leftside.setHealth(0);
+                rightside.setHealth(0);
+            }*/
 
-            if(hitcount % Math.max(13, Math.log(hitcount)) == 0) {
-                final List<Integer> chunk = new ArrayList<Integer>();
-                chunk.add(dmgtoboss);
-                chunk.add(dmgtoplayer);
-                chunk.add(leftside.getHealth());
-                chunk.add(rightside.getHealth());
-                chunk.add(hitcount);
-                Gdx.app.postRunnable(new Runnable(){
-                    @Override
-                    public void run(){
-                        synchronized (dmgNumListA) {
+
+            if(hitcount % Math.max(1, (int)Math.log(hitcount)) == 0) {
+                //System.out.println("Hitcount " + hitcount + " " + (int)Math.log(hitcount));
+
+                chunk = new int[5];
+                chunk[0] = dmgtoboss;
+                chunk[1] = dmgtoplayer;
+                chunk[2] = leftside.getHealth();
+                chunk[3] = rightside.getHealth();
+                chunk[4] = hitcount;
+              //    Gdx.app.postRunnable(new Runnable(){
+                //        @Override
+                //       public void run(){
+
                             dmgNumListA.add(chunk);
-                        }
-                    }
 
-                });
+               //     }
+
+               // });
                 dmgtoboss = 0;
                 dmgtoplayer = 0;
             }
@@ -83,28 +102,39 @@ public class Battle implements Runnable {
                 }
             }
             //reduce lifesteal to ensure games don't run too long
-            if(hitcount%100000 == 0){
+            if(hitcount % 1000 == 0 && lifesteal > 0.001){
                 lifesteal -= 0.001;
-            }
 
+            }
+            if(hitcount % 10000 == 0){
+                //also wait
+                //we produce far far faster than we consume
+                //if we produce too much we can't deal with the amount produced
+                //when we slow it down a tad it becomes managable, in fact, it gives a massive memory improvement as well
+                //since we don't have to store so many chunks
+               /* try {
+
+                    Thread.currentThread().sleep(1);
+                }catch(Exception e){
+                    //don't do shit all
+                }*/
+            }
 
         } while (leftside.getHealth() > 0 && rightside.getHealth() > 0);
         System.out.println(hitcount);
-
-        final List<Integer> chunk = new ArrayList<Integer>();
-        chunk.add(dmgtoboss);
-        chunk.add(dmgtoplayer);
-        chunk.add(leftside.getHealth());
-        chunk.add(rightside.getHealth());
-        chunk.add(hitcount);
-        Gdx.app.postRunnable(new Runnable(){
-            @Override
-            public void run(){
-                synchronized (dmgNumListA) {
+        chunk = new int[5];
+        chunk[0] = dmgtoboss;
+        chunk[1] = dmgtoplayer;
+        chunk[2] = leftside.getHealth();
+        chunk[3] = rightside.getHealth();
+        chunk[4] = hitcount;
+        //Gdx.app.postRunnable(new Runnable(){
+        //  @Override
+         //  public void run(){
                     dmgNumListA.add(chunk);
-                }
-            }
 
-        });
+         //  }
+
+        //});
     }
 }

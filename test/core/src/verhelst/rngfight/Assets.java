@@ -42,7 +42,7 @@ public class Assets {
         pantcount = 7;
         shirtcount = 7;
         shouldercount = 7;
-        weaponcount = 16;
+        weaponcount = 26;
 
         faces = new Sprite[facecount];
         pants = new Sprite[pantcount];

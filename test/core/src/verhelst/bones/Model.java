@@ -65,13 +65,30 @@ public class Model {
                 shoulder.setAngle(-90);
             }
             Joint elbow = shoulder.children.get(0);
+            Joint wrist = elbow.children.get(0);
           //  System.out.println(elbow.getAngle());
             if(Math.abs(elbow.getAngle()) < 270 && BattleScreen.battling){
                // elbow.adjustAngle(10);
             }else
             {
-                elbow.setAngle(180);
+                    elbow.setAngle(180);
+
             }
+            if(Math.abs(elbow.getAngle()) == 180 && BattleScreen.battling) {
+            //  System.out.print(" wrist to def ");
+                wrist.setAngle(180);
+            }
+
+
+            if(!BattleScreen.battling){
+                wrist.setAngle(115);
+            }else{
+
+            }
+
+
+
+
         }else{
             if(shoulder.getAngle() < 0 && BattleScreen.battling){
                 shoulder.adjustAngle(30);
@@ -81,6 +98,7 @@ public class Model {
                 shoulder.setAngle(-90);
             }
             Joint elbow = shoulder.children.get(0);
+            Joint wrist = elbow.children.get(0);
             //System.out.println(shoulder.getAngle());
             //  System.out.println(elbow.getAngle());
             if(Math.abs(elbow.getAngle()) < 45 && BattleScreen.battling){
@@ -89,6 +107,12 @@ public class Model {
             }else
             {
                 elbow.setAngle(0);
+                wrist.setAngle(0);
+            }
+            if(!BattleScreen.battling) {
+                wrist.setAngle(65);
+            }else{
+
             }
         }
 

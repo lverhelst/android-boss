@@ -21,14 +21,14 @@ public class BattleScreen implements Screen, InputProcessor {
 
      BattleView bView;
     Random rng;
-    ConcurrentLinkedQueue<List<Integer>> bswNumList = new ConcurrentLinkedQueue<List<Integer>>();
+    ConcurrentLinkedQueue<int[]> bswNumList = new ConcurrentLinkedQueue<int[]>();
 
 
     Battle btl;
     BattleResultHandler brh;
     BattleResult[] results;
     //A list of itegers for consuming the posts from the battle
-    List<Integer> lst;
+    int[] lst;
 
     Character a;
     Character a2;
@@ -243,8 +243,10 @@ public class BattleScreen implements Screen, InputProcessor {
         if(vec.x >= bView.butterbeaver.getX() && vec.x <= bView.butterbeaver.getX() + bView.butterbeaver.getWidth()
                 && vec.y >= bView.butterbeaver.getY() && vec.y <= bView.butterbeaver.getY() + bView.butterbeaver.getHeight()) {
             butterDragMe = new SpriteActor(Assets.butterBeaver);
+            butterDragMe.setSize(bView.butterbeaver.getWidth(), bView.butterbeaver.getHeight());
             butterDragMe.setPosition(vec.x + butterDragMe.getX() - butterDragMe.getWidth()/2, vec.y + butterDragMe.getY() - butterDragMe.getHeight()/2);
             bView.getStage().addActor(butterDragMe);
+            bView.butterbeaver.setVisible(false);
         }
 
 
@@ -277,6 +279,7 @@ public class BattleScreen implements Screen, InputProcessor {
         if(butterDragMe != null)
             butterDragMe.remove();
         butterDragMe = null;
+        bView.butterbeaver.setVisible(true);
             btl.getRightside().setGlow(false);
             if (showLoot) {
 
@@ -334,8 +337,7 @@ public class BattleScreen implements Screen, InputProcessor {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        int iii = 0;
-                        long time = System.nanoTime();
+                     //long time = System.nanoTime();
 
                         while (battling) {
                             try {
@@ -345,31 +347,32 @@ public class BattleScreen implements Screen, InputProcessor {
                                 e.printStackTrace();
                             }
 
-                            System.out.println((System.nanoTime() - time) + " " + bswNumList.size()+ " " + iii);
-                            time = System.nanoTime();
+                            //System.out.println((System.nanoTime() - time) + " " + bswNumList.size()+ " " + iii);
+                            //time = System.nanoTime();
                             if (!bswNumList.isEmpty()) {
 
                                 lst = bswNumList.poll();
                                 //Since the laptop isn't performant with the damage numbers...they may have to be rethought.
                                 //if (Gdx.app.getType() == Application.ApplicationType.Android) {
-                                    btl.getLeftside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst.get(0)), Character.DmgListSide.LEFT);
-                                    btl.getRightside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst.get(1)), Character.DmgListSide.RIGHT);
+                                btl.getLeftside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst[0]), Character.DmgListSide.LEFT);
+                                btl.getRightside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst[1]), Character.DmgListSide.RIGHT);
                                 //}
-                                anim_h1 = lst.get(2);
-                                anim_h2 = lst.get(3);
-                                hits = lst.get(4);
-                                if ((lst.get(2) <= 0 || lst.get(3) <= 0)) {
-                                    btl.getLeftside().setDisplay_hp(lst.get(2));
-                                    btl.getRightside().setDisplay_hp(lst.get(3));
+                                anim_h1 = lst[2];
+                                anim_h2 = lst[3];
+                                hits = lst[4];
+                                if ((lst[2] <= 0 || lst[3] <= 0)) {
+                                    btl.getLeftside().setDisplay_hp(lst[2]);
+                                    btl.getRightside().setDisplay_hp(lst[3]);
                                     battling = false;
                                     break;
                                 }
-                                if (hits > display_cap) {
+                                System.out.println("Consumer " + lst[4]);
+                                /*if (hits > display_cap) {
                                     System.out.println("Past Display Cap. TODO: Make display cap into an option");
                                     battling = false;
                                     break;
-                                }
-                                iii++;
+                                }*/
+                                //iii++;
                             }
 
                         }

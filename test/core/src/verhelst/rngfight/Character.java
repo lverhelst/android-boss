@@ -113,7 +113,7 @@ public class Character extends Actor {
             victim.applyDamageOrHealth(dmgOrHealth);
             //simulate lifesteal
             //0.011
-            this.applyDamageOrHealth(-1 * Math.abs((int)(dmgOrHealth * lifesteal)));
+            this.applyDamageOrHealth(-1 * (int)((Math.abs(dmgOrHealth))* lifesteal));
         //}
         return dmgOrHealth;
     }
@@ -307,7 +307,7 @@ public class Character extends Actor {
         m.originx = (int)(getX() + getWidth()/2);
         m.originy = (int)(getY() + getHeight()/2);
         renderDamageNumbers(batch);
-
+      //  System.out.println(this.name);
         m.render(batch);
 
     }

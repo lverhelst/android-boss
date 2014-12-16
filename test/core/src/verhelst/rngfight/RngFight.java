@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class RngFight extends com.badlogic.gdx.Game{
 
     public static final int VIRTUAL_WIDTH = 400;
-    public static final int VITRUAL_HEIGHT = 400;
+    public static final int VITRUAL_HEIGHT = 800;
     //Used by all screens
     public static SpriteBatch batch;
 
@@ -29,7 +29,7 @@ public class RngFight extends com.badlogic.gdx.Game{
 
        // setScreen(new BattleScreen());
       //  setScreen(new TestScreen());
-        switchScreens(1);
+        switchScreens(0);
     }
 
 
