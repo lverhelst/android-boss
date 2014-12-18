@@ -140,14 +140,14 @@ public class BattleView {
         rootTable.addRow();
 
         row3 = new LTable(0,0,100,100);
-        aWep = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.LEFT_POSITION);
+        aWep = Weapon.generateRandomWeapon(10,  Weapon.POSITION.LEFT_POSITION);
         aWep.setVisible(false);
 
         row3.addActor(r5c3).setWidth_percent(10);//.expand().fill();
         row3.addActor(aWep.getTable()).setWidth_percent(35);//.right().expand().fill();//.pad(PADDING); //A Weapon
 
         row3.addActor(r5c3).setWidth_percent(10);//.expand();         //Space
-        bWep = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.RIGHT_POSITION);
+        bWep = Weapon.generateRandomWeapon(10,  Weapon.POSITION.RIGHT_POSITION);
         bWep.setVisible(false);
         row3.addActor(bWep.getTable()).setWidth_percent(35);//.left().expand().fill();//.pad(PADDING); //B Weapon
         row3.addActor(r5c3).setWidth_percent(10);//.expand().fill();
@@ -175,7 +175,7 @@ public class BattleView {
 
         statsTable.setDebug(debug);
 
-        lootActor = Weapon.generateRandomWeapon(10, Assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION);
+        lootActor = Weapon.generateRandomWeapon(10, Weapon.POSITION.LOOT_POSITION);
         lootActor.setVisible(false);
 
 

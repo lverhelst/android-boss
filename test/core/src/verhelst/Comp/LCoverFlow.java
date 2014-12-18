@@ -38,7 +38,7 @@ public class LCoverFlow extends Actor implements InputProcessor {
 
     public LCoverFlow(List<Actor> displayItems, int width, int height, boolean keepAspectRatio){
         this.items = displayItems;
-        this.currentIndex = displayItems.size()/2;
+        this.currentIndex = 0;
         this.visibleItems = 5;
         this.keepAspectRatio = keepAspectRatio;
         setSize(width, height);

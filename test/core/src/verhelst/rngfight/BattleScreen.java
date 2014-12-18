@@ -48,8 +48,11 @@ public class BattleScreen implements Screen, InputProcessor {
 
     public BattleScreen(RngFight rf){
         this.fight = rf;
-        a = new Character("Enemy", Assets.resting_face);
-        a2 = new Character("Enemy2", Assets.resting_face);
+        a = SaveGame.leftside;
+        a2 = SaveGame.rightside;
+
+
+
 
         anim_h1 = a.getHealth();
         anim_h2 = a2.getHealth();
@@ -88,7 +91,9 @@ public class BattleScreen implements Screen, InputProcessor {
                         break;
                     case ShowStaticLoot:
                         showLoot = true;
-                        Weapon weapon = Weapon.generateRandomWeapon(a.max_level, Assets.getWeaponSprite(), Weapon.POSITION.LOOT_POSITION);
+                        Weapon weapon = Weapon.generateRandomWeapon(a.max_level, Weapon.POSITION.LOOT_POSITION);
+
+                        Assets.unlockItem(0, weapon.spriteindex);
                         bView.setLoot(weapon);
 
                        // System.out.println("Showloot");
@@ -101,7 +106,7 @@ public class BattleScreen implements Screen, InputProcessor {
                         custom_mode_string = "ioi";
                         break;
                     case Player1GetsLoot:
-                        btl.getLeftside().setEquipped_weapon(Weapon.generateScaledWeapon(a.getLevel(), Assets.getWeaponSprite(), Weapon.POSITION.LEFT_POSITION));
+                        btl.getLeftside().setEquipped_weapon(Weapon.generateScaledWeapon(a.getLevel(), Weapon.POSITION.LEFT_POSITION));
                         Weapon aWep = btl.getLeftside().getEquipped_weapon();
                         Weapon bWep = btl.getRightside().getEquipped_weapon();
 
@@ -113,17 +118,23 @@ public class BattleScreen implements Screen, InputProcessor {
 
                         int types= BodyPartActor.BodyPartType.values().length;
 
-                        BodyPartActor hsa = new BodyPartActor(BodyPartActor.BodyPartType.values()[rng.nextInt(types)]);
+                       int loooooot = rng.nextInt(types);
+
+
+                        BodyPartActor hsa = new BodyPartActor(BodyPartActor.BodyPartType.values()[loooooot]);
+                        Assets.unlockItem(loooooot + 1, hsa.part_index);
                         bView.setLoot(hsa);
+
 
 
                         break;
                     case Player1NewSuit:
-                        btl.getLeftside().equipSuit();
+                        btl.getLeftside().equipSuitNoCheck();
                         break;
                 }
             }
             results = new BattleResult[0];
+            SaveGame.saveGame(a,a2,brh.stats);
         }
     }
 
@@ -275,6 +286,12 @@ public class BattleScreen implements Screen, InputProcessor {
                     && rectay11 <= rectby21 && rectay21 >= rectby11) {
                 fight.switchScreens(1);
             }
+            if(butterDragMe != null)
+                butterDragMe.remove();
+            butterDragMe = null;
+            bView.butterbeaver.setVisible(true);
+            return false;
+
         }
         if(butterDragMe != null)
             butterDragMe.remove();
@@ -383,10 +400,10 @@ public class BattleScreen implements Screen, InputProcessor {
                 }).start();
 
 
-                return true;
+                //return true;
             }
 
-
+        SaveGame.saveGame(a,a2,brh.stats);
 
         return false;
     }

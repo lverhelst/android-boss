@@ -30,10 +30,14 @@ public class Assets {
     public static BitmapFont HUDbf;
     public static Texture dmgIconTxture, hrtIconTxture, glow, glow_ylw;
     public static Sprite dmgIcon, hrtIcon;
-    public static Sprite butterBeaver, landing_pad,landing_pad_glow, back_btn;
+    public static Sprite butterBeaver, landing_pad,landing_pad_glow, back_btn, reset_closed, reset_opened, reset_pressed, mystery_sprite;
 
     private static int armcount, pantcount, shirtcount, shouldercount, facecount,weaponcount;
     private static Random rng = new Random();
+
+    //values: 1 = unlocked, 0 = locked
+    //0 -> weps, 1-> head/face, 2-> shirts/torso, 3 -> legs/pants, 4->shoulder, 5->elbow/arms
+    static int[][] unclocks = new int[6][35];
 
     public Assets(){
         weapons_sprites = new ArrayList<Sprite>();
@@ -42,7 +46,7 @@ public class Assets {
         pantcount = 7;
         shirtcount = 7;
         shouldercount = 7;
-        weaponcount = 26;
+        weaponcount = 35;
 
         faces = new Sprite[facecount];
         pants = new Sprite[pantcount];
@@ -50,8 +54,11 @@ public class Assets {
         arms = new Sprite[armcount];
         shoulders = new Sprite[shouldercount];
 
+        for(int i = 1; i < 6; i++){
+            unclocks[i][0] = 1;
+        }
 
-        loadAssets();
+
     }
     //Load graphical assets
     public void loadAssets(){
@@ -120,7 +127,13 @@ public class Assets {
         landing_pad = new Sprite(new Texture(Gdx.files.internal("In Development\\repOG.png")));
         landing_pad_glow = new Sprite(new Texture(Gdx.files.internal("In Development\\repOG_hover.png")));
         back_btn = new Sprite(new Texture(Gdx.files.internal("In Development\\repARW.png")));
+        reset_closed = new Sprite(new Texture(Gdx.files.internal("In Development\\resetButtonClosed.png")));
+        reset_opened = new Sprite(new Texture(Gdx.files.internal("In Development\\resetButtonOpen.png")));
+        reset_pressed = new Sprite(new Texture(Gdx.files.internal("In Development\\resetButtonDepressed.png")));
+        mystery_sprite = new Sprite(new Texture(Gdx.files.internal("In Development\\mystery_sprite.png")));
     }
+
+
 
     public static Sprite getWeaponSprite(){
         return weapons_sprites.get(rng.nextInt(weapons_sprites.size()));
@@ -160,7 +173,8 @@ public class Assets {
         return arms[rng.nextInt(arms.length)];
     }
 
-    public static Sprite[] getSuitForLevel(int lvl){
+
+    public static Sprite[] getSuitForLevelNoCheck(int lvl){
         int index = lvl/10;
 
         Sprite[] suit = new Sprite[5];
@@ -175,5 +189,62 @@ public class Assets {
         //elbow
         suit[4] = arms[Math.min(index, armcount -1 )];
         return suit;
+    }
+
+    public static Sprite[] getSuitForLevel(int lvl){
+        int index = lvl/10;
+
+        Sprite[] suit = new Sprite[5];
+        //head
+
+        if(unclocks[1][Math.min(index, facecount - 1)] == 1)
+            suit[0] = faces[Math.min(index, facecount - 1)];
+        else
+            suit[0] = mystery_sprite;
+
+        //torso
+        if(unclocks[2][Math.min(index, shirtcount - 1)] == 1) {
+            suit[1] = shirts[Math.min(index, shirtcount - 1)];
+        }else{
+            suit[1] = mystery_sprite;
+        }
+        //leg
+        if(unclocks[3][Math.min(index, pantcount - 1)] == 1) {
+            suit[2] = pants[Math.min(index, pantcount -1 )];
+        }else{
+            suit[2] = mystery_sprite;
+        }
+        //arm
+        if(unclocks[4][Math.min(index, shouldercount - 1)] == 1) {
+            suit[3] = shoulders[Math.min(index, shouldercount - 1)];
+        }else{
+            suit[3] = mystery_sprite;
+        }
+
+        //elbow
+        if(unclocks[5][Math.min(index, armcount - 1)] == 1) {
+            suit[4] = arms[Math.min(index, armcount -1 )];
+        }else{
+            suit[4] = mystery_sprite;
+        }
+
+        return suit;
+    }
+
+    public static void unlockItem(int type, int index){
+        unclocks[type][index] = 1;
+    }
+
+    public static List<Sprite> getWeaponsList(){
+        ArrayList<Sprite> las = new ArrayList<Sprite>();
+        for(int i = 0; i < weapons_sprites.size(); i++){
+            if(unclocks[0][i] == 1){
+                las.add(weapons_sprites.get(i));
+            }else{
+                las.add(mystery_sprite);
+            }
+        }
+
+        return las;
     }
 }

@@ -38,8 +38,8 @@ public class Character extends Actor {
 
 
     int wins_to_level = 2;
-    private int win_streak = 0;
-    private int lose_streak = 0;
+    int win_streak = 0;
+    int lose_streak = 0;
     private boolean glow;
     public int glow_type; // 0 = none, 1 = yellow, 2 = green
 
@@ -62,8 +62,10 @@ public class Character extends Actor {
     //For rendering damage numbers
     Iterator<DamageNumber> i;
 
+    int[] spriteindices = new int[5];
 
-    public Character(String name, Sprite sprite){
+
+    public Character(String name){
         rng = new Random();
         this.name = name;
         this.health = BASE_HEALTH;
@@ -73,8 +75,7 @@ public class Character extends Actor {
         level = 1;
         max_level = 1;
         max_wtnl = 0;
-        if(sprite != null)
-            this.sprite = new Sprite(sprite);
+        this.sprite = new Sprite(Assets.resting_face);
 
         if(name.equals("Enemy")) {
             m = new Model((int)(getX() + getWidth()/2), (int)(getY() + getHeight()), true, getHeight());
@@ -84,14 +85,11 @@ public class Character extends Actor {
             m = new Model((int)(getX() + getWidth()/2), (int)(getY() + getHeight()), false, getHeight());
         m.hideWeapon();
 
-        for(int i = 0; i < 5000; i++){
+        for(int i = 0; i < 1000; i++){
             availablepool.add(new DamageNumber(-9999,-100,-100));
         }
     }
 
-    public void setSprite(Sprite sp){
-        this.sprite = sp;
-    }
 
     public void applyDamageOrHealth(int dmg_hlth){
         this.health -= dmg_hlth;
@@ -110,10 +108,10 @@ public class Character extends Actor {
         //}
         //Damage victim
         //else{
-            victim.applyDamageOrHealth(dmgOrHealth);
-            //simulate lifesteal
-            //0.011
-            this.applyDamageOrHealth(-1 * (int)((Math.abs(dmgOrHealth))* lifesteal));
+        victim.applyDamageOrHealth(dmgOrHealth);
+        //simulate lifesteal
+        //0.011
+        this.applyDamageOrHealth(-1 * (int)((Math.abs(dmgOrHealth))* lifesteal));
         //}
         return dmgOrHealth;
     }
@@ -160,29 +158,55 @@ public class Character extends Actor {
     }
 
     public void setBodyPart(BodyPartActor hsa){
+
         Sprite toequip = new Sprite(hsa.getSprite());
         switch(hsa.getBtype()){
             case HEAD:
+                spriteindices[0] = hsa.part_index;
                 toequip.rotate90(!name.equals("Enemy"));
                 m.updateSprite("head", toequip);
                 break;
-            case SHOULDER:
-                m.updateSprite( "shoulder" , toequip);
-                break;
             case TORSO:
+                spriteindices[1] = hsa.part_index;
                 m.updateSprite("torso", toequip);
                 break;
             case LEGS:
+                spriteindices[2] = hsa.part_index;
                 m.updateSprite("leg", toequip);
                 break;
+            case SHOULDER:
+                spriteindices[3] = hsa.part_index;
+                m.updateSprite( "shoulder" , toequip);
+                break;
             case ELBOW:
+                spriteindices[4] = hsa.part_index;
                 m.updateSprite("elbow", toequip);
                 break;
         }
     }
 
+    public void setBodyPart(String part, Sprite sprite, int index){
+
+        Sprite toequip = new Sprite(sprite);
+
+
+        if(part.equalsIgnoreCase("head")){
+            toequip.rotate90(!name.equals("Enemy"));
+            spriteindices[0] = index;
+        }
+        if(part.equalsIgnoreCase("torso"))
+            spriteindices[1] = index;
+        if(part.equalsIgnoreCase("leg"))
+            spriteindices[2] = index;
+        if(part.equalsIgnoreCase("shoulder"))
+            spriteindices[3] = index;
+        if(part.equalsIgnoreCase("elbow"))
+            spriteindices[4] = index;
+
+        m.updateSprite(part,toequip);
+    }
+
     public void equipSuit(){
-        System.out.println("EQUIP SUUUUUIT *********************");
         Sprite[] sprites = Assets.getSuitForLevel(level);
         Sprite head = new Sprite(sprites[0]);
         head.rotate90(true);
@@ -193,7 +217,28 @@ public class Character extends Actor {
         m.updateSprite("leg", sprites[2]);
         m.updateSprite( "shoulder" , sprites[3]);
         m.updateSprite("elbow", sprites[4]);
+        for(int i = 0; i < 5; i++){
+            spriteindices[1] = (int)level/10;
+        }
     }
+
+    public void equipSuitNoCheck(){
+        Sprite[] sprites = Assets.getSuitForLevelNoCheck(level);
+        Sprite head = new Sprite(sprites[0]);
+        head.rotate90(true);
+        head.flip(true, true);
+        m.isFlipped = true;
+        m.updateSprite("head", head);
+        m.updateSprite("torso", sprites[1]);
+        m.updateSprite("leg", sprites[2]);
+        m.updateSprite( "shoulder" , sprites[3]);
+        m.updateSprite("elbow", sprites[4]);
+        for(int i = 0; i < 5; i++){
+            spriteindices[1] = (int)level/10;
+        }
+    }
+
+
 
     public boolean isWeaponEquipped()
     {

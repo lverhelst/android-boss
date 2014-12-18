@@ -11,15 +11,38 @@ import javax.rmi.CORBA.Tie;
 public class BattleResultHandler {
 
     protected int max_hitcount, min_hitcount, max_level_reached, games, player2wins, player2losses, draws;
-
+    public int[] stats = new int[7];
 
     public BattleResultHandler(){
-        max_hitcount = -1;
-        min_hitcount = -1;
-        games = 0;
-        player2wins = 0;
-        player2losses = 0;
-        draws = 0;
+
+        try {
+
+            max_hitcount = SaveGame.stats[0];
+            min_hitcount = SaveGame.stats[1];
+            player2wins = SaveGame.stats[2];
+            player2losses = SaveGame.stats[3];
+            draws = SaveGame.stats[4];
+            games = SaveGame.stats[5];
+            max_level_reached = SaveGame.stats[6];
+
+        }catch(Exception e) {
+            System.out.println("Could not load stats");
+
+            max_hitcount = -1;
+            min_hitcount = -1;
+            games = 0;
+            player2wins = 0;
+            player2losses = 0;
+            draws = 0;
+            max_level_reached = 0;
+        }
+        stats[0] = max_hitcount;
+        stats[1] = min_hitcount;
+        stats[2] = player2wins;
+        stats[3] = player2losses;
+        stats[4] = draws;
+        stats[5] = games;
+        stats[6] = max_level_reached;
     }
 
 
@@ -61,7 +84,6 @@ public class BattleResultHandler {
                 resultsList.add(BattleResult.Player1GetsLoot);
 
 
-        System.out.println("BOSSSSUIT : " + aoriglvl + " max: " + a.max_level + " ");
         if((int)(aoriglvl / 10) != (int)(a.getLevel() /10)){
 
             resultsList.add(BattleResult.Player1NewSuit);
@@ -85,6 +107,13 @@ public class BattleResultHandler {
 
         System.out.print(resultsList);
        // System.out.println("        CL " + a.getLevel() + " ws " + a.getWin_streak() + " ml" + a.max_level + " mwtl" + a.max_wtnl + " ls " + a.getLose_streak() + " lscheck" + a.getLose_streak() % (a.wins_to_level + 1));
+        stats[0] = max_hitcount;
+        stats[1] = min_hitcount;
+        stats[2] = player2wins;
+        stats[3] = player2losses;
+        stats[4] = draws;
+        stats[5] = games;
+        stats[6] = max_level_reached;
         return resultsList.toArray(new BattleResult[resultsList.size()]);
     }
 

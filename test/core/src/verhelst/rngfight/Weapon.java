@@ -44,6 +44,8 @@ public class Weapon extends Actor {
     private int max_damage, min_damage, hp_multiplier;
     private float life_steal;
 
+    public int spriteindex;
+
     int wdi_initWidth, sprite_initWidth;
 
 
@@ -53,16 +55,16 @@ public class Weapon extends Actor {
     public Skin skin;
 
 
-    public static Weapon generateRandomWeapon(int lvl, Sprite tempSprite, POSITION position)
+    public static Weapon generateRandomWeapon(int lvl, POSITION position)
     {
         int a_roll = rng.nextInt(lvl);
         int b_roll = rng.nextInt(lvl * 2) + 1;
 
-        return new Weapon(Math.min(a_roll, b_roll), Math.max(a_roll,b_roll), DAMAGETYPE.NORMAL, Math.max(rng.nextInt(lvl)/3,1),(float)0.1,tempSprite, position);
+        return new Weapon(Math.min(a_roll, b_roll), Math.max(a_roll,b_roll), DAMAGETYPE.NORMAL, Math.max(rng.nextInt(lvl)/3,1),(float)0.1, position);
 
     }
 
-    public static Weapon generateScaledWeapon(int lvl, Sprite tempSprite, POSITION position)
+    public static Weapon generateScaledWeapon(int lvl, POSITION position)
     {
         double average_dmg = Math.pow(lvl,1.11); //(mindmg + max_damage )/2.0;
         int offset_roll = rng.nextInt((int)average_dmg);//(int)average_dmg - mindmg;
@@ -72,13 +74,14 @@ public class Weapon extends Actor {
         System.out.println("A,O,A-O,A+O: " + average_dmg + " " + offset_roll + " " +  min_dmg + " " +  max_dmg);
 
 
-        return new Weapon(min_dmg, max_dmg, DAMAGETYPE.NORMAL, Math.max(rng.nextInt(lvl)/3, Math.max(lvl/5,1)), (float)(0.1), tempSprite, position);
+        return new Weapon(min_dmg, max_dmg, DAMAGETYPE.NORMAL, Math.max(rng.nextInt(lvl)/3, Math.max(lvl/5,1)), (float)(0.1),  position);
     }
 
     //Dummy Constructor
     public Weapon(){
         this.setName("DummyWeap" + System.currentTimeMillis());
-        this.sprite = Assets.getWeaponSprite();
+        this.spriteindex = rng.nextInt(Assets.weapons_sprites.size());
+        this.sprite = new Sprite(Assets.weapons_sprites.get(spriteindex));
         this.sprite_initWidth = (int)sprite.getWidth();
 
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
@@ -94,12 +97,13 @@ public class Weapon extends Actor {
 
 
 
-    public Weapon( int min_damage,int max_damage, float life_steal, Sprite sprite, POSITION position){
+    public Weapon( int min_damage,int max_damage, float life_steal, POSITION position){
         this.setName("Weap" + System.currentTimeMillis());
         this.max_damage = max_damage;
         this.min_damage = min_damage;
         this.life_steal = life_steal;
-        this.sprite  = new Sprite(sprite);
+        this.spriteindex = rng.nextInt(Assets.weapons_sprites.size());
+        this.sprite = new Sprite(Assets.weapons_sprites.get(spriteindex));
 
         this.sprite_initWidth = (int)sprite.getWidth();
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
@@ -108,7 +112,7 @@ public class Weapon extends Actor {
         root = getTable();
     }
 
-    public Weapon(int mindmg, int maxdmg, DAMAGETYPE dmg_type, int hp_multiplier, float life_steal, Sprite sprite, POSITION position){
+    public Weapon(int mindmg, int maxdmg, DAMAGETYPE dmg_type, int hp_multiplier, float life_steal, POSITION position){
         this.setName("Weap" + System.currentTimeMillis());
         this.nm = this.getName();
         this.min_damage = mindmg;
@@ -118,7 +122,8 @@ public class Weapon extends Actor {
         this.life_steal = life_steal;
         this.posi = position;
         //Copy the sprite so we aren't dependant on the external sprite
-        this.sprite = new Sprite(sprite);
+        this.spriteindex = rng.nextInt(Assets.weapons_sprites.size());
+        this.sprite = new Sprite(Assets.weapons_sprites.get(spriteindex));
 
         this.sprite_initWidth = (int)sprite.getWidth();
         this.wdi_initWidth = (int)Assets.weapon_data_icon.getWidth();
@@ -141,6 +146,7 @@ public class Weapon extends Actor {
         this.life_steal = to_copy.life_steal;
         this.posi = posit;
         this.sprite = new Sprite(to_copy.getSprite());
+        this.spriteindex = to_copy.spriteindex;
 
 
         this.sprite_initWidth = (int)to_copy.sprite_initWidth;
@@ -160,6 +166,20 @@ public class Weapon extends Actor {
 
     }
 
+    private void rebuildUI(){
+        this.dmgstring = min_damage + "-" + max_damage;
+        this.heartstring = hp_multiplier +"";
+
+//        System.out.println(this.getName() + " copy from " + to_copy.getName());
+        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+        lldmg = new Label(dmgstring, skin);
+
+        lldmg.setText(dmgstring);
+        llhrt = new Label(heartstring, skin);
+        llhrt.setText(heartstring);
+        root = getTable();
+    }
+
     public int getMax_damage() {
         return max_damage;
     }
@@ -171,6 +191,13 @@ public class Weapon extends Actor {
     public float getLife_steal() {
         return life_steal;
     }
+
+    public void setSprite(Sprite sprite) {
+        this.sprite = new Sprite(sprite);
+        this.displaysprite = new Sprite(sprite);
+    }
+
+
 
     public Sprite getSprite(){
         return this.sprite;
@@ -292,6 +319,21 @@ public class Weapon extends Actor {
            // root.addActor(dataTable);//.uniform().expand().fill();
         //}
         return root;
+    }
+
+    public void setMax_damage(int max_damage) {
+        this.max_damage = max_damage;
+        rebuildUI();
+    }
+
+    public void setMin_damage(int min_damage) {
+        this.min_damage = min_damage;
+        rebuildUI();
+    }
+
+    public void setHp_multiplier(int hp_multiplier) {
+        this.hp_multiplier = hp_multiplier;
+        rebuildUI();
     }
 
     public class WepSpriteActor extends Actor{

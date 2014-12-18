@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import java.util.Random;
+
 /**
  * Created by Leon I. Verhelst on 11/17/2014.
  */
@@ -11,15 +13,17 @@ public class BodyPartActor extends Actor {
 
     public enum BodyPartType {
         HEAD,
-        SHOULDER,
-        ELBOW,
         TORSO,
-        LEGS
+        LEGS,
+        SHOULDER,
+        ELBOW
+
     }
 
     Sprite partSprite;
     Sprite drawSprite;
-
+    public int part_index;
+    Random rng = new Random();
 
 
     BodyPartType btype;
@@ -33,19 +37,24 @@ public class BodyPartActor extends Actor {
         partSprite = null;
         switch (type){
             case HEAD:
-                partSprite = new Sprite(Assets.getHeadSprite());
+                part_index = rng.nextInt(Assets.faces.length);
+                partSprite = new Sprite(Assets.faces[part_index]);
                 break;
             case SHOULDER:
-                partSprite = new Sprite(Assets.getShoulderSprite());
+                part_index = rng.nextInt(Assets.shoulders.length);
+                partSprite = new Sprite(Assets.shoulders[part_index]);
                 break;
             case ELBOW:
-                partSprite = new Sprite(Assets.getElbowSprite());
+                part_index = rng.nextInt(Assets.arms.length);
+                partSprite = new Sprite(Assets.arms[part_index]);
                 break;
             case TORSO:
-                partSprite = new Sprite(Assets.getTorsoSprite());
+                part_index = rng.nextInt(Assets.shirts.length);
+                partSprite = new Sprite(Assets.shirts[part_index]);
                 break;
             case LEGS:
-                partSprite = new Sprite(Assets.getLegSprite());
+                part_index = rng.nextInt(Assets.pants.length);
+                partSprite = new Sprite(Assets.pants[part_index]);
                 break;
         }
         drawSprite = new Sprite(partSprite);
@@ -66,7 +75,8 @@ public class BodyPartActor extends Actor {
         this.drawSprite = new Sprite(partSprite);
         setName(hsa.getName());
         setBtype(hsa.getBtype());
-         updateSize();
+        this.part_index = hsa.part_index;
+        updateSize();
     }
 
     public void updateSize(){

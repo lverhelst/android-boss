@@ -102,8 +102,11 @@ public class Battle implements Runnable {
                 }
             }*/
             //reduce lifesteal to ensure games don't run too long
-            if(hitcount % 100000 == 0 && lifesteal > 0.001){
+            if(hitcount % 100000 == 0 && lifesteal > 0.0){
                 lifesteal -= 0.001;
+                if(lifesteal < 0)
+                    lifesteal = 0;
+                System.out.println("Lifesteal " + lifesteal);
             }
 
         } while (leftside.getHealth() > 0 && rightside.getHealth() > 0);

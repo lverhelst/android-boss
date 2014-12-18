@@ -32,40 +32,42 @@ public class TestScreen implements Screen {
     final RngFight game2;
     LeonLabel maxlbl, minlbl, wlrg, maxlvl, battles;
     InputMultiplexer im;
-    SpriteActor backBtn;
+    SpriteActor backBtn, resetButton;
 
+    int reset_state = 0; //0 closed, 1 open, 2 pressed
+    long reset_time = -1;
 
     public TestScreen(RngFight game){
         this.game2 = game;
         //m = new Model(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, false, 96);
-        Character a = new Character("Enemy", Assets.getHeadSprite());
+        Character a = new Character("Enemy");
         a.setLevel(1);
         a.equipSuit();
-        Character b = new Character("Enemy", Assets.getHeadSprite());
+        Character b = new Character("Enemy");
         b.setLevel(11);
         b.equipSuit();
-        Character c = new Character("Enemy", Assets.getHeadSprite());
+        Character c = new Character("Enemy");
         c.setLevel(21);
         c.equipSuit();
-        Character d = new Character("Enemy", Assets.getHeadSprite());
+        Character d = new Character("Enemy");
         d.setLevel(31);
         d.equipSuit();
-        Character e = new Character("Enemy", Assets.getHeadSprite());
+        Character e = new Character("Enemy");
         e.setLevel(41);
         e.equipSuit();
-        Character f = new Character("Enemy", Assets.getHeadSprite());
+        Character f = new Character("Enemy");
         f.setLevel(51);
         f.equipSuit();
-        Character g = new Character("Enemy", Assets.getHeadSprite());
+        Character g = new Character("Enemy");
         g.setLevel(61);
         g.equipSuit();
-        Character h = new Character("Enemy", Assets.getHeadSprite());
+        Character h = new Character("Enemy");
         h.setLevel(71);
         h.equipSuit();
-        Character i2 = new Character("Enemy", Assets.getHeadSprite());
+        Character i2 = new Character("Enemy");
         i2.setLevel(81);
         i2.equipSuit();
-        Character j = new Character("Enemy", Assets.getHeadSprite());
+        Character j = new Character("Enemy");
         j.setLevel(91);
         j.equipSuit();
 
@@ -105,7 +107,7 @@ public class TestScreen implements Screen {
         List<Actor> actor = new ArrayList<Actor>();
         Character chara;
         for(int k = 0; k < Assets.faces.length; k++){
-            chara = new Character("Enemy", Assets.getHeadSprite());
+            chara = new Character("Enemy");
             chara.setLevel(10 * k + 1);
             chara.equipSuit();
             actor.add(chara);
@@ -116,8 +118,7 @@ public class TestScreen implements Screen {
 
        List<Actor> las = new ArrayList<Actor>();
 
-        for(Sprite s: Assets.weapons_sprites){
-
+        for(Sprite s: Assets.getWeaponsList()){
             Image img = new Image(s);
            // img.setOrigin(img.getWidth()/2, img.getHeight()/2);
            // img.setRotation(45);
@@ -155,11 +156,14 @@ public class TestScreen implements Screen {
        maxlvl = new LeonLabel(" Max Level Reached: 1", skin);
        maxlvl.isHUD = true;
        statsTable.addActor(maxlvl);
+       resetButton = new SpriteActor(Assets.reset_closed);
+     //   statsTable.addRow();
+
        //statsTable.addActor(new Image(Assets.back_btn)); //TODO: Back button (need proper graphics)
        t.addActor(statsTable);
         backBtn = new SpriteActor(Assets.back_btn);
-
-        t.addActor(new Label("",skin));
+        t.addActor(resetButton,true);
+        //t.addActor(new Label("",skin));
         t.addActor(backBtn,2);
 
 
@@ -174,6 +178,34 @@ public class TestScreen implements Screen {
                 if(screenX > backBtn.getX() && (Gdx.graphics.getHeight() - screenY) < backBtn.getY() + backBtn.getHeight()){
                     game2.switchScreens(0);
                 }
+                if(screenX < resetButton.getX() + resetButton.getWidth() && (Gdx.graphics.getHeight() - screenY) < resetButton.getY() + resetButton.getHeight()){
+                    switch(reset_state){
+                        case 0:
+                            resetButton.displaysprite = new Sprite(Assets.reset_opened);
+                            reset_state = 1;
+                            break;
+                        case 1:
+                            if((Gdx.graphics.getHeight() - screenY) < resetButton.getY() + resetButton.getHeight()/2) {
+                                resetButton.displaysprite = new Sprite(Assets.reset_pressed);
+                                reset_state = 2;
+
+                                reset_time = System.currentTimeMillis();
+                            }
+                            else{
+                                reset_state = 0;
+                                resetButton.displaysprite = new Sprite(Assets.reset_closed);
+                            }
+                            break;
+                        case 2:
+                            //Do nothing
+                            break;
+
+                    }
+                }
+
+
+
+
                 return false;
             }
         });
@@ -186,6 +218,7 @@ public class TestScreen implements Screen {
         wlrg.setText("  Wins/Losses/Draws:  " +  wins + "/" +  losses +  "/" + draws);
         battles.setText("   Games: " + games );
         maxlvl.setText("    Highest level reached: " + maxlevel);
+
     }
 
 
@@ -193,6 +226,11 @@ public class TestScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         RngFight.batch.begin();
+        if(reset_state == 2 && (reset_time != -1 && System.currentTimeMillis() > reset_time + 100)){
+            reset_state = 0;
+            SaveGame.reset();
+            resetButton.displaysprite = new Sprite(Assets.reset_closed);
+        }
       //  m.render(RngFight.batch);
         t.draw(RngFight.batch, 1);
        // lcf.draw(RngFight.batch, 1);
