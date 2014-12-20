@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 import java.util.ArrayList;
@@ -30,16 +29,16 @@ public class Assets {
     public static BitmapFont HUDbf;
     public static Texture dmgIconTxture, hrtIconTxture, glow, glow_ylw;
     public static Sprite dmgIcon, hrtIcon;
-    public static Sprite butterBeaver, landing_pad,landing_pad_glow, back_btn, reset_closed, reset_opened, reset_pressed, mystery_sprite;
+    public static Sprite butterBeaver, landing_pad, landing_pad_glow, back_btn, reset_closed, reset_opened, reset_pressed, mystery_sprite;
 
-    private static int armcount, pantcount, shirtcount, shouldercount, facecount,weaponcount;
+    private static int armcount, pantcount, shirtcount, shouldercount, facecount, weaponcount;
     private static Random rng = new Random();
 
     //values: 1 = unlocked, 0 = locked
     //0 -> weps, 1-> head/face, 2-> shirts/torso, 3 -> legs/pants, 4->shoulder, 5->elbow/arms
     static int[][] unclocks = new int[6][35];
 
-    public Assets(){
+    public Assets() {
         weapons_sprites = new ArrayList<Sprite>();
         facecount = 19;
         armcount = 7;
@@ -54,14 +53,15 @@ public class Assets {
         arms = new Sprite[armcount];
         shoulders = new Sprite[shouldercount];
 
-        for(int i = 1; i < 6; i++){
+        for (int i = 1; i < 6; i++) {
             unclocks[i][0] = 1;
         }
 
 
     }
+
     //Load graphical assets
-    public void loadAssets(){
+    public void loadAssets() {
 
         //Load character images & animation
         TextureAtlas ta = new TextureAtlas(Gdx.files.internal("face_sprites\\sprite.pack"));
@@ -70,23 +70,23 @@ public class Assets {
         resting_face = new Sprite(ta.findRegion("face1"));
         dead_face = new Sprite(ta.findRegion("face1"));
         //faces
-        for(int i = 1; i <= facecount; i++){
+        for (int i = 1; i <= facecount; i++) {
             faces[i - 1] = new Sprite(ta.findRegion("face" + i));
         }
         //torsos
-        for(int i = 1; i <= shirtcount; i++){
+        for (int i = 1; i <= shirtcount; i++) {
             shirts[i - 1] = new Sprite(ta.findRegion("torso" + i));
         }
         //legs
-        for(int i = 1; i <= pantcount; i++){
+        for (int i = 1; i <= pantcount; i++) {
             pants[i - 1] = new Sprite(ta.findRegion("legs" + i));
         }
         //shoulders
-        for(int i = 1; i <= armcount; i++){
+        for (int i = 1; i <= armcount; i++) {
             arms[i - 1] = new Sprite(ta.findRegion("elbow" + i));
         }
         //elbows
-        for(int i = 1; i <= shouldercount; i++){
+        for (int i = 1; i <= shouldercount; i++) {
             shoulders[i - 1] = new Sprite(ta.findRegion("shoulder" + i));
         }
 
@@ -111,7 +111,7 @@ public class Assets {
 
         FreeTypeFontGenerator ftfg = new FreeTypeFontGenerator(Gdx.files.internal("game_font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter ftfp = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        ftfp.size = Math.round(32 * Gdx.graphics.getDensity() );
+        ftfp.size = Math.round(32 * Gdx.graphics.getDensity());
         bf = ftfg.generateFont(ftfp);
 
         ftfp.size = Math.round(28 * Gdx.graphics.getDensity());
@@ -127,55 +127,68 @@ public class Assets {
         landing_pad = new Sprite(new Texture(Gdx.files.internal("In Development\\repOG.png")));
         landing_pad_glow = new Sprite(new Texture(Gdx.files.internal("In Development\\repOG_hover.png")));
         back_btn = new Sprite(new Texture(Gdx.files.internal("In Development\\repARW.png")));
-        reset_closed = new Sprite(new Texture(Gdx.files.internal("In Development\\resetButtonClosed.png")));
-        reset_opened = new Sprite(new Texture(Gdx.files.internal("In Development\\resetButtonOpen.png")));
-        reset_pressed = new Sprite(new Texture(Gdx.files.internal("In Development\\resetButtonDepressed.png")));
+        reset_closed = new Sprite(new Texture(Gdx.files.internal("In Development\\ResetButtonClosed.png")));
+        reset_opened = new Sprite(new Texture(Gdx.files.internal("In Development\\ResetButtonOpen.png")));
+        reset_pressed = new Sprite(new Texture(Gdx.files.internal("In Development\\ResetButtonDepressed.png")));
         mystery_sprite = new Sprite(new Texture(Gdx.files.internal("In Development\\mystery_sprite.png")));
     }
 
 
-
-    public static Sprite getWeaponSprite(){
+    public static Sprite getWeaponSprite() {
         return weapons_sprites.get(rng.nextInt(weapons_sprites.size()));
     }
 
-    public static Sprite findSpriteForName(String name){
-        if(name.equals("head"))
+    public static Sprite findSpriteForName(String name) {
+        if (name.equals("head"))
             return resting_face;
-        if(name.equals("shoulder"))
+        if (name.equals("shoulder"))
             return shoulders[0];
-        if(name.equals("leg"))
-            return  pants[0];
-        if(name.equals("torso"))
+        if (name.equals("leg"))
+            return pants[0];
+        if (name.equals("torso"))
             return shirts[0];
-        if(name.equals("wrist"))
+        if (name.equals("wrist"))
             return getWeaponSprite();
         return arms[0];
     }
 
-    public static Sprite getHeadSprite(){
+    public static Sprite findSpriteForName(String name, int index) {
+        if (name.equals("head"))
+            return faces[index];
+        if (name.equals("shoulder"))
+            return shoulders[index];
+        if (name.equals("leg"))
+            return pants[index];
+        if (name.equals("torso"))
+            return shirts[index];
+        if (name.equals("wrist"))
+            return weapons_sprites.get(index);
+        return arms[index];
+    }
+
+    public static Sprite getHeadSprite() {
         return faces[rng.nextInt(faces.length)];
     }
 
-    public static Sprite getShoulderSprite(){
+    public static Sprite getShoulderSprite() {
         return shoulders[rng.nextInt(shoulders.length)];
     }
 
-    public static Sprite getLegSprite(){
+    public static Sprite getLegSprite() {
         return pants[rng.nextInt(pants.length)];
     }
 
-    public static Sprite getTorsoSprite(){
+    public static Sprite getTorsoSprite() {
         return shirts[rng.nextInt(shirts.length)];
     }
 
-    public static Sprite getElbowSprite(){
+    public static Sprite getElbowSprite() {
         return arms[rng.nextInt(arms.length)];
     }
 
 
-    public static Sprite[] getSuitForLevelNoCheck(int lvl){
-        int index = lvl/10;
+    public static Sprite[] getSuitForLevelNoCheck(int lvl) {
+        int index = lvl / 10;
 
         Sprite[] suit = new Sprite[5];
         //head
@@ -183,68 +196,67 @@ public class Assets {
         //torso
         suit[1] = shirts[Math.min(index, shirtcount - 1)];
         //leg
-        suit[2] = pants[Math.min(index, pantcount -1 )];
+        suit[2] = pants[Math.min(index, pantcount - 1)];
         //arm
         suit[3] = shoulders[Math.min(index, shouldercount - 1)];
         //elbow
-        suit[4] = arms[Math.min(index, armcount -1 )];
+        suit[4] = arms[Math.min(index, armcount - 1)];
         return suit;
     }
 
-    public static Sprite[] getSuitForLevel(int lvl){
-        int index = lvl/10;
+    public static Sprite[] getSuitForLevel(int lvl) {
+        int index = lvl / 10;
 
         Sprite[] suit = new Sprite[5];
         //head
 
-        if(unclocks[1][Math.min(index, facecount - 1)] == 1)
+        if (unclocks[1][Math.min(index, facecount - 1)] == 1)
             suit[0] = faces[Math.min(index, facecount - 1)];
         else
             suit[0] = mystery_sprite;
 
         //torso
-        if(unclocks[2][Math.min(index, shirtcount - 1)] == 1) {
+        if (unclocks[2][Math.min(index, shirtcount - 1)] == 1) {
             suit[1] = shirts[Math.min(index, shirtcount - 1)];
-        }else{
+        } else {
             suit[1] = mystery_sprite;
         }
         //leg
-        if(unclocks[3][Math.min(index, pantcount - 1)] == 1) {
-            suit[2] = pants[Math.min(index, pantcount -1 )];
-        }else{
+        if (unclocks[3][Math.min(index, pantcount - 1)] == 1) {
+            suit[2] = pants[Math.min(index, pantcount - 1)];
+        } else {
             suit[2] = mystery_sprite;
         }
         //arm
-        if(unclocks[4][Math.min(index, shouldercount - 1)] == 1) {
+        if (unclocks[4][Math.min(index, shouldercount - 1)] == 1) {
             suit[3] = shoulders[Math.min(index, shouldercount - 1)];
-        }else{
+        } else {
             suit[3] = mystery_sprite;
         }
 
         //elbow
-        if(unclocks[5][Math.min(index, armcount - 1)] == 1) {
-            suit[4] = arms[Math.min(index, armcount -1 )];
-        }else{
+        if (unclocks[5][Math.min(index, armcount - 1)] == 1) {
+            suit[4] = arms[Math.min(index, armcount - 1)];
+        } else {
             suit[4] = mystery_sprite;
         }
 
         return suit;
     }
 
-    public static void unlockItem(int type, int index){
+    public static void unlockItem(int type, int index) {
         unclocks[type][index] = 1;
     }
 
-    public static List<Sprite> getWeaponsList(){
+    public static List<Sprite> getWeaponsList() {
         ArrayList<Sprite> las = new ArrayList<Sprite>();
-        for(int i = 0; i < weapons_sprites.size(); i++){
-            if(unclocks[0][i] == 1){
+        for (int i = 0; i < weapons_sprites.size(); i++) {
+            if (unclocks[0][i] == 1) {
                 las.add(weapons_sprites.get(i));
-            }else{
+            } else {
                 las.add(mystery_sprite);
             }
         }
-
         return las;
     }
 }

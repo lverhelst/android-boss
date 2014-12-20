@@ -1,10 +1,12 @@
-package verhelst.rngfight;
+package verhelst.CustomActors;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.Random;
+
+import verhelst.rngfight.Assets;
 
 /**
  * Created by Leon I. Verhelst on 11/17/2014.
@@ -28,14 +30,14 @@ public class BodyPartActor extends Actor {
 
     BodyPartType btype;
 
-    public BodyPartActor(){
+    public BodyPartActor() {
 
     }
 
 
-    public BodyPartActor(BodyPartType type){
+    public BodyPartActor(BodyPartType type) {
         partSprite = null;
-        switch (type){
+        switch (type) {
             case HEAD:
                 part_index = rng.nextInt(Assets.faces.length);
                 partSprite = new Sprite(Assets.faces[part_index]);
@@ -64,13 +66,12 @@ public class BodyPartActor extends Actor {
 
     }
 
-    public Sprite getSprite(){
+    public Sprite getSprite() {
         return partSprite;
     }
 
 
-
-    public void copyHSA(BodyPartActor hsa){
+    public void copyHSA(BodyPartActor hsa) {
         this.partSprite = new Sprite(hsa.getSprite());
         this.drawSprite = new Sprite(partSprite);
         setName(hsa.getName());
@@ -79,8 +80,8 @@ public class BodyPartActor extends Actor {
         updateSize();
     }
 
-    public void updateSize(){
-        switch (btype){
+    public void updateSize() {
+        switch (btype) {
             case HEAD:
                 //   partSprite.rotate90(true);
                 break;
@@ -124,7 +125,7 @@ public class BodyPartActor extends Actor {
 
     @Override
     public void setPosition(float x, float y) {
-        drawSprite.setPosition(x,y);
+        drawSprite.setPosition(x, y);
         super.setPosition(x, y);
     }
 }

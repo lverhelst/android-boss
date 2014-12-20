@@ -7,79 +7,78 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 /**
  * Created by Orion on 10/21/2014.
  */
-public class RngFight extends com.badlogic.gdx.Game{
+public class RngFight extends com.badlogic.gdx.Game {
 
     public static final int VIRTUAL_WIDTH = 400;
     public static final int VITRUAL_HEIGHT = 800;
     //Used by all screens
     public static SpriteBatch batch;
 
-    static TestScreen viewerAndStats;
+    static StatsScreen viewerAndStats;
     static BattleScreen gameScreen;
 
+    private int currentscreen;
+    SaveGame sg;
     //input multiplexor?
 
     @Override
     public void create() {
-        Gdx.app.log("WWWWWWWWWWWWWWWWWW", "RNG IFGHT BITECHSASDA:DLKA:SD");
         Assets assets = new Assets();
         assets.loadAssets();
-        try{
-            SaveGame sg = new SaveGame(this);
+        try {
+            sg = new SaveGame(this);
             sg.readGameSave();
 
             Assets.unclocks = SaveGame.unclocks;
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
-            Gdx.app.error("what", e.getMessage(),e);
+            Gdx.app.error("Load Game error: ", e.getMessage(), e);
 
         }
-
         batch = new SpriteBatch();
-        viewerAndStats = new TestScreen(this);
         gameScreen = new BattleScreen(this);
-
-       // setScreen(new BattleScreen());
-      //  setScreen(new TestScreen());
+        viewerAndStats = new StatsScreen(this);
         switchScreens(0);
     }
 
 
-    public void switchScreens(int screen){
-        if(screen == 1){
+    public void switchScreens(int screen) {
+        if (screen == 1) {
 
-            viewerAndStats = new TestScreen(this);
+           // viewerAndStats = new StatsScreen(this);
             viewerAndStats.updateLabels(gameScreen.brh.max_hitcount, gameScreen.brh.min_hitcount, gameScreen.brh.player2wins, gameScreen.brh.player2losses, gameScreen.brh.draws, gameScreen.brh.games, gameScreen.brh.max_level_reached);
 
             setScreen(viewerAndStats);
             Gdx.input.setInputProcessor(viewerAndStats.im);
-        }else{
+        } else {
             setScreen(gameScreen);
             Gdx.input.setInputProcessor(gameScreen);
         }
+        currentscreen = screen;
     }
 
-    public void reload(){
-        try{
-            SaveGame sg = new SaveGame(this);
+    public void reload() {
+        try {
             sg.readGameSave();
             Assets.unclocks = SaveGame.unclocks;
-        }catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
 
-        viewerAndStats = new TestScreen(this);
-        gameScreen = new BattleScreen(this);
-        //reload can only be called from testscreen...
-        //bad design I know.
-        switchScreens(1);
+     //   viewerAndStats = new StatsScreen(this);
+
+        //gameScreen = new BattleScreen(this);
+        gameScreen.reload();
+        viewerAndStats.reload();
+
+        switchScreens(currentscreen);
 
     }
 
     @Override
-    public void render(){
+    public void render() {
         super.render();
     }
 

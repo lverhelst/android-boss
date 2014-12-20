@@ -1,4 +1,4 @@
-package verhelst.rngfight;
+package verhelst.CustomActors;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -10,20 +10,28 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class SpriteActor extends Actor {
     Sprite displaysprite;
 
-    public SpriteActor(Sprite sprite){
+    public SpriteActor(Sprite sprite) {
         displaysprite = new Sprite(sprite);
-        setSize(displaysprite.getWidth(),displaysprite.getHeight());
+        setSize(displaysprite.getWidth(), displaysprite.getHeight());
+    }
+
+    public Sprite getDisplaysprite() {
+        return displaysprite;
+    }
+
+    public void setDisplaysprite(Sprite displaysprite) {
+        this.displaysprite = displaysprite;
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha){
+    public void draw(Batch batch, float parentAlpha) {
         displaysprite.draw(batch);
     }
 
     @Override
     public void setSize(float width, float height) {
         displaysprite.setSize(width, height);
-        displaysprite.setOrigin(width / 2, height/ 2);
+        displaysprite.setOrigin(width / 2, height / 2);
         super.setSize(width, height);
     }
 
