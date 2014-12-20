@@ -25,7 +25,6 @@ public class HealthBar extends Actor {
     private NinePatchDrawable background;
     private NinePatchDrawable foreground;
 
-    private Label nameAndHealth;
     private final verhelst.CustomActors.Character character;
 
 
@@ -82,7 +81,7 @@ public class HealthBar extends Actor {
         if (character.getDisplay_hp() <= 0)
             return "0";
         else if (character.getDisplay_hp() >= 100000)
-            return character.getDisplay_hp() % 1000 + "k";
+            return character.getDisplay_hp() / 1000 + "k";
         else return character.getDisplay_hp() + "";
     }
 

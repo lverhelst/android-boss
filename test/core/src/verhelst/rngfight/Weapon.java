@@ -53,6 +53,11 @@ public class Weapon extends Actor {
     private String nm;
     public Skin skin;
 
+    //glowy stuff here
+    int glow_type = 0;
+    boolean glow;
+
+
 
     public static Weapon generateRandomWeapon(int lvl, POSITION position) {
         int a_roll = rng.nextInt(lvl);
@@ -380,4 +385,7 @@ public class Weapon extends Actor {
             return root.getHeight();
         return super.getHeight();
     }
+
+
+
 }

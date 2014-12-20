@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import verhelst.CustomActors.BodyPartActor;
+import verhelst.rngfight.Assets;
 
 import static verhelst.CustomActors.BodyPartActor.BodyPartType.ELBOW;
 import static verhelst.CustomActors.BodyPartActor.BodyPartType.SHOULDER;
@@ -19,8 +20,8 @@ public class LCell extends Actor {
     int width, height;
     int draw_position;
     int width_percent;
-    boolean keep_aspect_ratio;
-
+    boolean keep_aspect_ratio, glow;
+    int glow_type;
     Actor actor;
 
     public LCell() {
@@ -64,6 +65,14 @@ public class LCell extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+
+        if (glow) {
+            if (glow_type == 1)
+                batch.draw(Assets.glow_ylw, getX(), getY(), getWidth(), getHeight());
+            if (glow_type == 2)
+                batch.draw(Assets.glow, getX(), getY(), getWidth(), getHeight());
+        }
+
 
         if (!keep_aspect_ratio) {
             actor.setSize(width, height);
@@ -137,5 +146,25 @@ public class LCell extends Actor {
     @Override
     public float getHeight() {
         return height;
+    }
+
+    /***
+     *
+     * Glow shit
+     */
+    public int getGlow_type() {
+        return glow_type;
+    }
+
+    public void setGlow_type(int glow_type) {
+        this.glow_type = glow_type;
+    }
+
+    public boolean isGlow() {
+        return glow;
+    }
+
+    public void setGlow(boolean glow) {
+        this.glow = glow;
     }
 }

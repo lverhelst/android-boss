@@ -319,4 +319,15 @@ public class BattleView {
             landingpad.setDisplaysprite(Assets.landing_pad);
         }
     }
+
+    public void setPlayerWeaponGlow(boolean glow, int glow_type){
+        LCell c = row3.getLCellForActorName(((Weapon)bWep).getTable().getName());
+        if(c!= null){
+            c.setGlow(glow);
+            c.setGlow_type(glow_type);
+        }
+        else{
+            System.out.println("Set Player Weapon Glow, cell not found!");
+        }
+    }
 }

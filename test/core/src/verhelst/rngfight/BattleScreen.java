@@ -319,6 +319,7 @@ public class BattleScreen implements Screen, InputProcessor {
         butterDragMe = null;
         bView.butterbeaver.setVisible(true);
         btl.getRightside().setGlow(false);
+        bView.setPlayerWeaponGlow(false, 0);
         if (showLoot) {
 
             if (dragme != null) {
@@ -334,11 +335,17 @@ public class BattleScreen implements Screen, InputProcessor {
                 float rectay2 = btl.getRightside().otherY + btl.getRightside().getHeight();
                 float rectby1 = dragme.getY();
 
-                if (rectax1 <= rectbx2 && rectax2 >= rectbx1
-                        && rectay1 <= rectby2 && rectay2 >= rectby1) {
 
-                    //Copy the weapon so that we aren't passing the reference
-                    if (bView.lootActor instanceof Weapon) {
+                if(bView.lootActor instanceof Weapon) {
+                    float rectcx1 = bView.bWep.getX();
+                    float rectcx2 = bView.bWep.getX() + btl.getRightside().getWidth();
+                    float rectcy1 = bView.bWep.getY();
+                    float rectcy2 = bView.bWep.getY() + bView.bWep.getHeight();
+
+                    if ((rectcx1 <= rectbx2 && rectcx2 >= rectbx1
+                            && rectcy1 <= rectby2 && rectcy2 >= rectby1)|| (rectax1 <= rectbx2 && rectax2 >= rectbx1
+                            && rectay1 <= rectby2 && rectay2 >= rectby1)) {
+                        //Overlapping weapon.
                         Weapon newWep = new Weapon();
                         newWep.copyWeapon((Weapon) bView.lootActor, Weapon.POSITION.RIGHT_POSITION);
                         btl.getRightside().setEquipped_weapon(newWep);
@@ -346,12 +353,16 @@ public class BattleScreen implements Screen, InputProcessor {
                         Weapon bWep = btl.getRightside().getEquipped_weapon();
 
                         bView.updateCharacterWeapons(aWep, bWep);
-
                     }
+
+                }
+                else 
+                if (rectax1 <= rectbx2 && rectax2 >= rectbx1
+                            && rectay1 <= rectby2 && rectay2 >= rectby1) {
+
                     if (bView.lootActor instanceof BodyPartActor) {
 
                         btl.getRightside().setBodyPart((BodyPartActor) bView.lootActor);
-
                     }
                 }
             }
@@ -436,6 +447,22 @@ public class BattleScreen implements Screen, InputProcessor {
 
             float rectay2 = btl.getRightside().otherY + btl.getRightside().getHeight();
             float rectby1 = dragme.getY();
+
+            if(bView.lootActor instanceof Weapon) {
+                float rectcx1 = bView.bWep.getX();
+                float rectcx2 = bView.bWep.getX() + btl.getRightside().getWidth();
+                float rectcy1 = bView.bWep.getY();
+                float rectcy2 = bView.bWep.getY() + bView.bWep.getHeight();
+
+                if (rectcx1 <= rectbx2 && rectcx2 >= rectbx1
+                        && rectcy1 <= rectby2 && rectcy2 >= rectby1) {
+                    //Overlapping weapon.
+                    bView.setPlayerWeaponGlow(true, 2);
+                } else {
+
+                    bView.setPlayerWeaponGlow(true, 1);
+                }
+            }
 
 
             if (rectax1 <= rectbx2 && rectax2 >= rectbx1
