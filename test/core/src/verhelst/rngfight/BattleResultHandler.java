@@ -29,16 +29,12 @@ public class BattleResultHandler {
         if (a.getHealth() > 0 && b.getHealth() <= 0) {
             resultsList.add(BattleResult.Player1Win);
             a.incrementWins();
-            a.resetLosses();
-            b.resetWins();
             b.incrementLosses();
             player2losses++;
         } else if (a.getHealth() <= 0 && b.getHealth() > 0) {
             resultsList.add(BattleResult.Player2Win);
             a.incrementLosses();
-            a.resetWins();
             b.incrementWins();
-            b.resetLosses();
             player2wins++;
             if (hitcount % 3 == 0) {
                 resultsList.add(BattleResult.ShowStaticLoot);

@@ -217,12 +217,20 @@ public class Character extends Actor {
 
 
     public void incrementWins() {
-        this.win_streak++;
+        if(lose_streak > 0) {
+            lose_streak = 0;
+            win_streak = 0;
+        }else {
+            this.win_streak++;
+            this.lose_streak--;
+        }
+
+
         if (win_streak % (wins_to_level + 2) == wins_to_level + 1) {
             level--;
             level = Math.max(1, level);
         }
-
+        System.out.println("Lose Streak: " + lose_streak + " ws " + win_streak);
     }
 
     public void resetWins() {
@@ -230,7 +238,13 @@ public class Character extends Actor {
     }
 
     public void incrementLosses() {
-        this.lose_streak++;
+        if(win_streak > 0){
+            win_streak = 0;
+            lose_streak =0;
+        }else {
+            this.lose_streak++;
+            this.win_streak--;
+        }
         if (lose_streak % wins_to_level == 0) {
             level++;
             System.out.println(name + " lvl up");
