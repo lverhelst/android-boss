@@ -34,17 +34,20 @@ public class Assets {
     private static int armcount, pantcount, shirtcount, shouldercount, facecount, weaponcount;
     private static Random rng = new Random();
 
+
+    private static boolean debug;
+
     //values: 1 = unlocked, 0 = locked
     //0 -> weps, 1-> head/face, 2-> shirts/torso, 3 -> legs/pants, 4->shoulder, 5->elbow/arms
     static int[][] unclocks = new int[6][35];
 
     public Assets() {
         weapons_sprites = new ArrayList<Sprite>();
-        facecount = 19;
-        armcount = 7;
-        pantcount = 7;
-        shirtcount = 7;
-        shouldercount = 7;
+        facecount = 27;
+        armcount = 12;
+        pantcount = 12;
+        shirtcount = 12;
+        shouldercount = 12;
         weaponcount = 35;
 
         faces = new Sprite[facecount];
@@ -56,6 +59,8 @@ public class Assets {
         for (int i = 1; i < 6; i++) {
             unclocks[i][0] = 1;
         }
+
+        debug = true;
 
 
     }
@@ -70,7 +75,10 @@ public class Assets {
         resting_face = new Sprite(ta.findRegion("face1"));
         dead_face = new Sprite(ta.findRegion("face1"));
         //faces
+
+
         for (int i = 1; i <= facecount; i++) {
+            System.out.println(i);
             faces[i - 1] = new Sprite(ta.findRegion("face" + i));
         }
         //torsos
@@ -95,7 +103,6 @@ public class Assets {
         //TODO: Make more weapon sprites
 
         ta = new TextureAtlas(Gdx.files.internal("In Development\\weaponFullSize.pack"));
-
         for (int i = 1; i <= weaponcount; i++) {
             weapons_sprites.add(new Sprite(ta.findRegion("weapon" + String.format("%02d", i))));
         }
@@ -210,32 +217,32 @@ public class Assets {
         Sprite[] suit = new Sprite[5];
         //head
 
-        if (unclocks[1][Math.min(index, facecount - 1)] == 1)
+        if (debug || unclocks[1][Math.min(index, facecount - 1)] == 1)
             suit[0] = faces[Math.min(index, facecount - 1)];
         else
             suit[0] = mystery_sprite;
 
         //torso
-        if (unclocks[2][Math.min(index, shirtcount - 1)] == 1) {
+        if (debug || unclocks[2][Math.min(index, shirtcount - 1)] == 1) {
             suit[1] = shirts[Math.min(index, shirtcount - 1)];
         } else {
             suit[1] = mystery_sprite;
         }
         //leg
-        if (unclocks[3][Math.min(index, pantcount - 1)] == 1) {
+        if (debug || unclocks[3][Math.min(index, pantcount - 1)] == 1) {
             suit[2] = pants[Math.min(index, pantcount - 1)];
         } else {
             suit[2] = mystery_sprite;
         }
         //arm
-        if (unclocks[4][Math.min(index, shouldercount - 1)] == 1) {
+        if (debug || unclocks[4][Math.min(index, shouldercount - 1)] == 1) {
             suit[3] = shoulders[Math.min(index, shouldercount - 1)];
         } else {
             suit[3] = mystery_sprite;
         }
 
         //elbow
-        if (unclocks[5][Math.min(index, armcount - 1)] == 1) {
+        if (debug || unclocks[5][Math.min(index, armcount - 1)] == 1) {
             suit[4] = arms[Math.min(index, armcount - 1)];
         } else {
             suit[4] = mystery_sprite;
@@ -251,7 +258,7 @@ public class Assets {
     public static List<Sprite> getWeaponsList() {
         ArrayList<Sprite> las = new ArrayList<Sprite>();
         for (int i = 0; i < weapons_sprites.size(); i++) {
-            if (unclocks[0][i] == 1) {
+            if (debug || unclocks[0][i] == 1) {
                 las.add(weapons_sprites.get(i));
             } else {
                 las.add(mystery_sprite);

@@ -356,7 +356,7 @@ public class BattleScreen implements Screen, InputProcessor {
                     }
 
                 }
-                else 
+                else
                 if (rectax1 <= rectbx2 && rectax2 >= rectbx1
                             && rectay1 <= rectby2 && rectay2 >= rectby1) {
 
