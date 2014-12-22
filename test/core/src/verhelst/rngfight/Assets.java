@@ -60,7 +60,7 @@ public class Assets {
             unclocks[i][0] = 1;
         }
 
-        debug = true;
+        debug = false;
 
 
     }

@@ -339,7 +339,7 @@ public class BattleScreen implements Screen, InputProcessor {
                 if(bView.lootActor instanceof Weapon) {
                     float rectcx1 = bView.bWep.getX();
                     float rectcx2 = bView.bWep.getX() + btl.getRightside().getWidth();
-                    float rectcy1 = bView.bWep.getY();
+                    float rectcy1 = bView.bWep.getY() + bView.bWep.getHeight()/2;
                     float rectcy2 = bView.bWep.getY() + bView.bWep.getHeight();
 
                     if ((rectcx1 <= rectbx2 && rectcx2 >= rectbx1
@@ -451,7 +451,7 @@ public class BattleScreen implements Screen, InputProcessor {
             if(bView.lootActor instanceof Weapon) {
                 float rectcx1 = bView.bWep.getX();
                 float rectcx2 = bView.bWep.getX() + btl.getRightside().getWidth();
-                float rectcy1 = bView.bWep.getY();
+                float rectcy1 = bView.bWep.getY() + bView.bWep.getHeight()/2;
                 float rectcy2 = bView.bWep.getY() + bView.bWep.getHeight();
 
                 if (rectcx1 <= rectbx2 && rectcx2 >= rectbx1
