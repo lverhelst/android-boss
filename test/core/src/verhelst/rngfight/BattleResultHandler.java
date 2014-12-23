@@ -52,7 +52,7 @@ public class BattleResultHandler {
             resultsList.add(BattleResult.Player1GetsLoot);
 
 
-        if ((int) (aoriglvl / 10) != (int) (a.getLevel() / 10)) {
+        if ((int) (aoriglvl /5) != (int) (a.getLevel() / 5)) {
 
             resultsList.add(BattleResult.Player1NewSuit);
 

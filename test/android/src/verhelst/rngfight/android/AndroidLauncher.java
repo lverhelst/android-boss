@@ -47,7 +47,8 @@ public class AndroidLauncher extends AndroidApplication {
         layout.addView(gameView);
 
         setContentView(layout);
-        startAdvertising(admobView);
+        if(false)
+            startAdvertising(admobView);
     }
 
 

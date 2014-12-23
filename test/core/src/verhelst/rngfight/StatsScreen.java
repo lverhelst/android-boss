@@ -10,8 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import verhelst.Comp.LCoverFlow;
 import verhelst.Comp.LLabel;
@@ -169,10 +171,10 @@ public class StatsScreen implements Screen {
     }
 
     public void updateLabels(int maxhits, int minhits, int wins, int losses, int draws, int games, int maxlevel) {
-        maxlbl.setText("    Max hits: " + maxhits);
-        minlbl.setText("    Min hits: " + minhits);
-        wlrg.setText("  W/L/D:  " + wins + "/" + losses + "/" + draws);
-        battles.setText("   Games: " + games);
+        maxlbl.setText("    Max hits: " + NumberFormat.getNumberInstance(Locale.US).format(maxhits));
+        minlbl.setText("    Min hits: " +  NumberFormat.getNumberInstance(Locale.US).format(minhits));
+        wlrg.setText("  W/L/D:  " +  NumberFormat.getNumberInstance(Locale.US).format(wins) + "/" +  NumberFormat.getNumberInstance(Locale.US).format(losses) + "/" +  NumberFormat.getNumberInstance(Locale.US).format(draws));
+        battles.setText("   Games: " +  NumberFormat.getNumberInstance(Locale.US).format(games));
         maxlvl.setText("    Max Lvl: " + maxlevel);
 
         //rebuild character list

@@ -77,7 +77,7 @@ public class SaveGame extends DefaultHandler {
     }
 
     public static void saveGame(Character A, Character B, int[] stats) {
-        int indexForLevel = A.getLevel() / 10;
+        int indexForLevel = A.getLevel() / 5;
 
         String unclocksString = Assets.unclocks.length + ";" + Assets.unclocks[0].length + ";";
         for (int i = 0; i < Assets.unclocks.length; i++) {

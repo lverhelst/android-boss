@@ -43,11 +43,11 @@ public class Assets {
 
     public Assets() {
         weapons_sprites = new ArrayList<Sprite>();
-        facecount = 27;
-        armcount = 14;
-        pantcount = 14;
-        shirtcount = 14;
-        shouldercount = 14;
+        facecount = 19;
+        armcount = 19;
+        pantcount = 19;
+        shirtcount = 19;
+        shouldercount = 19;
         weaponcount = 35;
 
         faces = new Sprite[facecount];
@@ -195,7 +195,7 @@ public class Assets {
 
 
     public static Sprite[] getSuitForLevelNoCheck(int lvl) {
-        int index = lvl / 10;
+        int index = lvl / 5;
 
         Sprite[] suit = new Sprite[5];
         //head

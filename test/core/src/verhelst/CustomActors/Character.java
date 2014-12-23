@@ -239,15 +239,17 @@ public class Character extends Actor {
 
     public void incrementLosses() {
         if(win_streak > 0){
+
             win_streak = 0;
             lose_streak =0;
         }else {
             this.lose_streak++;
             this.win_streak--;
         }
-        if (lose_streak % wins_to_level == 0) {
+
+        if (lose_streak != 0 && lose_streak % wins_to_level == 0) {
             level++;
-            System.out.println(name + " lvl up");
+            System.out.println(name + " lvl up" + " ls" + lose_streak);
             if (level > max_level)
                 max_wtnl = 0;
             max_level = Math.max(max_level, level);

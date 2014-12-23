@@ -145,7 +145,7 @@ public class LTable extends Actor {
     public LCell getLCellForActorName(String name) {
         for (LCell cell : sortedCells) {
             if (cell.getActor().getName() != null) {
-                System.out.println("Search names " + name + " " + cell.getActor().getName());
+               // System.out.println("Search names " + name + " " + cell.getActor().getName());
                 if (cell.getActor().getName().equals(name)) {
                     return cell;
                 }

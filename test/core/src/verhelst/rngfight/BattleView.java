@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Random;
 
 import verhelst.Comp.LCell;
@@ -309,7 +311,7 @@ public class BattleView {
         //twoLbl.setText(b.getRightside().getName() + ": " + (righthp > 0 ? righthp : 0));
 
         highscore.setText("Streak: " + b.getRightside().getWin_streak());
-        hitcount.setText("Hits: " + hits);
+        hitcount.setText("Hits: " +  NumberFormat.getNumberInstance(Locale.US).format(hits));
     }
 
     public void landingPadGlow(boolean pad) {
