@@ -39,7 +39,7 @@ public class Assets {
 
     //values: 1 = unlocked, 0 = locked
     //0 -> weps, 1-> head/face, 2-> shirts/torso, 3 -> legs/pants, 4->shoulder, 5->elbow/arms
-    static int[][] unclocks = new int[6][35];
+    static int[][] unclocks = new int[6][50];
 
     public Assets() {
         weapons_sprites = new ArrayList<Sprite>();
@@ -48,7 +48,7 @@ public class Assets {
         pantcount = 19;
         shirtcount = 19;
         shouldercount = 19;
-        weaponcount = 35;
+        weaponcount = 50;
 
         faces = new Sprite[facecount];
         pants = new Sprite[pantcount];
@@ -173,25 +173,7 @@ public class Assets {
         return arms[index];
     }
 
-    public static Sprite getHeadSprite() {
-        return faces[rng.nextInt(faces.length)];
-    }
 
-    public static Sprite getShoulderSprite() {
-        return shoulders[rng.nextInt(shoulders.length)];
-    }
-
-    public static Sprite getLegSprite() {
-        return pants[rng.nextInt(pants.length)];
-    }
-
-    public static Sprite getTorsoSprite() {
-        return shirts[rng.nextInt(shirts.length)];
-    }
-
-    public static Sprite getElbowSprite() {
-        return arms[rng.nextInt(arms.length)];
-    }
 
 
     public static Sprite[] getSuitForLevelNoCheck(int lvl) {

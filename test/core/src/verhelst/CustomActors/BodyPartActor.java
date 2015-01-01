@@ -35,33 +35,36 @@ public class BodyPartActor extends Actor {
     }
 
 
-    public BodyPartActor(BodyPartType type) {
+    public BodyPartActor(BodyPartType type, int lvl) {
         partSprite = null;
+        lvl = (lvl + 15)/5;
         switch (type) {
             case HEAD:
-                part_index = rng.nextInt(Assets.faces.length);
+                part_index = rng.nextInt(Math.min(Assets.faces.length,lvl));
                 partSprite = new Sprite(Assets.faces[part_index]);
                 break;
             case SHOULDER:
-                part_index = rng.nextInt(Assets.shoulders.length);
+                part_index = rng.nextInt(Math.min(Assets.shoulders.length,lvl));
                 partSprite = new Sprite(Assets.shoulders[part_index]);
                 break;
             case ELBOW:
-                part_index = rng.nextInt(Assets.arms.length);
+                part_index = rng.nextInt(Math.min(Assets.arms.length,lvl));
                 partSprite = new Sprite(Assets.arms[part_index]);
                 break;
             case TORSO:
-                part_index = rng.nextInt(Assets.shirts.length);
+                part_index = rng.nextInt(Math.min(Assets.shirts.length,lvl));
                 partSprite = new Sprite(Assets.shirts[part_index]);
                 break;
             case LEGS:
-                part_index = rng.nextInt(Assets.pants.length);
+                part_index = rng.nextInt(Math.min(Assets.pants.length, lvl));
                 partSprite = new Sprite(Assets.pants[part_index]);
                 break;
         }
         drawSprite = new Sprite(partSprite);
         setName("HSA" + btype + System.currentTimeMillis());
         this.btype = type;
+        System.out.println("lvl " + lvl + " " + part_index) ;
+
         updateSize();
 
     }

@@ -148,7 +148,7 @@ public class BattleScreen implements Screen, InputProcessor {
                         int loooooot = rng.nextInt(types);
 
 
-                        BodyPartActor hsa = new BodyPartActor(BodyPartActor.BodyPartType.values()[loooooot]);
+                        BodyPartActor hsa = new BodyPartActor(BodyPartActor.BodyPartType.values()[loooooot], btl.getLeftside().getMax_level());
                         Assets.unlockItem(loooooot + 1, hsa.part_index);
                         bView.setLoot(hsa);
 

@@ -72,7 +72,7 @@ public class Character extends Actor {
             m = new Model((int) (getX() + getWidth() / 2), (int) (getY() + getHeight()), false, getHeight());
             m.hideWeapon();
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 1500; i++) {
             availablepool.add(new DamageNumber(-9999, -100, -100));
         }
     }
@@ -149,7 +149,7 @@ public class Character extends Actor {
 
         availablepool.clear();
         dnListA.clear();
-        for (int i = availablepool.size(); i < 1000 - availablepool.size(); i++) {
+        for (int i = availablepool.size(); i < 1500 - availablepool.size(); i++) {
             availablepool.add(new DamageNumber(-9999, -100, -100));
         }
 

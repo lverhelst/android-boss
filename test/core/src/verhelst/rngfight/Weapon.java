@@ -113,7 +113,7 @@ public class Weapon extends Actor {
         this.sprite_initWidth = (int) sprite.getWidth();
         this.wdi_initWidth = (int) Assets.weapon_data_icon.getWidth();
         this.dmgstring = min_damage + "-" + max_damage;
-        this.heartstring = hp_multiplier + "";
+        this.heartstring = hp_multiplier * 200 + "";
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         lldmg = new Label(dmgstring, skin);
         lldmg.setText(dmgstring);
@@ -138,7 +138,7 @@ public class Weapon extends Actor {
 
         this.wdi_initWidth = (int) Assets.weapon_data_icon.getWidth();
         this.dmgstring = min_damage + "-" + max_damage;
-        this.heartstring = hp_multiplier + "";
+        this.heartstring = hp_multiplier * 200 + "";
 
 //        System.out.println(this.getName() + " copy from " + to_copy.getName());
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
@@ -153,7 +153,7 @@ public class Weapon extends Actor {
 
     private void rebuildUI() {
         this.dmgstring = min_damage + "-" + max_damage;
-        this.heartstring = hp_multiplier + "";
+        this.heartstring = hp_multiplier * 200 + "";
 
 //        System.out.println(this.getName() + " copy from " + to_copy.getName());
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
