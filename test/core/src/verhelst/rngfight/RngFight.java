@@ -16,8 +16,8 @@ public class RngFight extends com.badlogic.gdx.Game {
 
     static StatsScreen viewerAndStats;
     static BattleScreen gameScreen;
-    static DressingRoom dressingScreen;
-  //static SettingsScreen settingsScreen;
+    static DressingScreen dressingScreen;
+    static SettingScreen settingsScreen;
     static MainScreen mainScreen;
 
 
@@ -45,7 +45,8 @@ public class RngFight extends com.badlogic.gdx.Game {
         mainScreen = new MainScreen(this);
         gameScreen = new BattleScreen(this);
         viewerAndStats = new StatsScreen(this);
-        dressingScreen = new DressingRoom(this, gameScreen.a2);
+        dressingScreen = new DressingScreen(this, gameScreen.a2);
+        settingsScreen = new SettingScreen(this);
 
         switchScreens(4);
     }
@@ -68,6 +69,8 @@ public class RngFight extends com.badlogic.gdx.Game {
                 Gdx.input.setInputProcessor(dressingScreen.getInputProcessor());
                 break;
             case 3:
+                setScreen(settingsScreen);
+                Gdx.input.setInputProcessor(settingsScreen);
                 break;
             case 4:
                 setScreen(mainScreen);
@@ -91,6 +94,7 @@ public class RngFight extends com.badlogic.gdx.Game {
         //gameScreen = new BattleScreen(this);
         gameScreen.reload();
         viewerAndStats.reload();
+        dressingScreen = new DressingScreen(this, gameScreen.a2);
 
         switchScreens(currentscreen);
 

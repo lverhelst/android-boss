@@ -34,10 +34,10 @@ public class StatsScreen implements Screen {
     final RngFight game2;
     LLabel maxlbl, minlbl, wlrg, maxlvl, battles;
     InputMultiplexer im;
-    SpriteActor backBtn, resetButton;
+    SpriteActor backBtn;//, resetButton;
 
-    int reset_state = 0; //0 closed, 1 open, 2 pressed
-    long reset_time = -1;
+    //int reset_state = 0; //0 closed, 1 open, 2 pressed
+    //long reset_time = -1;
     List<Actor> characterSuitList = new ArrayList<Actor>();
     List<Actor> weaponsImgList;
 
@@ -96,14 +96,14 @@ public class StatsScreen implements Screen {
         maxlvl = new LLabel(" Max Level Reached: 1", skin);
         maxlvl.setIsHUD(true);
         statsTable.addActor(maxlvl);
-        resetButton = new SpriteActor(Assets.reset_closed);
+       // resetButton = new SpriteActor(Assets.reset_closed);
         //   statsTable.addRow();
 
         //statsTable.addActor(new Image(Assets.back_btn)); //TODO: Back button (need proper graphics)
         t.addActor(statsTable);
         backBtn = new SpriteActor(Assets.back_btn);
-        t.addActor(resetButton, true);
-        t.getLCellForActor(resetButton).setDraw_position(2);
+        t.addActor(new LLabel("", skin), 2);
+       // t.getLCellForActor(resetButton).setDraw_position(2);
 
         //t.addActor(new Label("",skin));
         t.addActor(backBtn, 2);
@@ -119,7 +119,7 @@ public class StatsScreen implements Screen {
                 if (screenX > backBtn.getX() && (Gdx.graphics.getHeight() - screenY) < backBtn.getY() + backBtn.getHeight()) {
                     game2.switchScreens(4);
                 }
-                if (screenX < resetButton.getX() + resetButton.getWidth() && (Gdx.graphics.getHeight() - screenY) < resetButton.getY() + resetButton.getHeight()) {
+               /* if (screenX < resetButton.getX() + resetButton.getWidth() && (Gdx.graphics.getHeight() - screenY) < resetButton.getY() + resetButton.getHeight()) {
                     switch (reset_state) {
                         case 0:
                             resetButton.setDisplaysprite(new Sprite(Assets.reset_opened));
@@ -141,7 +141,7 @@ public class StatsScreen implements Screen {
                             break;
 
                     }
-                }
+                }*/
                 return false;
             }
         });
@@ -189,11 +189,12 @@ public class StatsScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         RngFight.batch.begin();
-        if (reset_state == 2 && (reset_time != -1 && System.currentTimeMillis() > reset_time)) {
+       /* if (reset_state == 2 && (reset_time != -1 && System.currentTimeMillis() > reset_time)) {
             reset_state = 0;
             SaveGame.reset();
             resetButton.setDisplaysprite(new Sprite(Assets.reset_closed));
         }
+        */
         //  m.render(RngFight.batch);
         t.draw(RngFight.batch, 1);
         // lcf.draw(RngFight.batch, 1);

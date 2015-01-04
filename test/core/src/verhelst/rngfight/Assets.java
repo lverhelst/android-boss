@@ -29,7 +29,7 @@ public class Assets {
     public static BitmapFont HUDbf;
     public static Texture dmgIconTxture, hrtIconTxture, glow, glow_ylw;
     public static Sprite dmgIcon, hrtIcon;
-    public static Sprite butterBeaver, landing_pad, landing_pad_glow, back_btn, reset_closed, reset_opened, reset_pressed, mystery_sprite;
+    public static Sprite butterBeaver, landing_pad, landing_pad_glow, back_btn, reset_closed, reset_opened, reset_pressed, mystery_sprite, FITE_SIGN, STATS, DRES, INDEV;
 
     private static int armcount, pantcount, shirtcount, shouldercount, facecount, weaponcount;
     private static Random rng = new Random();
@@ -133,6 +133,11 @@ public class Assets {
         HUDbf = ftfg.generateFont(ftfp);
 
         butterBeaver = new Sprite(new Texture(Gdx.files.internal("In Development\\repBB.png")));
+        FITE_SIGN = new Sprite(new Texture(Gdx.files.internal("In Development\\bbFITE.png")));
+        STATS = new Sprite(new Texture(Gdx.files.internal("In Development\\bbSTAT.png")));
+        DRES = new Sprite(new Texture(Gdx.files.internal("In Development\\bbDRES.png")));
+        INDEV = new Sprite(new Texture(Gdx.files.internal("In Development\\bbOTHE.png")));
+
         landing_pad = new Sprite(new Texture(Gdx.files.internal("In Development\\repOG.png")));
         landing_pad_glow = new Sprite(new Texture(Gdx.files.internal("In Development\\repOG_hover.png")));
         back_btn = new Sprite(new Texture(Gdx.files.internal("In Development\\repARW.png")));

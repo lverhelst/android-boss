@@ -19,7 +19,7 @@ import verhelst.CustomActors.Character;
 /**
  * Created by Leon I. Verhelst on 1/1/2015.
  */
-public class DressingRoom implements Screen, InputProcessor {
+public class DressingScreen implements Screen, InputProcessor {
 
 
     private final Character c;
@@ -37,7 +37,7 @@ public class DressingRoom implements Screen, InputProcessor {
     private Actor dragme;
 
 
-    public DressingRoom(RngFight rfight, Character c){
+    public DressingScreen(RngFight rfight, Character c){
         this.game = rfight;
         this.c = c;
         Sprite[] sprs = Assets.getSuitForLevel(1);
@@ -174,6 +174,7 @@ public class DressingRoom implements Screen, InputProcessor {
     @Override
     public void show() {
 
+
     }
 
     @Override
@@ -273,10 +274,13 @@ public class DressingRoom implements Screen, InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         int actualY = Gdx.graphics.getHeight() - screenY;
+        LCell b = mainT.getLCellForActor(c);
+        b.setGlow_type(0);
+        b.setGlow(false);
 
         //dragme chek
         if(dragme != null) {
-            LCell b = mainT.getLCellForActor(c);
+
             if (screenX > b.getX() && screenX < b.getX() + b.getWidth() &&
                     actualY > b.getY() && actualY < b.getY() + b.getHeight()) {
 
@@ -309,7 +313,7 @@ public class DressingRoom implements Screen, InputProcessor {
 
             //Switch Gear Types
             for(int i = 0; i < 7; i++) {
-                LCell b = subT.getLCellForActorName("gt" + i);
+                b = subT.getLCellForActorName("gt" + i);
 
                 if(screenX > b.getX() && screenX < b.getX() + b.getWidth() &&
                         actualY > b.getY() && actualY < b.getY() + b.getHeight()){
@@ -330,12 +334,24 @@ public class DressingRoom implements Screen, InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
 
+
         if(dragme != null) {
             int actualY = Gdx.graphics.getHeight() - screenY;
 
             dragme.setPosition(screenX - dragme.getWidth()/2, actualY - dragme.getHeight()/2);
-
+            if(dragme != null) {
+                LCell b = mainT.getLCellForActor(c);
+                if (screenX > b.getX() && screenX < b.getX() + b.getWidth() &&
+                        actualY > b.getY() && actualY < b.getY() + b.getHeight()) {
+                    b.setGlow_type(2);
+                    b.setGlow(true);
+                }else{
+                    b.setGlow_type(0);
+                    b.setGlow(false);
+                }
+            }
         }
+
         return false;
     }
 
