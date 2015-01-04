@@ -32,7 +32,7 @@ public class Model {
 
             scale = (float) Math.max(height / 96, 2.25);
         }
-        System.out.println("Scale" + scale);
+      //  System.out.println("Scale" + scale);
 
         isFlipped = false;
         //Pseudo human torso, side view

@@ -35,6 +35,9 @@ public class LCoverFlow extends Actor implements InputProcessor {
     int shiftedcount;
 
 
+    int rotate_items_by = 0;
+
+
     public LCoverFlow(List<Actor> displayItems, int width, int height, boolean keepAspectRatio) {
         this.items = displayItems;
         this.currentIndex = 0;
@@ -47,6 +50,14 @@ public class LCoverFlow extends Actor implements InputProcessor {
         //Gdx.input.setInputProcessor(this);
         shiftedcount = 0;
         inBoundingBox = false;
+    }
+
+    public List<Actor> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Actor> items) {
+        this.items = items;
     }
 
     public void setCurrentIndex(int ind){
@@ -71,15 +82,21 @@ public class LCoverFlow extends Actor implements InputProcessor {
 
             float scale = Math.min(x_scale, y_scale);
 
-            float left_edge_offset = (float) (getWidth() / 10 + (items.get(index).getHeight() / 2));
+            float left_edge_offset = (float) (getWidth() / 5 + (items.get(index).getHeight() / 2));
             //System.out.println(left_edge_offset + " " + items.get(index).getWidth());
             items.get(index).setSize(w * scale, h * scale);
-            //items.get(index).setOrigin(w * scale/2,h * scale);
-            items.get(index).setRotation(90);
-            float y_offset = (float) (getHeight() / 2.0 - (items.get(index).getWidth() * items.get(index).getScaleX()) / 2.0);
-            // System.out.println("y off " + y_offset);
+            items.get(index).setOrigin(w * scale/2, h * scale/2);
+            items.get(index).setRotation(rotate_items_by);
 
-            items.get(index).setPosition((float) (0 + (((offset + visibleItems / 2) / 5.0) * getWidth() + left_edge_offset) + calculatePosition()), getY() + y_offset);
+
+            float y_offset = (float) (getHeight() / 2.0 - (items.get(index).getWidth() * items.get(index).getScaleX()) / 2.0);
+            if(rotate_items_by >= 90 && rotate_items_by < 271)
+                y_offset = (float) (getHeight() / 2.0 - (items.get(index).getHeight() * items.get(index).getScaleY()) / 2.0);
+            // System.out.println("y off " + y_offset);
+            float x_o = (float)((offset + 2)/ 5.0);
+//            System.out.println("Offset " + offset +  " visibleitems/2 " + visibleItems/2 + " added/5: " + x_o );
+
+            items.get(index).setPosition((float) ((x_o * getWidth()) + calculatePosition()), getY() + y_offset);
 
             //  System.out.println("o " + offset + " " + calculateScale(offset));
         } else {
@@ -89,6 +106,14 @@ public class LCoverFlow extends Actor implements InputProcessor {
 
         }
 
+    }
+
+    public Actor getInFocusActor(){
+        return items.get(currentIndex);
+    }
+
+    public int getCurrentIndex(){
+        return currentIndex;
     }
 
     private float calculateScale(int offset) {
@@ -319,6 +344,7 @@ public class LCoverFlow extends Actor implements InputProcessor {
                 index = index - items.size();
             }
             computeSizeAndPosition(i, index);
+
             items.get(index).draw(batch, parentAlpha);
         }
         //super.draw(batch, parentAlpha);
@@ -343,6 +369,14 @@ public class LCoverFlow extends Actor implements InputProcessor {
         }
     }
 
+
+    public int getRotate_items_by() {
+        return rotate_items_by;
+    }
+
+    public void setRotate_items_by(int rotate_items_by) {
+        this.rotate_items_by = rotate_items_by;
+    }
 }
 
 

@@ -16,6 +16,10 @@ public class RngFight extends com.badlogic.gdx.Game {
 
     static StatsScreen viewerAndStats;
     static BattleScreen gameScreen;
+    static DressingRoom dressingScreen;
+  //static SettingsScreen settingsScreen;
+    static MainScreen mainScreen;
+
 
     private int currentscreen;
     SaveGame sg;
@@ -30,6 +34,7 @@ public class RngFight extends com.badlogic.gdx.Game {
             sg.readGameSave();
 
             Assets.unclocks = SaveGame.unclocks;
+            Assets.weaponUnlocks = SaveGame.weapon_unlocks;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -37,23 +42,36 @@ public class RngFight extends com.badlogic.gdx.Game {
 
         }
         batch = new SpriteBatch();
+        mainScreen = new MainScreen(this);
         gameScreen = new BattleScreen(this);
         viewerAndStats = new StatsScreen(this);
-        switchScreens(0);
+        dressingScreen = new DressingRoom(this, gameScreen.a2);
+
+        switchScreens(4);
     }
 
 
     public void switchScreens(int screen) {
-        if (screen == 1) {
-
-           // viewerAndStats = new StatsScreen(this);
-            viewerAndStats.updateLabels(gameScreen.brh.max_hitcount, gameScreen.brh.min_hitcount, gameScreen.brh.player2wins, gameScreen.brh.player2losses, gameScreen.brh.draws, gameScreen.brh.games, gameScreen.brh.max_level_reached);
-
-            setScreen(viewerAndStats);
-            Gdx.input.setInputProcessor(viewerAndStats.im);
-        } else {
-            setScreen(gameScreen);
-            Gdx.input.setInputProcessor(gameScreen);
+        switch(screen) {
+            case 0:
+                setScreen(gameScreen);
+                Gdx.input.setInputProcessor(gameScreen);
+                break;
+            case 1:
+                // viewerAndStats = new StatsScreen(this);
+                viewerAndStats.updateLabels(gameScreen.brh.max_hitcount, gameScreen.brh.min_hitcount, gameScreen.brh.player2wins, gameScreen.brh.player2losses, gameScreen.brh.draws, gameScreen.brh.games, gameScreen.brh.max_level_reached);
+                setScreen(viewerAndStats);
+                Gdx.input.setInputProcessor(viewerAndStats.im);
+                break;
+            case 2:
+                setScreen(dressingScreen);
+                Gdx.input.setInputProcessor(dressingScreen.getInputProcessor());
+                break;
+            case 3:
+                break;
+            case 4:
+                setScreen(mainScreen);
+                Gdx.input.setInputProcessor(mainScreen);
         }
         currentscreen = screen;
     }
@@ -62,6 +80,7 @@ public class RngFight extends com.badlogic.gdx.Game {
         try {
             sg.readGameSave();
             Assets.unclocks = SaveGame.unclocks;
+            Assets.weaponUnlocks = SaveGame.weapon_unlocks;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();

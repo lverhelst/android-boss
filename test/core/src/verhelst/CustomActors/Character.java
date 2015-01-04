@@ -97,7 +97,7 @@ public class Character extends Actor {
         victim.applyDamageOrHealth(dmgOrHealth);
         //simulate lifesteal
         //0.011
-        this.applyDamageOrHealth(-1 * (int) ((Math.abs(dmgOrHealth)) * 0.011));
+        //this.applyDamageOrHealth(-1 * (int) ((Math.abs(dmgOrHealth)) * 0.011));
         //}
         return dmgOrHealth;
     }
@@ -441,6 +441,10 @@ public class Character extends Actor {
         m.updateSprite("wrist", new Sprite(weapon.getSprite()));
         m.showWeapon();
 
+    }
+
+    public void updateWeaponSprite(){
+        m.updateSprite("wrist", new Sprite(this.equipped_weapon.getSprite()));
     }
 
     public int getLevel() {

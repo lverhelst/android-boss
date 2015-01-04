@@ -74,7 +74,7 @@ public class Battle implements Runnable {
             hitcount++;
             if (hitcount % 500000 == 0 && healing_scaler > 0.0) {
 
-                healing_scaler -= 0.001;
+                //healing_scaler -= 0.001;
                 if (healing_scaler < 0)
                     healing_scaler = 0;
             }

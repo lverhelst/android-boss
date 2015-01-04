@@ -38,8 +38,10 @@ public class Assets {
     private static boolean debug;
 
     //values: 1 = unlocked, 0 = locked
-    //0 -> weps, 1-> head/face, 2-> shirts/torso, 3 -> legs/pants, 4->shoulder, 5->elbow/arms
-    static int[][] unclocks = new int[6][50];
+    //0 -> head/face, 1-> shirts/torso, 2 -> legs/pants, 3->shoulder, 4->elbow/arms
+    static int[][] unclocks = new int[5][100];
+    //weapons
+    static int[] weaponUnlocks = new int [100];
 
     public Assets() {
         weapons_sprites = new ArrayList<Sprite>();
@@ -55,8 +57,8 @@ public class Assets {
         shirts = new Sprite[shirtcount];
         arms = new Sprite[armcount];
         shoulders = new Sprite[shouldercount];
-
-        for (int i = 1; i < 6; i++) {
+        //unlock first suit
+        for (int i = 0; i < 5; i++) {
             unclocks[i][0] = 1;
         }
 
@@ -199,32 +201,32 @@ public class Assets {
         Sprite[] suit = new Sprite[5];
         //head
 
-        if (debug || unclocks[1][Math.min(index, facecount - 1)] == 1)
+        if (debug || unclocks[0][Math.min(index, facecount - 1)] == 1)
             suit[0] = faces[Math.min(index, facecount - 1)];
         else
             suit[0] = mystery_sprite;
 
         //torso
-        if (debug || unclocks[2][Math.min(index, shirtcount - 1)] == 1) {
+        if (debug || unclocks[1][Math.min(index, shirtcount - 1)] == 1) {
             suit[1] = shirts[Math.min(index, shirtcount - 1)];
         } else {
             suit[1] = mystery_sprite;
         }
         //leg
-        if (debug || unclocks[3][Math.min(index, pantcount - 1)] == 1) {
+        if (debug || unclocks[2][Math.min(index, pantcount - 1)] == 1) {
             suit[2] = pants[Math.min(index, pantcount - 1)];
         } else {
             suit[2] = mystery_sprite;
         }
         //arm
-        if (debug || unclocks[4][Math.min(index, shouldercount - 1)] == 1) {
+        if (debug || unclocks[3][Math.min(index, shouldercount - 1)] == 1) {
             suit[3] = shoulders[Math.min(index, shouldercount - 1)];
         } else {
             suit[3] = mystery_sprite;
         }
 
         //elbow
-        if (debug || unclocks[5][Math.min(index, armcount - 1)] == 1) {
+        if (debug || unclocks[4][Math.min(index, armcount - 1)] == 1) {
             suit[4] = arms[Math.min(index, armcount - 1)];
         } else {
             suit[4] = mystery_sprite;
@@ -234,13 +236,16 @@ public class Assets {
     }
 
     public static void unlockItem(int type, int index) {
-        unclocks[type][index] = 1;
+        if(type == -1)
+            weaponUnlocks[index] = 1;
+        else
+            unclocks[type][index] = 1;
     }
 
     public static List<Sprite> getWeaponsList() {
         ArrayList<Sprite> las = new ArrayList<Sprite>();
         for (int i = 0; i < weapons_sprites.size(); i++) {
-            if (debug || unclocks[0][i] == 1) {
+            if (debug || weaponUnlocks[i] == 1) {
                 las.add(weapons_sprites.get(i));
             } else {
                 las.add(mystery_sprite);

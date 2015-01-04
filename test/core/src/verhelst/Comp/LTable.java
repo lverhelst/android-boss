@@ -103,7 +103,7 @@ public class LTable extends Actor {
                     LCell lc = row.get(i);
 
                     columnWidth = (int) ((lc.getWidth_percent() / 100.0) * w);
-                    System.out.println("CW: " + columnWidth + " actual width: " + w + " percent: " + lc.getWidth_percent() / 100);
+                   // System.out.println("CW: " + columnWidth + " actual width: " + w + " percent: " + lc.getWidth_percent() / 100);
                     lc.setBounds(currentw, y + h - (rowheight * rowindex), columnWidth, rowheight);
                     currentw += columnWidth;
                 }

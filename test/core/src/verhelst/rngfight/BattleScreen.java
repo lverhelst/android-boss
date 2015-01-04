@@ -120,7 +120,7 @@ public class BattleScreen implements Screen, InputProcessor {
                         showLoot = true;
                         Weapon weapon = Weapon.generateRandomWeapon(a.getMax_level(), Weapon.POSITION.LOOT_POSITION);
 
-                        Assets.unlockItem(0, weapon.spriteindex);
+                        Assets.unlockItem(-1, weapon.spriteindex);
                         bView.setLoot(weapon);
 
                         // System.out.println("Showloot");
@@ -149,7 +149,7 @@ public class BattleScreen implements Screen, InputProcessor {
 
 
                         BodyPartActor hsa = new BodyPartActor(BodyPartActor.BodyPartType.values()[loooooot], btl.getLeftside().getMax_level());
-                        Assets.unlockItem(loooooot + 1, hsa.part_index);
+                        Assets.unlockItem(loooooot, hsa.part_index);
                         bView.setLoot(hsa);
 
 
@@ -305,7 +305,7 @@ public class BattleScreen implements Screen, InputProcessor {
             float rectby11 = butterDragMe.getY();
             if (rectax11 <= rectbx21 && rectax21 >= rectbx11
                     && rectay11 <= rectby21 && rectay21 >= rectby11) {
-                fight.switchScreens(1);
+                fight.switchScreens(4);
             }
             if (butterDragMe != null)
                 butterDragMe.remove();

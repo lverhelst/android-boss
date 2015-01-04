@@ -28,6 +28,7 @@ public class SaveGame extends DefaultHandler {
 
     public static int[] stats;
     public static int[][] unclocks;
+    public static int[] weapon_unlocks;
 
     private int charind;
 
@@ -77,7 +78,7 @@ public class SaveGame extends DefaultHandler {
     }
 
     public static void saveGame(Character A, Character B, int[] stats) {
-        int indexForLevel = A.getLevel() / 5;
+        int indexForLevel = Math.min(A.getLevel() / 5, Assets.faces.length - 1);
 
         String unclocksString = Assets.unclocks.length + ";" + Assets.unclocks[0].length + ";";
         for (int i = 0; i < Assets.unclocks.length; i++) {
@@ -85,59 +86,66 @@ public class SaveGame extends DefaultHandler {
                 unclocksString += Assets.unclocks[i][j];
             }
         }
+        String weaponsUnclocksString = Assets.weaponUnlocks.length + ";";
+        for(int i = 0; i < Assets.weaponUnlocks.length; i++){
+            weaponsUnclocksString += Assets.weaponUnlocks[i];
+        }
 
-        String s = "<?xml version=\"1.0\"?>\n" +
-                "<Data>\n" +
-                "    <Stats>\n" +
-                "        <MaxHits>" + stats[0] + "</MaxHits>\n" +
-                "        <MinHits>" + stats[1] + "</MinHits>\n" +
-                "        <player2wins>" + stats[2] + "</player2wins>\n" +
-                "        <player2losses>" + stats[3] + "</player2losses>\n" +
-                "        <draws>" + stats[4] + "</draws>\n" +
-                "        <games>" + stats[5] + "</games>\n" +
-                "        <max_level_reached>" + stats[6] + "</max_level_reached>\n" +
-                "    </Stats>\n" +
-                "    <Character>\n" +
-                "        <index>1</index>\n" +
-                "        <Name>" + A.getName() + "</Name>\n" +
-                "        <Level>" + A.getLevel() + "</Level>\n" +
-                "        <Max_Level>" + A.getMax_level() + "</Max_Level>\n" +
-                "        <Max_WTNL>" + A.getMax_wtnl() + "</Max_WTNL>\n" +
-                "        <WinStreak>" + A.getWin_streak() + "</WinStreak>\n" +
-                "        <LoseStreak>" + A.getLose_streak() + "</LoseStreak>\n" +
-                "        <Head>" + indexForLevel + "</Head>\n" +
-                "        <Torso>" + indexForLevel + "</Torso>\n" +
-                "        <Legs>" + indexForLevel + "</Legs>\n" +
-                "        <Shoulder>" + indexForLevel + "</Shoulder>\n" +
-                "        <Elbow>" + indexForLevel + "</Elbow>\n" +
-                "        <Weapon>\n" +
-                "            <SpriteNumber>" + (A.getEquipped_weapon() == null ? -1 : A.getEquipped_weapon().spriteindex) + "</SpriteNumber>\n" +
-                "            <MaxDamage>" + (A.getEquipped_weapon() == null ? 0 : A.getEquipped_weapon().getMax_damage()) + "</MaxDamage>\n" +
-                "            <MinDamage>" + (A.getEquipped_weapon() == null ? 0 : A.getEquipped_weapon().getMin_damage()) + "</MinDamage>\n" +
-                "            <Hearts>" + (A.getEquipped_weapon() == null ? 1 : A.getEquipped_weapon().getHp_multiplier()) + "</Hearts>\n" +
-                "        </Weapon>\n" +
-                "    </Character>\n" +
-                "    <Character>\n" +
-                "        <index>2</index>\n" +
-                "        <Name>" + B.getName() + "</Name>\n" +
-                "        <Level>" + B.getLevel() + "</Level>\n" +
-                "        <Max_Level>" + B.getMax_level() + "</Max_Level>\n" +
-                "        <Max_WTNL>" + B.getMax_wtnl() + "</Max_WTNL>\n" +
-                "        <WinStreak>" + B.getWin_streak() + "</WinStreak>\n" +
-                "        <LoseStreak>" + B.getLose_streak() + "</LoseStreak>\n" +
-                "        <Head>" + B.getSpriteindices()[0] + "</Head>\n" +
-                "        <Torso>" + B.getSpriteindices()[1] + "</Torso>\n" +
-                "        <Legs>" + B.getSpriteindices()[2] + "</Legs>\n" +
-                "        <Shoulder>" + B.getSpriteindices()[3] + "</Shoulder>\n" +
-                "        <Elbow>" + B.getSpriteindices()[4] + "</Elbow>\n" +
-                "        <Weapon>\n" +
-                "            <SpriteNumber>" + (B.getEquipped_weapon() == null ? -1 : B.getEquipped_weapon().spriteindex) + "</SpriteNumber>\n" +
-                "            <MaxDamage>" + (B.getEquipped_weapon() == null ? 0 : B.getEquipped_weapon().getMax_damage()) + "</MaxDamage>\n" +
-                "            <MinDamage>" + (B.getEquipped_weapon() == null ? 0 : B.getEquipped_weapon().getMin_damage()) + "</MinDamage>\n" +
-                "            <Hearts>" + (B.getEquipped_weapon() == null ? 1 : B.getEquipped_weapon().getHp_multiplier()) + "</Hearts>\n" +
-                "        </Weapon>\n" +
-                "    </Character>\n" +
-                "    <Unclocks>" + unclocksString + "</Unclocks>\n" +
+        String s = "<?xml version=\"1.0\"?>" +
+                "<Data>" +
+                    "<Stats>" +
+                        "<MaxHits>" + stats[0] + "</MaxHits>" +
+                        "<MinHits>" + stats[1] + "</MinHits>" +
+                        "<player2wins>" + stats[2] + "</player2wins>" +
+                        "<player2losses>" + stats[3] + "</player2losses>" +
+                        "<draws>" + stats[4] + "</draws>" +
+                        "<games>" + stats[5] + "</games>" +
+                        "<max_level_reached>" + stats[6] + "</max_level_reached>" +
+                    "</Stats>" +
+                    "<Character>" +
+                        "<index>1</index>" +
+                        "<Name>" + A.getName() + "</Name>" +
+                        "<Level>" + A.getLevel() + "</Level>" +
+                        "<Max_Level>" + A.getMax_level() + "</Max_Level>" +
+                        "<Max_WTNL>" + A.getMax_wtnl() + "</Max_WTNL>" +
+                        "<WinStreak>" + A.getWin_streak() + "</WinStreak>" +
+                        "<LoseStreak>" + A.getLose_streak() + "</LoseStreak>" +
+                        "<Head>" + indexForLevel + "</Head>" +
+                        "<Torso>" + indexForLevel + "</Torso>" +
+                        "<Legs>" + indexForLevel + "</Legs>" +
+                        "<Shoulder>" + indexForLevel + "</Shoulder>" +
+                        "<Elbow>" + indexForLevel + "</Elbow>" +
+                        "<Weapon>" +
+                            "<SpriteNumber>" + (A.getEquipped_weapon() == null ? -1 : A.getEquipped_weapon().spriteindex) + "</SpriteNumber>" +
+                            "<MaxDamage>" + (A.getEquipped_weapon() == null ? 0 : A.getEquipped_weapon().getMax_damage()) + "</MaxDamage>" +
+                            "<MinDamage>" + (A.getEquipped_weapon() == null ? 0 : A.getEquipped_weapon().getMin_damage()) + "</MinDamage>" +
+                            "<Hearts>" + (A.getEquipped_weapon() == null ? 1 : A.getEquipped_weapon().getHp_multiplier()) + "</Hearts>" +
+                        "</Weapon>" +
+                    "</Character>" +
+                    "<Character>" +
+                        "<index>2</index>" +
+                        "<Name>" + B.getName() + "</Name>" +
+                        "<Level>" + B.getLevel() + "</Level>" +
+                        "<Max_Level>" + B.getMax_level() + "</Max_Level>" +
+                        "<Max_WTNL>" + B.getMax_wtnl() + "</Max_WTNL>" +
+                        "<WinStreak>" + B.getWin_streak() + "</WinStreak>" +
+                        "<LoseStreak>" + B.getLose_streak() + "</LoseStreak>" +
+                        "<Head>" + B.getSpriteindices()[0] + "</Head>" +
+                        "<Torso>" + B.getSpriteindices()[1] + "</Torso>" +
+                        "<Legs>" + B.getSpriteindices()[2] + "</Legs>" +
+                        "<Shoulder>" + B.getSpriteindices()[3] + "</Shoulder>" +
+                        "<Elbow>" + B.getSpriteindices()[4] + "</Elbow>" +
+                        "<Weapon>" +
+                            "<SpriteNumber>" + (B.getEquipped_weapon() == null ? -1 : B.getEquipped_weapon().spriteindex) + "</SpriteNumber>" +
+                            "<MaxDamage>" + (B.getEquipped_weapon() == null ? 0 : B.getEquipped_weapon().getMax_damage()) + "</MaxDamage>" +
+                            "<MinDamage>" + (B.getEquipped_weapon() == null ? 0 : B.getEquipped_weapon().getMin_damage()) + "</MinDamage>" +
+                            "<Hearts>" + (B.getEquipped_weapon() == null ? 1 : B.getEquipped_weapon().getHp_multiplier()) + "</Hearts>" +
+                        "</Weapon>" +
+                    "</Character>" +
+                    "<Unclocks>" +
+                        "<WeaponUnlocks>" + weaponsUnclocksString + "</WeaponUnlocks>"+
+                        "<GearUnlocks>" + unclocksString + "</GearUnlocks>" +
+                    "</Unclocks>" +
                 "</Data>";
         // FileHandle fh = Gdx.files.local("save.xml");
         // fh.writeString(s, false);
@@ -170,7 +178,7 @@ public class SaveGame extends DefaultHandler {
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
-        System.out.print(start + " " + length + "");
+       // System.out.print(start + " " + length + "");
         String st = "";
         for (int i = start; i < start + length; i++) {
             st += ch[i];//System.out.println((i - start) + "  " + ch[i]);
@@ -240,10 +248,13 @@ public class SaveGame extends DefaultHandler {
                     leftside.setBodyPart("elbow", Assets.arms[Integer.parseInt(str)], Integer.parseInt(str));
                 }
                 if (currentNode.equalsIgnoreCase("weapon")) {
+                    System.out.println("NEW WEP");
                     a = new Weapon();
                 }
                 if (currentNode.equalsIgnoreCase("spritenumber")) {
                     int spritenum = Integer.parseInt(str);
+                    if(a == null)
+                        a = new Weapon();
                     if (spritenum != -1) {
                         shouldequip = true;
                         a.setSprite(Assets.weapons_sprites.get(spritenum));
@@ -305,6 +316,8 @@ public class SaveGame extends DefaultHandler {
                 }
                 if (currentNode.equalsIgnoreCase("spritenumber")) {
                     int spritenum = Integer.parseInt(str);
+                    if(b == null)
+                        b = new Weapon();
                     if (spritenum != -1) {
                         shouldequip = true;
                         b.setSprite(Assets.weapons_sprites.get(spritenum));
@@ -325,18 +338,37 @@ public class SaveGame extends DefaultHandler {
                 }
                 break;
             case UNCLOCKS:
-                String[] splits = str.split(";");
-                int r = Integer.parseInt(splits[0].toString());
-                int c = Integer.parseInt(splits[1].toString());
+                System.out.println("UNCLOCKS: " + currentNode);
+                if(currentNode.equals(""))
+                    break;
+                if(currentNode.equalsIgnoreCase("gearUnlocks")) {
 
-                unclocks = new int[r][c];
-                int index = 0;
-                for (int i = 0; i < r; i++) {
-                    for (int j = 0; j < c; j++) {
-                        unclocks[i][j] = splits[2].charAt(i * c + j) - 48;
+
+                    String[] splits = str.split(";");
+                    int r = Integer.parseInt(splits[0].toString());
+                    int c = Integer.parseInt(splits[1].toString());
+
+                    unclocks = new int[r][c];
+                    int index = 0;
+                    for (int i = 0; i < r; i++) {
+                        for (int j = 0; j < c; j++) {
+                            unclocks[i][j] = splits[2].charAt(i * c + j) - 48;
+                        }
                     }
+                } else if (currentNode.equalsIgnoreCase("WeaponUnlocks")){
+                    String[] splits = str.split(";");
+                    int r = Integer.parseInt(splits[0].toString());
+                    System.out.println("r" + r);
+                    weapon_unlocks = new int[r];
+                    for (int i = 0; i < r; i++) {
+                         weapon_unlocks[i] = splits[1].charAt(i) - 48;
+                    }
+
+                }else if(currentNode.equalsIgnoreCase("Unclocks")) {
+
+                }else{
+                    state = States.OTHER;
                 }
-                state = States.OTHER;
                 break;
         }
     }
@@ -344,7 +376,7 @@ public class SaveGame extends DefaultHandler {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        System.out.println("Stat " + localName);
+        System.out.println("BGN " + localName);
         currentNode = localName;
         if (currentNode.equalsIgnoreCase("stats")) {
             state = States.STATS;

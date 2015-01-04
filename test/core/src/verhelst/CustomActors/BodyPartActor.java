@@ -37,7 +37,7 @@ public class BodyPartActor extends Actor {
 
     public BodyPartActor(BodyPartType type, int lvl) {
         partSprite = null;
-        lvl = (lvl + 15)/5;
+        lvl = (lvl + 25)/5;
         switch (type) {
             case HEAD:
                 part_index = rng.nextInt(Math.min(Assets.faces.length,lvl));
