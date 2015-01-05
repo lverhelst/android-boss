@@ -14,5 +14,6 @@ public enum BattleResult {
     HeadLoot,
     Player1NewSuit,
     NewMaxHitCount,
-    NewMinHitCount
+    NewMinHitCount,
+    NewHighScore
 }

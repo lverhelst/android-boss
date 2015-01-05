@@ -101,6 +101,7 @@ public class SaveGame extends DefaultHandler {
                         "<draws>" + stats[4] + "</draws>" +
                         "<games>" + stats[5] + "</games>" +
                         "<max_level_reached>" + stats[6] + "</max_level_reached>" +
+                        "<max_score>" + stats[7] + "</max_score>" +
                     "</Stats>" +
                     "<Character>" +
                         "<index>1</index>" +
@@ -210,6 +211,9 @@ public class SaveGame extends DefaultHandler {
                 }
                 if (currentNode.equalsIgnoreCase("max_level_reached")) {
                     stats[6] = Integer.parseInt(str);
+                }
+                if (currentNode.equalsIgnoreCase("max_score")) {
+                    stats[7] = Integer.parseInt(str);
                 }
 
                 break;
@@ -380,7 +384,7 @@ public class SaveGame extends DefaultHandler {
         currentNode = localName;
         if (currentNode.equalsIgnoreCase("stats")) {
             state = States.STATS;
-            stats = new int[7];
+            stats = new int[8];
             stats[0] = -1;
             stats[1] = -1;
             stats[2] = 0;

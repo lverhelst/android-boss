@@ -7,11 +7,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Random;
 
 import verhelst.Comp.LCell;
+import verhelst.Comp.LLabel;
 import verhelst.Comp.LTable;
 import verhelst.CustomActors.DamageNumber;
 
@@ -20,23 +23,39 @@ import verhelst.CustomActors.DamageNumber;
  */
 public class MainScreen implements Screen, InputProcessor {
 
-    LTable lt, entrances;
+    LTable mt, st, lt, entrances;
+    LLabel highscore;
     Image butterbeaver;
     RngFight game;
 
     ArrayList<DamageNumber> stringlist = new ArrayList<DamageNumber>();
     Iterator<DamageNumber> i;
 
-    String[] thingsToSay = {"QUICKFITE", "QuickFite", "quickfite", "ioi", "get a job", "you lose", "you win", "yes", "no", "That's ridiculous", "Well I say!", "This text is really small and hard to read!", "CHEN SMASH", ",", "i++", "Subliminal Suggestions!",
-        "Namtab: MY PARENT'S ARE ALIVE!", "Namtab: I'll fight your tax return!", "The fire rises", "No one cared who I was till I put on the mask", "Please like and subscribe!",
+    String[] thingsToSay = {"QUICKFITE", "QuickFite", "quickfite", "ioi", "get a job", "you lose", "you win", "yes", "no", "That's ridiculous", "Well I say!", "Uplifting Message!", "CHEN SMASH", ",", "i++", "Subliminal Suggestions!",
+        "Namtab: MY PARENT'S ARE ALIVE!", "Namtab: I'll fight your tax return!", "The fire rises", "Looking good!", "Please like and subscribe!",
         "It really helps!", "It puts the lotion on the skin", "MATH.PI", "LIBGDX", "Wowee", "Call me: 1-800-not a real number.com", "ACHIEVMENT UNLOCKED!", "Get rekt", "Tyranasauras Rekt",
-        "Sometimes I put vaseline on my body and pretend I'm a slug", "Butterbeaver", "Pee gee!", "Android", "Fighting Game", "P ZEN Q", "P -> Q", "n C r"};
+        "Heeey there", "Butterbeaver", "Pee gee!", "Android", "Fighting Game", "P ZEN Q", "P -> Q"};
 
     public MainScreen(RngFight fight){
         this.game = fight;
+        mt = new LTable(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         lt = new LTable(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        st = new LTable(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
         butterbeaver = new Image(Assets.butterBeaver);
         lt.addActor(butterbeaver, true);
+        lt.addRow();
+
+
+        highscore = new LLabel("Highscore", RngFight.skin);
+        highscore.setIsHUD(true);
+        st.addActor(highscore);
+        st.addRow();
+        //TODO: Make into SHARE buttons
+        st.addActor(butterbeaver,true);
+        st.addActor(butterbeaver,true);
+
+        lt.addActor(st);
+
 
         entrances = new LTable(Gdx.graphics.getWidth()/2, 0, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight());
         //Fight screen
@@ -60,16 +79,23 @@ public class MainScreen implements Screen, InputProcessor {
         Image img4 = new Image(Assets.INDEV);
         img4.setName("img3");
         entrances.addActor(img4,true);
-        lt.addActor(entrances);
+
+
+        mt.addActor(lt);
+        mt.addActor(entrances);
     }
 
+    public void updateHighscore(int score){
+
+        highscore.setText("Highscore: " +  NumberFormat.getNumberInstance(Locale.US).format(score));
+    }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         RngFight.batch.begin();
         renderDamageNumbers(RngFight.batch);
-        lt.draw(RngFight.batch, 1);
+        mt.draw(RngFight.batch, 1);
 
         RngFight.batch.end();
     }

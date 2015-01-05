@@ -2,6 +2,7 @@ package verhelst.rngfight;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 
 /**
@@ -20,6 +21,9 @@ public class RngFight extends com.badlogic.gdx.Game {
     static SettingScreen settingsScreen;
     static MainScreen mainScreen;
 
+    static Skin skin;
+
+
 
     private int currentscreen;
     SaveGame sg;
@@ -27,6 +31,7 @@ public class RngFight extends com.badlogic.gdx.Game {
 
     @Override
     public void create() {
+        Skin skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         Assets assets = new Assets();
         assets.loadAssets();
         try {
@@ -60,7 +65,7 @@ public class RngFight extends com.badlogic.gdx.Game {
                 break;
             case 1:
                 // viewerAndStats = new StatsScreen(this);
-                viewerAndStats.updateLabels(gameScreen.brh.max_hitcount, gameScreen.brh.min_hitcount, gameScreen.brh.player2wins, gameScreen.brh.player2losses, gameScreen.brh.draws, gameScreen.brh.games, gameScreen.brh.max_level_reached);
+                viewerAndStats.updateLabels(gameScreen.brh.max_hitcount, gameScreen.brh.min_hitcount, gameScreen.brh.player2wins, gameScreen.brh.player2losses, gameScreen.brh.draws, gameScreen.brh.games, gameScreen.brh.max_level_reached, gameScreen.brh.getMax_score());
                 setScreen(viewerAndStats);
                 Gdx.input.setInputProcessor(viewerAndStats.im);
                 break;
@@ -73,6 +78,7 @@ public class RngFight extends com.badlogic.gdx.Game {
                 Gdx.input.setInputProcessor(settingsScreen);
                 break;
             case 4:
+                mainScreen.updateHighscore(gameScreen.brh.getMax_score());
                 setScreen(mainScreen);
                 Gdx.input.setInputProcessor(mainScreen);
         }

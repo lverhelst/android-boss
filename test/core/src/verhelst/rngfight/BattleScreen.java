@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import verhelst.Comp.LCell;
 import verhelst.CustomActors.BodyPartActor;
 import verhelst.CustomActors.Character;
+import verhelst.CustomActors.DamageNumber;
 import verhelst.CustomActors.SpriteActor;
 
 /**
@@ -37,10 +38,12 @@ public class BattleScreen implements Screen, InputProcessor {
     boolean showLoot;
     public static boolean battling, interrupted;
     public static float statetime;
-    int hits = 0, anim_h1, anim_h2;
+    int hits = 0, score = 0, anim_h1, anim_h2;
 
     int display_cap = Integer.MAX_VALUE;
     Actor dragme, butterDragMe;
+
+    DamageNumber soloMessage;
 
     boolean custom_mode_on;
     String custom_mode_string;
@@ -87,6 +90,7 @@ public class BattleScreen implements Screen, InputProcessor {
 
          showLoot = false;
          hits = 0;
+         score = 0;
 
          Weapon aWep = btl.getLeftside().getEquipped_weapon();
          Weapon bWep = btl.getRightside().getEquipped_weapon();
@@ -94,7 +98,7 @@ public class BattleScreen implements Screen, InputProcessor {
          bView.updateCharacterWeapons(aWep, bWep);
 
          brh.reset();
-         bView.update(anim_h1, anim_h2, showLoot, a.getMax_level(), message, hits);
+         bView.update(anim_h1, anim_h2, showLoot, 0, message, hits, 0);
         btl = new Battle(a, a2, bswNumList);
         bView = new BattleView(btl);
     }
@@ -107,6 +111,9 @@ public class BattleScreen implements Screen, InputProcessor {
             //This can probably be done without a switch, I just don't know how yet.
             for (BattleResult br : results) {
                 switch (br) {
+                    case NewHighScore:
+                        soloMessage = new DamageNumber("NEW HIGHSCORE!", Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight() * 3/4 );
+                        break;
                     case Player1Win:
                         message = "You lost. Too bad.";
                         break;
@@ -176,10 +183,20 @@ public class BattleScreen implements Screen, InputProcessor {
             handleBattleResults();
 
 
-        bView.update(anim_h1, anim_h2, showLoot, a.getMax_level(), message, hits);
+        bView.update(anim_h1, anim_h2, showLoot, brh.getMax_score(), message, hits, score);
 
 
         bView.getStage().draw();
+
+        if(soloMessage != null) {
+            RngFight.batch.begin();
+            Assets.wepNumFnt.setColor(soloMessage.getRed(), soloMessage.getGreen(), soloMessage.getBlue(), soloMessage.getAlpha());
+            Assets.wepNumFnt.draw(RngFight.batch, soloMessage.getCs(), soloMessage.getX(), soloMessage.getY());
+            RngFight.batch.end();
+            soloMessage.update();
+            if(soloMessage.isRemoveable())
+                soloMessage = null;
+        }
 
     }
 
@@ -401,6 +418,9 @@ public class BattleScreen implements Screen, InputProcessor {
                             anim_h1 = lst[2];
                             anim_h2 = lst[3];
                             hits = lst[4];
+
+                            score = brh.getScore(hits, btl.getLeftside());
+
                             if ((lst[2] <= 0 || lst[3] <= 0)) {
                                 btl.getLeftside().setDisplay_hp(lst[2]);
                                 btl.getRightside().setDisplay_hp(lst[3]);

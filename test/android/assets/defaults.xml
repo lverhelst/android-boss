@@ -8,6 +8,7 @@
         <draws>0</draws>
         <games>0</games>
         <max_level_reached>0</max_level_reached>
+        <max_score>0</max_score>
     </Stats>
     <Character>
         <index>1</index>

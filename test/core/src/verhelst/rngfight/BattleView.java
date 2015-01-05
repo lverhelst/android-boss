@@ -28,7 +28,7 @@ public class BattleView {
 
     HealthBar one, two;
     Stage stage;
-    LLabel highscore, hitcount, oneLbl, twoLbl;
+    LLabel highscorelbl, scorelbl, streaklbl, hitcount, oneLbl, twoLbl;
 
 
     Random rng;
@@ -67,8 +67,12 @@ public class BattleView {
         twoLbl = new LLabel(b.getRightside().getName() + 200, skin);
         twoLbl.setIsHUD(true);
 
-        highscore = new LLabel("Streak: 0", skin);
-        highscore.setIsHUD(true);
+        highscorelbl = new LLabel("Highscore: 0", skin);
+        highscorelbl.setIsHUD(true);
+        scorelbl = new LLabel("Score: 0", skin);
+        scorelbl.setIsHUD(true);
+        streaklbl = new LLabel("Streak: 0", skin);
+        streaklbl.setIsHUD(true);
         hitcount = new LLabel("Hits: 0", skin);
         hitcount.setIsHUD(true);
 
@@ -157,13 +161,19 @@ public class BattleView {
         row4 = new LTable(0, 0, 100, 100);
 
         Table statsTable = new Table();
+
+
         statsTable.add(r2c1).expand().top().left();
         statsTable.row();
         statsTable.add(r3c2).expand().top().left();
         statsTable.row();
-        statsTable.add(highscore).expand().align(Align.left).top();
+        statsTable.add(streaklbl).expand().align(Align.left).top();
         statsTable.row();
         statsTable.add(hitcount).expand().align(Align.left).top();
+        statsTable.row();
+        statsTable.add(scorelbl).expand().top().left();
+        statsTable.row();
+        statsTable.add(highscorelbl).expand().top().left();
         statsTable.row();
         /*Table row2pt2 = new Table();
         row2pt2.add(r2c1).expand().top().right();
@@ -283,7 +293,7 @@ public class BattleView {
     }
 
 
-    public void update(int lefthp, int righthp, boolean showLoot, int aMax, String message, int hits) {
+    public void update(int lefthp, int righthp, boolean showLoot, int highscore, String message, int hits, int score) {
         b.getLeftside().setDisplay_hp(lefthp);
         b.getRightside().setDisplay_hp(righthp);
 
@@ -295,13 +305,13 @@ public class BattleView {
         }
 
         String str = String.format("%3s", line + b.getLeftside().getLevel());
-        r3c2.setText(str);
+        r3c2.setText("Cur Lvl: " + str);
         line = "";
         for (int i = 0; i < b.getLeftside().getMax_wtnl(); i++) {
             line += "*";
         }
         String str2 = String.format("%3s", line + b.getLeftside().getMax_level());
-        r2c1.setText(str2);
+        r2c1.setText("Max Lvl: " + str2);
         endMessageLbl.setText(message);
 
         one.setHealth_value(lefthp);
@@ -310,8 +320,10 @@ public class BattleView {
         two.setHealth_value(righthp);
         //twoLbl.setText(b.getRightside().getName() + ": " + (righthp > 0 ? righthp : 0));
 
-        highscore.setText("Streak: " + b.getRightside().getWin_streak());
+        streaklbl.setText("Streak: " + b.getRightside().getWin_streak());
         hitcount.setText("Hits: " +  NumberFormat.getNumberInstance(Locale.US).format(hits));
+        highscorelbl.setText("Highscore: " +  NumberFormat.getNumberInstance(Locale.US).format(highscore));
+        scorelbl.setText("Score: " +  NumberFormat.getNumberInstance(Locale.US).format(score));
     }
 
     public void landingPadGlow(boolean pad) {

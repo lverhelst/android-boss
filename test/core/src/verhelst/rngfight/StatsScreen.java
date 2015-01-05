@@ -32,7 +32,7 @@ public class StatsScreen implements Screen {
     LTable t;
     LCoverFlow lcf, wCF ;
     final RngFight game2;
-    LLabel maxlbl, minlbl, wlrg, maxlvl, battles;
+    LLabel highscorelbl, maxlbl, minlbl, wlrg, maxlvl, battles;
     InputMultiplexer im;
     SpriteActor backBtn;//, resetButton;
 
@@ -77,6 +77,10 @@ public class StatsScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
         LTable statsTable = new LTable(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() / 2);
+        highscorelbl = new LLabel(" Highscore: 0", skin);
+        highscorelbl.setIsHUD(true);
+        statsTable.addActor(highscorelbl);
+        statsTable.addRow();
         maxlbl = new LLabel(" Max Hits: 0", skin);
         maxlbl.setIsHUD(true);
         statsTable.addActor(maxlbl);
@@ -171,7 +175,8 @@ public class StatsScreen implements Screen {
         lcf.setCurrentIndex(0);
     }
 
-    public void updateLabels(int maxhits, int minhits, int wins, int losses, int draws, int games, int maxlevel) {
+    public void updateLabels(int maxhits, int minhits, int wins, int losses, int draws, int games, int maxlevel, int highscore) {
+        highscorelbl.setText("    Highscore: " + NumberFormat.getNumberInstance(Locale.US).format(highscore));
         maxlbl.setText("    Max hits: " + NumberFormat.getNumberInstance(Locale.US).format(maxhits));
         minlbl.setText("    Min hits: " +  NumberFormat.getNumberInstance(Locale.US).format(minhits));
         wlrg.setText("  W/L/D:  " +  NumberFormat.getNumberInstance(Locale.US).format(wins) + "/" +  NumberFormat.getNumberInstance(Locale.US).format(losses) + "/" +  NumberFormat.getNumberInstance(Locale.US).format(draws));

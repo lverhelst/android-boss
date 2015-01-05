@@ -10,8 +10,9 @@ import verhelst.CustomActors.Character;
  */
 public class BattleResultHandler {
 
-    protected int max_hitcount, min_hitcount, max_level_reached, games, player2wins, player2losses, draws;
-    public int[] stats = new int[7];
+    protected int max_hitcount, min_hitcount, max_level_reached, games, player2wins, player2losses, draws, score, max_score;
+    public int[] stats = new int[8];
+
 
     public BattleResultHandler() {
         reset();
@@ -25,12 +26,14 @@ public class BattleResultHandler {
 
 
         int aoriglvl = a.getLevel();
-
+        double winscaler;
         if (a.getHealth() > 0 && b.getHealth() <= 0) {
             resultsList.add(BattleResult.Player1Win);
             a.incrementWins();
             b.incrementLosses();
             player2losses++;
+            winscaler = 0.5;
+
         } else if (a.getHealth() <= 0 && b.getHealth() > 0) {
             resultsList.add(BattleResult.Player2Win);
             a.incrementLosses();
@@ -41,12 +44,13 @@ public class BattleResultHandler {
             } else if (hitcount % 7 == 0) {
                 resultsList.add(BattleResult.HeadLoot);
             }
-
+            winscaler = 1.0;
         } else {
             resultsList.add(BattleResult.Tie);
             a.resetWins();
             b.resetWins();
             draws++;
+            winscaler = 0.55;
         }
         if (hitcount % 4 == 1 || (aoriglvl != a.getLevel() && a.getLevel() % 2 == 0))
             resultsList.add(BattleResult.Player1GetsLoot);
@@ -74,6 +78,12 @@ public class BattleResultHandler {
 
         System.out.print(resultsList);
         // System.out.println("        CL " + a.getLevel() + " ws " + a.getWin_streak() + " ml" + a.max_level + " mwtl" + a.max_wtnl + " ls " + a.getLose_streak() + " lscheck" + a.getLose_streak() % (a.wins_to_level + 1));
+        score = hitcount * (1 + player2wins/(games)) * a.getLevel()/a.getMax_level() * a.getMax_level()/25;
+        if(score > max_score){
+            max_score = score;
+            resultsList.add(BattleResult.NewHighScore);
+        }
+
         stats[0] = max_hitcount;
         stats[1] = min_hitcount;
         stats[2] = player2wins;
@@ -81,8 +91,13 @@ public class BattleResultHandler {
         stats[4] = draws;
         stats[5] = games;
         stats[6] = max_level_reached;
+        stats[7] = max_score;
+
+
+
         return resultsList.toArray(new BattleResult[resultsList.size()]);
     }
+
 
     public void reset(){
         try {
@@ -94,6 +109,7 @@ public class BattleResultHandler {
             draws = SaveGame.stats[4];
             games = SaveGame.stats[5];
             max_level_reached = SaveGame.stats[6];
+            max_score = SaveGame.stats[7];
 
         } catch (Exception e) {
             System.out.println("Could not load stats");
@@ -105,6 +121,7 @@ public class BattleResultHandler {
             player2losses = 0;
             draws = 0;
             max_level_reached = 0;
+            max_score = 0;
         }
         stats[0] = max_hitcount;
         stats[1] = min_hitcount;
@@ -113,6 +130,15 @@ public class BattleResultHandler {
         stats[4] = draws;
         stats[5] = games;
         stats[6] = max_level_reached;
+        stats[7] = max_score;
+    }
+
+    public int getScore(int hits, Character a){
+        return hits * (1 + player2wins/(games == 0 ? 1: games)) * a.getLevel()/a.getMax_level() * a.getMax_level()/25;
+    }
+
+    public int getMax_score(){
+        return max_score;
     }
 
 }
