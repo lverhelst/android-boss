@@ -230,7 +230,7 @@ public class Character extends Actor {
             level--;
             level = Math.max(1, level);
         }
-        System.out.println("Lose Streak: " + lose_streak + " ws " + win_streak);
+        //System.out.println("Lose Streak: " + lose_streak + " ws " + win_streak);
     }
 
     public void resetWins() {
@@ -249,7 +249,7 @@ public class Character extends Actor {
 
         if (lose_streak != 0 && lose_streak % wins_to_level == 0) {
             level++;
-            System.out.println(name + " lvl up" + " ls" + lose_streak);
+           // System.out.println(name + " lvl up" + " ls" + lose_streak);
             if (level > max_level)
                 max_wtnl = 0;
             max_level = Math.max(max_level, level);

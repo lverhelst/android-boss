@@ -73,7 +73,7 @@ public class Weapon extends Actor {
         int min_dmg = (int) Math.min(lvl, average_dmg - offset_roll);
         int max_dmg = (int) Math.min(lvl * 2, average_dmg + offset_roll);
 
-        System.out.println("A,O,A-O,A+O: " + average_dmg + " " + offset_roll + " " + min_dmg + " " + max_dmg);
+       // System.out.println("A,O,A-O,A+O: " + average_dmg + " " + offset_roll + " " + min_dmg + " " + max_dmg);
 
 
         return new Weapon(min_dmg, max_dmg, DAMAGETYPE.NORMAL, Math.max(rng.nextInt(lvl) / 3, Math.max(lvl / 5, 1)), (float) (0.1), lvl, position);

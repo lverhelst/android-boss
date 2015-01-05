@@ -172,6 +172,10 @@ public class DamageNumber {
         return this.alpha;
     }
 
+    public void setAngle(int degrees){
+        this.angle = (float) Math.toRadians(degrees);
+    }
+
     public DamageNumber reset() {
 
         this.value = Integer.MAX_VALUE;

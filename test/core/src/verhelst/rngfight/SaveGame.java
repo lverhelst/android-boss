@@ -74,7 +74,7 @@ public class SaveGame extends DefaultHandler {
         xr.parse(new InputSource(new ByteArrayInputStream(data.getBytes())));
 
 
-        System.out.println("Break here");
+       // System.out.println("Break here");
     }
 
     public static void saveGame(Character A, Character B, int[] stats) {
@@ -252,7 +252,7 @@ public class SaveGame extends DefaultHandler {
                     leftside.setBodyPart("elbow", Assets.arms[Integer.parseInt(str)], Integer.parseInt(str));
                 }
                 if (currentNode.equalsIgnoreCase("weapon")) {
-                    System.out.println("NEW WEP");
+                   // System.out.println("NEW WEP");
                     a = new Weapon();
                 }
                 if (currentNode.equalsIgnoreCase("spritenumber")) {
@@ -305,7 +305,7 @@ public class SaveGame extends DefaultHandler {
                 if (currentNode.equalsIgnoreCase("shoulder")) {
                     rightside.setBodyPart("shoulder", Assets.shoulders[Integer.parseInt(str)], Integer.parseInt(str));
                 }
-                System.out.println(currentNode);
+                //System.out.println(currentNode);
                 if (currentNode.equalsIgnoreCase("legs")) {
                     rightside.setBodyPart("leg", Assets.pants[Integer.parseInt(str)], Integer.parseInt(str));
                 }
@@ -342,7 +342,7 @@ public class SaveGame extends DefaultHandler {
                 }
                 break;
             case UNCLOCKS:
-                System.out.println("UNCLOCKS: " + currentNode);
+                //System.out.println("UNCLOCKS: " + currentNode);
                 if(currentNode.equals(""))
                     break;
                 if(currentNode.equalsIgnoreCase("gearUnlocks")) {
@@ -362,7 +362,7 @@ public class SaveGame extends DefaultHandler {
                 } else if (currentNode.equalsIgnoreCase("WeaponUnlocks")){
                     String[] splits = str.split(";");
                     int r = Integer.parseInt(splits[0].toString());
-                    System.out.println("r" + r);
+                    //.out.println("r" + r);
                     weapon_unlocks = new int[r];
                     for (int i = 0; i < r; i++) {
                          weapon_unlocks[i] = splits[1].charAt(i) - 48;
@@ -380,7 +380,7 @@ public class SaveGame extends DefaultHandler {
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        System.out.println("BGN " + localName);
+        //System.out.println("BGN " + localName);
         currentNode = localName;
         if (currentNode.equalsIgnoreCase("stats")) {
             state = States.STATS;
@@ -411,7 +411,7 @@ public class SaveGame extends DefaultHandler {
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        System.out.println("END " + localName);
+      //  System.out.println("END " + localName);
         currentNode = "";
         super.endElement(uri, localName, qName);
     }

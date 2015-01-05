@@ -40,6 +40,7 @@ public class BattleView {
     public SpriteActor butterbeaver, landingpad;
     Weapon aWep, bWep;
     LTable rootTable, row3, row4, butterTable;
+    Table statsTable;
     public final float PADDING;
 
 
@@ -160,7 +161,7 @@ public class BattleView {
         //rootTable.addRow();
         row4 = new LTable(0, 0, 100, 100);
 
-        Table statsTable = new Table();
+        statsTable = new Table();
 
 
         statsTable.add(r2c1).expand().top().left();
@@ -237,13 +238,13 @@ public class BattleView {
     public void setLoot(Actor newloot) {
         LCell c = row4.getLCellForActor(lootActor);
         if (lootActor instanceof Weapon) {
-            System.out.println("Searching for weapon table");
+            //System.out.println("Searching for weapon table");
             c = row4.getLCellForActorName(((Weapon) lootActor).getTable().getName());
         }
 
-        System.out.println(lootActor);
+       // System.out.println(lootActor);
         if (c != null) {
-            System.out.println("Cell found");
+            //System.out.println("Cell found");
             if (newloot instanceof Weapon) {
                 c.setActor(((Weapon) newloot).getTable());
                 c.setKeep_aspect_ratio(false);
@@ -257,18 +258,18 @@ public class BattleView {
             }
             lootActor = newloot;
         }
-        System.out.println(lootActor);
+        //System.out.println(lootActor);
     }
 
     public void updateCharacterWeapons(Weapon aWeapon, Weapon bWeapon) {
 
 
-        System.out.println("Update Character Weapons");
+        //System.out.println("Update Character Weapons");
         if (aWeapon != null && b.getLeftside().isWeaponEquipped()) {
             //aWep.copyWeapon(aWeapon, Weapon.POSITION.LEFT_POSITION);
             LCell c = row3.getLCellForActor(aWep.getTable());
             if (c != null) {
-                System.out.println("AWeaponFound");
+               // System.out.println("AWeaponFound");
                 c.setActor(aWeapon.getTable());
                 aWep = aWeapon;
             }
@@ -324,6 +325,19 @@ public class BattleView {
         hitcount.setText("Hits: " +  NumberFormat.getNumberInstance(Locale.US).format(hits));
         highscorelbl.setText("Highscore: " +  NumberFormat.getNumberInstance(Locale.US).format(highscore));
         scorelbl.setText("Score: " +  NumberFormat.getNumberInstance(Locale.US).format(score));
+        scorex = (int)(Assets.wepNumFnt.getBounds("Score: " +  NumberFormat.getNumberInstance(Locale.US).format(score)).width);
+        scorey = (int) (scorelbl.getY() + Assets.wepNumFnt.getBounds("Score: " +  NumberFormat.getNumberInstance(Locale.US).format(score)).height * 2);
+
+    }
+
+    int scorex, scorey;
+
+    public int getScoreX(){
+        return scorex;
+    }
+
+    public int getScoreY(){
+        return scorey;
     }
 
     public void landingPadGlow(boolean pad) {

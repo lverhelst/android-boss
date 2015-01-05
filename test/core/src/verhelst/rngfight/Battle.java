@@ -80,7 +80,7 @@ public class Battle implements Runnable {
             }
 
         } while (leftside.getHealth() > 0 && rightside.getHealth() > 0);
-        System.out.println(hitcount);
+
         chunk = new int[5];
         chunk[0] = dmgtoboss;
         chunk[1] = dmgtoplayer;
@@ -88,6 +88,8 @@ public class Battle implements Runnable {
         chunk[3] = rightside.getHealth();
         chunk[4] = hitcount;
         dmgNumListA.add(chunk);
+
+        System.out.println("BTL: " + leftside.getHealth() + " " + rightside.getHealth() + " Hits " + hitcount);
 
     }
 }

@@ -23,7 +23,7 @@ public class BattleResultHandler {
         games++;
         List<BattleResult> resultsList = new ArrayList<BattleResult>();
         //Decide winner
-
+        System.out.println("BRH: " + a.getHealth() + " " + b.getHealth() + " Hits " + hitcount);
 
         int aoriglvl = a.getLevel();
         double winscaler;
@@ -76,9 +76,9 @@ public class BattleResultHandler {
 
         max_level_reached = a.getMax_level();
 
-        System.out.print(resultsList);
+        System.out.println(resultsList);
         // System.out.println("        CL " + a.getLevel() + " ws " + a.getWin_streak() + " ml" + a.max_level + " mwtl" + a.max_wtnl + " ls " + a.getLose_streak() + " lscheck" + a.getLose_streak() % (a.wins_to_level + 1));
-        score = hitcount * (1 + player2wins/(games)) * a.getLevel()/a.getMax_level() * a.getMax_level()/25;
+        score = (int)(winscaler * hitcount * (1 + player2wins/(games)) * a.getLevel()/a.getMax_level() * a.getMax_level()/25);
         if(score > max_score){
             max_score = score;
             resultsList.add(BattleResult.NewHighScore);
@@ -134,7 +134,7 @@ public class BattleResultHandler {
     }
 
     public int getScore(int hits, Character a){
-        return hits * (1 + player2wins/(games == 0 ? 1: games)) * a.getLevel()/a.getMax_level() * a.getMax_level()/25;
+        return (int)(0.5 * hits * (1 + player2wins/(games == 0 ? 1: games)) * a.getLevel()/a.getMax_level() * a.getMax_level()/25);
     }
 
     public int getMax_score(){

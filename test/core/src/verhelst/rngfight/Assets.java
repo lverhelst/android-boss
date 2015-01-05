@@ -80,7 +80,7 @@ public class Assets {
 
 
         for (int i = 1; i <= facecount; i++) {
-            System.out.println(i);
+          //  System.out.println(i);
             faces[i - 1] = new Sprite(ta.findRegion("face" + i));
         }
         //torsos

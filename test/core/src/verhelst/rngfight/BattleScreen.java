@@ -123,6 +123,9 @@ public class BattleScreen implements Screen, InputProcessor {
                         break;
                     case Player2Win:
                         message = "Victory! " + a.getName() + " defeated!";
+                        DamageNumber dn = new DamageNumber("Score x2", (bView.getScoreX()), bView.getScoreY());
+                        dn.setAngle(45);
+                        soloMessage.add(dn);
                         break;
                     case Tie:
                         message = "D-D-D-Double Kill!";
@@ -142,7 +145,6 @@ public class BattleScreen implements Screen, InputProcessor {
                     case CustomMode_ioi:
                         custom_mode_on = true;
                         custom_mode_string = "ioi";
-                        soloMessage.add(new DamageNumber("CUSTOM MODE ioi!", Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight() * 3/4 ));
                         break;
                     case Player1GetsLoot:
                         btl.getLeftside().setEquipped_weapon(Weapon.generateScaledWeapon(a.getLevel(), Weapon.POSITION.LEFT_POSITION));
@@ -427,27 +429,27 @@ public class BattleScreen implements Screen, InputProcessor {
                             e.printStackTrace();
                         }
 
-                        if (!bswNumList.isEmpty()) {
+                     //   if (!bswNumList.isEmpty()) {
 
                             lst = bswNumList.poll();
+                            if(lst != null) {
+                                btl.getLeftside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst[0]), Character.DmgListSide.LEFT);
+                                btl.getRightside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst[1]), Character.DmgListSide.RIGHT);
 
-                            btl.getLeftside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst[0]), Character.DmgListSide.LEFT);
-                            btl.getRightside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst[1]), Character.DmgListSide.RIGHT);
-
-                            anim_h1 = lst[2];
-                            anim_h2 = lst[3];
-                            hits = lst[4];
-
+                                anim_h1 = lst[2];
+                                anim_h2 = lst[3];
+                                hits = lst[4];
+                            }
                             score = brh.getScore(hits, btl.getLeftside());
 
-                            if ((lst[2] <= 0 || lst[3] <= 0)) {
+                            if (bswNumList.isEmpty()) {
                                 btl.getLeftside().setDisplay_hp(lst[2]);
                                 btl.getRightside().setDisplay_hp(lst[3]);
                                 battling = false;
                                 break;
                             }
 
-                        }
+                       // }
 
                     }
                     if(!interrupted)
