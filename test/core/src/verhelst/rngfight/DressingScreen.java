@@ -36,6 +36,7 @@ public class DressingScreen implements Screen, InputProcessor {
 
     private Actor dragme;
 
+    boolean canSwitchGearTypes;
 
     public DressingScreen(RngFight rfight, Character c){
         this.game = rfight;
@@ -267,6 +268,8 @@ public class DressingScreen implements Screen, InputProcessor {
                 }
             System.out.println("Added new dragme");
         }
+        if(actualY < b.getY())
+            canSwitchGearTypes = true;
 
         return false;
     }
@@ -309,7 +312,7 @@ public class DressingScreen implements Screen, InputProcessor {
                 }
             }
         }
-        else{
+        if(canSwitchGearTypes){
 
             //Switch Gear Types
             for(int i = 0; i < 7; i++) {
@@ -328,6 +331,7 @@ public class DressingScreen implements Screen, InputProcessor {
             }
         }
         dragme = null;
+        canSwitchGearTypes = false;
         return false;
     }
 

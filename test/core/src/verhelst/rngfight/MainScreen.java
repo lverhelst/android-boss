@@ -31,7 +31,7 @@ public class MainScreen implements Screen, InputProcessor {
     ArrayList<DamageNumber> stringlist = new ArrayList<DamageNumber>();
     Iterator<DamageNumber> i;
 
-    String[] thingsToSay = {"QUICKFITE", "QuickFite", "quickfite", "ioi", "get a job", "you lose", "you win", "yes", "no", "That's ridiculous", "Well I say!", "Uplifting Message!", "CHEN SMASH", ",", "i++", "Subliminal Suggestions!",
+    String[] thingsToSay = {"QUIKFITE", "QuikFite", "quikfite", "ioi", "get a job", "you lose", "you win", "yes", "no", "That's ridiculous", "Well I say!", "Uplifting Message!", "CHEN SMASH", ",", "i++", "Subliminal Suggestions!",
         "Namtab: MY PARENT'S ARE ALIVE!", "Namtab: I'll fight your tax return!", "The fire rises", "Looking good!", "Please like and subscribe!",
         "It really helps!", "It puts the lotion on the skin", "MATH.PI", "LIBGDX", "Wowee", "Call me: 1-800-not a real number.com", "ACHIEVMENT UNLOCKED!", "Get rekt", "Tyranasauras Rekt",
         "Heeey there", "Butterbeaver", "Pee gee!", "Android", "Fighting Game", "P ZEN Q", "P -> Q"};

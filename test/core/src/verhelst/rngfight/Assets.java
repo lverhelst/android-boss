@@ -120,16 +120,16 @@ public class Assets {
 
         FreeTypeFontGenerator ftfg = new FreeTypeFontGenerator(Gdx.files.internal("game_font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter ftfp = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        ftfp.size = Math.round(32 * Gdx.graphics.getDensity());
+        ftfp.size = Math.round(28 * Gdx.graphics.getDensity());
         bf = ftfg.generateFont(ftfp);
 
-        ftfp.size = Math.round(28 * Gdx.graphics.getDensity());
+        ftfp.size = Math.round(24 * Gdx.graphics.getDensity());
         wepNumFnt = ftfg.generateFont(ftfp);
 
         ftfp.size = Math.round(12 * Gdx.graphics.getDensity());
         dmgNumFnt = ftfg.generateFont(ftfp);
 
-        ftfp.size = Math.round(24 * Gdx.graphics.getDensity());
+        ftfp.size = Math.round(20 * Gdx.graphics.getDensity());
         HUDbf = ftfg.generateFont(ftfp);
 
         butterBeaver = new Sprite(new Texture(Gdx.files.internal("In Development\\repBB.png")));

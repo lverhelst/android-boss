@@ -112,7 +112,7 @@ public class BattleScreen implements Screen, InputProcessor {
             for (BattleResult br : results) {
                 switch (br) {
                     case NewHighScore:
-                        soloMessage = new DamageNumber("NEW HIGHSCORE!", Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight() * 3/4 );
+                        soloMessage = new DamageNumber("NEW HIGHSCORE!", Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight() * 3/4 );
                         break;
                     case Player1Win:
                         message = "You lost. Too bad.";
