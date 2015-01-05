@@ -4,9 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -43,7 +46,8 @@ public class BattleScreen implements Screen, InputProcessor {
     int display_cap = Integer.MAX_VALUE;
     Actor dragme, butterDragMe;
 
-    DamageNumber soloMessage;
+    ArrayList<DamageNumber> soloMessage = new ArrayList<DamageNumber>();
+    Iterator<DamageNumber> it;
 
     boolean custom_mode_on;
     String custom_mode_string;
@@ -112,7 +116,7 @@ public class BattleScreen implements Screen, InputProcessor {
             for (BattleResult br : results) {
                 switch (br) {
                     case NewHighScore:
-                        soloMessage = new DamageNumber("NEW HIGHSCORE!", Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight() * 3/4 );
+                        soloMessage.add(new DamageNumber("NEW HIGHSCORE!", Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight() * 3/4 ));
                         break;
                     case Player1Win:
                         message = "You lost. Too bad.";
@@ -129,7 +133,7 @@ public class BattleScreen implements Screen, InputProcessor {
 
                         Assets.unlockItem(-1, weapon.spriteindex);
                         bView.setLoot(weapon);
-
+                        soloMessage.add(new DamageNumber("LOOT!", Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight() * 3/4 ));
                         // System.out.println("Showloot");
                         break;
                     case ShowRandomLoot:
@@ -138,6 +142,7 @@ public class BattleScreen implements Screen, InputProcessor {
                     case CustomMode_ioi:
                         custom_mode_on = true;
                         custom_mode_string = "ioi";
+                        soloMessage.add(new DamageNumber("CUSTOM MODE ioi!", Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight() * 3/4 ));
                         break;
                     case Player1GetsLoot:
                         btl.getLeftside().setEquipped_weapon(Weapon.generateScaledWeapon(a.getLevel(), Weapon.POSITION.LEFT_POSITION));
@@ -145,6 +150,7 @@ public class BattleScreen implements Screen, InputProcessor {
                         Weapon bWep = btl.getRightside().getEquipped_weapon();
 
                         bView.updateCharacterWeapons(aWep, bWep);
+
 
                         break;
                     case HeadLoot:
@@ -158,7 +164,7 @@ public class BattleScreen implements Screen, InputProcessor {
                         BodyPartActor hsa = new BodyPartActor(BodyPartActor.BodyPartType.values()[loooooot], btl.getLeftside().getMax_level());
                         Assets.unlockItem(loooooot, hsa.part_index);
                         bView.setLoot(hsa);
-
+                        soloMessage.add(new DamageNumber("LOOT!", Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight() * 3/4 ));
 
                         break;
                     case Player1NewSuit:
@@ -187,15 +193,28 @@ public class BattleScreen implements Screen, InputProcessor {
 
 
         bView.getStage().draw();
+        renderDamageNumbers(RngFight.batch);
 
-        if(soloMessage != null) {
-            RngFight.batch.begin();
-            Assets.wepNumFnt.setColor(soloMessage.getRed(), soloMessage.getGreen(), soloMessage.getBlue(), soloMessage.getAlpha());
-            Assets.wepNumFnt.draw(RngFight.batch, soloMessage.getCs(), soloMessage.getX(), soloMessage.getY());
-            RngFight.batch.end();
-            soloMessage.update();
-            if(soloMessage.isRemoveable())
-                soloMessage = null;
+    }
+
+    public void renderDamageNumbers(Batch batch) {
+
+        //Add Damage Numbers to screen
+        synchronized (soloMessage) {
+
+            for (it = soloMessage.iterator(); it.hasNext(); ) {
+
+                DamageNumber dn = it.next();
+                if (dn.isRemoveable()) {
+                    it.remove();
+                } else {
+                    batch.begin();
+                    Assets.wepNumFnt.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
+                    Assets.wepNumFnt.draw(batch, dn.getCs(), dn.getX(), dn.getY());
+                    batch.end();
+                    dn.update();
+                }
+            }
         }
 
     }
