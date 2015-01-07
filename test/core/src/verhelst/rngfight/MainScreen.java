@@ -17,6 +17,7 @@ import verhelst.Comp.LCell;
 import verhelst.Comp.LLabel;
 import verhelst.Comp.LTable;
 import verhelst.CustomActors.DamageNumber;
+import verhelst.CustomActors.SpriteActor;
 
 /**
  * Created by Leon I. Verhelst on 1/3/2015.
@@ -36,6 +37,12 @@ public class MainScreen implements Screen, InputProcessor {
         "It really helps!", "It puts the lotion on the skin", "MATH.PI", "LIBGDX", "Wowee", "Call me: 1-800-not a real number.com", "ACHIEVMENT UNLOCKED!", "Get rekt", "Tyranasauras Rekt",
         "Heeey there", "Butterbeaver", "Pee gee!", "Android", "Fighting Game", "P ZEN Q", "P -> Q"};
 
+    Image achieve, leaders;
+    SpriteActor signin;
+
+
+
+
     public MainScreen(RngFight fight){
         this.game = fight;
         mt = new LTable(0,0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
@@ -48,11 +55,20 @@ public class MainScreen implements Screen, InputProcessor {
 
         highscore = new LLabel("Highscore", RngFight.skin);
         highscore.setIsHUD(true);
+
+        st.addRow();
+        st.addActor(new Image(Assets.game_controller),true);
         st.addActor(highscore);
         st.addRow();
-        //TODO: Make into SHARE buttons
-        st.addActor(butterbeaver,true);
-        st.addActor(butterbeaver,true);
+        //TODO: Make into SIGN IN, ACHIEVEMENTS, LEADERBOARD buttons
+        signin = new SpriteActor(Assets.signin);
+        st.addActor(signin,true);
+        achieve = new Image(Assets.game_achieve);
+        achieve.setVisible(false);
+        st.addActor(achieve, true);
+        leaders = new Image(Assets.game_leader);
+        leaders.setVisible(false);
+        st.addActor(leaders,true);
 
         lt.addActor(st);
 
@@ -195,13 +211,31 @@ public class MainScreen implements Screen, InputProcessor {
 
         if(screenX < Gdx.graphics.getWidth()/2){
             addDmgNum(thingsToSay[new Random().nextInt(thingsToSay.length)], screenX, actualY);
+
+            if(actualY > signin.getY() && actualY < signin.getY() + signin.getHeight()) {
+                if (screenX > signin.getX() && screenX < signin.getX() + signin.getWidth()) {
+                    if (RngFight.actionResolver.isSignedIn()) {
+                        leaders.setVisible(false);
+                        achieve.setVisible(false);
+                        signin.setDisplaysprite(Assets.signin);
+                        RngFight.actionResolver.signOut();
+                    } else {
+                        leaders.setVisible(true);
+                        achieve.setVisible(true);
+                        signin.setDisplaysprite(Assets.signout);
+                        RngFight.actionResolver.signIn();
+                    }
+                }else if(screenX > achieve.getX() && screenX < achieve.getX() + achieve.getWidth()){
+                    if (RngFight.actionResolver.isSignedIn()) {
+                        RngFight.actionResolver.showAchievements();
+                    }
+                }else if(screenX > leaders.getX() && screenX < leaders.getX() + leaders.getWidth()){
+                    if (RngFight.actionResolver.isSignedIn()) {
+                        RngFight.actionResolver.showLeaderBoard();
+                    }
+                }
+            }
         }
-
-
-
-
-
-
         return false;
     }
 

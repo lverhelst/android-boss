@@ -13,6 +13,17 @@ public class BattleResultHandler {
     protected int max_hitcount, min_hitcount, max_level_reached, games, player2wins, player2losses, draws, score, max_score;
     public int[] stats = new int[8];
 
+    /*
+        <string name="app_id">225240267219</string>
+          <string name="achievement_its_over_9000">CgkI0_P2iscGEAIQAg</string>
+          <string name="achievement_millennial">CgkI0_P2iscGEAIQAw</string>
+          <string name="achievement_lucky">CgkI0_P2iscGEAIQBA</string>
+          <string name="achievement_quikfite">CgkI0_P2iscGEAIQBQ</string>
+          <string name="achievement_achievement_unlocked">CgkI0_P2iscGEAIQBg</string>
+          <string name="leaderboard_leaderboard">CgkI0_P2iscGEAIQAA</string>
+    
+
+     */
 
     public BattleResultHandler() {
         reset();

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">QuikFite</string>
-    <string name="app_id">1337</string>
+    <string name="app_id">225240267219</string>
+    <string name="achievement_its_over_9000">CgkI0_P2iscGEAIQAg</string>
+    <string name="achievement_millennial">CgkI0_P2iscGEAIQAw</string>
+    <string name="achievement_lucky">CgkI0_P2iscGEAIQBA</string>
+    <string name="achievement_quikfite">CgkI0_P2iscGEAIQBQ</string>
+    <string name="achievement_achievement_unlocked">CgkI0_P2iscGEAIQBg</string>
+    <string name="leaderboard_leaderboard">CgkI0_P2iscGEAIQAA</string>
 </resources>

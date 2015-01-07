@@ -29,8 +29,7 @@ public class Assets {
     public static BitmapFont HUDbf;
     public static Texture dmgIconTxture, hrtIconTxture, glow, glow_ylw;
     public static Sprite dmgIcon, hrtIcon;
-    public static Sprite butterBeaver, landing_pad, landing_pad_glow, back_btn, reset_closed, reset_opened, reset_pressed, mystery_sprite, FITE_SIGN, STATS, DRES, INDEV;
-
+    public static Sprite butterBeaver, landing_pad, landing_pad_glow, back_btn, reset_closed, reset_opened, reset_pressed, mystery_sprite, FITE_SIGN, STATS, DRES, INDEV, game_controller, game_leader, game_achieve, signin, signout;
     private static int armcount, pantcount, shirtcount, shouldercount, facecount, weaponcount;
     private static Random rng = new Random();
 
@@ -145,6 +144,11 @@ public class Assets {
         reset_opened = new Sprite(new Texture(Gdx.files.internal("In Development\\ResetButtonOpen.png")));
         reset_pressed = new Sprite(new Texture(Gdx.files.internal("In Development\\ResetButtonDepressed.png")));
         mystery_sprite = new Sprite(new Texture(Gdx.files.internal("In Development\\mystery_sprite.png")));
+        game_controller =  new Sprite(new Texture(Gdx.files.internal("games_controller.png")));
+        game_leader =  new Sprite(new Texture(Gdx.files.internal("bb_leaderboards.png")));
+        game_achieve =  new Sprite(new Texture(Gdx.files.internal("bb_achievements.png")));
+        signin =  new Sprite(new Texture(Gdx.files.internal("bb_signin.png")));
+        signout =  new Sprite(new Texture(Gdx.files.internal("bb_signout.png")));
     }
 
 

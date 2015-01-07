@@ -27,7 +27,13 @@ public class RngFight extends com.badlogic.gdx.Game {
 
     private int currentscreen;
     SaveGame sg;
-    //input multiplexor?
+
+    public static ActionResolver actionResolver;
+
+    public RngFight(ActionResolver ar){
+        this.actionResolver = ar;
+    }
+
 
     @Override
     public void create() {
@@ -37,9 +43,10 @@ public class RngFight extends com.badlogic.gdx.Game {
         try {
             sg = new SaveGame(this);
             sg.readGameSave();
-
-            Assets.unclocks = SaveGame.unclocks;
-            Assets.weaponUnlocks = SaveGame.weapon_unlocks;
+            if(SaveGame.unclocks != null)
+                Assets.unclocks = SaveGame.unclocks;
+            if(SaveGame.weapon_unlocks != null)
+                Assets.weaponUnlocks = SaveGame.weapon_unlocks;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -70,6 +77,7 @@ public class RngFight extends com.badlogic.gdx.Game {
                 Gdx.input.setInputProcessor(viewerAndStats.im);
                 break;
             case 2:
+                dressingScreen.reload();
                 setScreen(dressingScreen);
                 Gdx.input.setInputProcessor(dressingScreen.getInputProcessor());
                 break;

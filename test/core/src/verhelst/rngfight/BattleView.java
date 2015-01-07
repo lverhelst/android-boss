@@ -324,7 +324,11 @@ public class BattleView {
         streaklbl.setText("Streak: " + b.getRightside().getWin_streak());
         hitcount.setText("Hits: " +  NumberFormat.getNumberInstance(Locale.US).format(hits));
         highscorelbl.setText("Highscore: " +  NumberFormat.getNumberInstance(Locale.US).format(highscore));
-        scorelbl.setText("Score: " +  NumberFormat.getNumberInstance(Locale.US).format(score));
+        line = "";
+        if(message.contains("Victory")){
+               score *= 2;
+        }
+        scorelbl.setText("Score: " +  NumberFormat.getNumberInstance(Locale.US).format(score) + line);
         scorex = (int)(Assets.wepNumFnt.getBounds("Score: " +  NumberFormat.getNumberInstance(Locale.US).format(score)).width);
         scorey = (int) (scorelbl.getY() + Assets.wepNumFnt.getBounds("Score: " +  NumberFormat.getNumberInstance(Locale.US).format(score)).height * 2);
 

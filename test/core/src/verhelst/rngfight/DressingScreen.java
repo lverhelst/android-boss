@@ -77,6 +77,11 @@ public class DressingScreen implements Screen, InputProcessor {
         im.addProcessor(this);
     }
 
+    public void reload(){
+        //Load CoverFlow Heads Here.
+        loadCoverFlow(geartype);
+    }
+
     public InputMultiplexer getInputProcessor(){
         return im;
     }

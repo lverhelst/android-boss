@@ -13,20 +13,24 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.games.Games;
 
 import verhelst.rngfight.RngFight;
 
-public class AndroidLauncher extends AndroidApplication {
+public class AndroidLauncher extends AndroidApplication  {
 
     private static final String AD_UNIT_ID = "ca-app-pub-5013489833070081/3540762654";
     protected AdView adView;
     protected View gameView;
 
+    public static AndroidLauncher instance;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        instance = this;
 
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
         cfg.useAccelerometer = false;
@@ -53,7 +57,7 @@ public class AndroidLauncher extends AndroidApplication {
 
 
     private View createGameView(AndroidApplicationConfiguration cfg) {
-        gameView = initializeForView(new RngFight(), cfg);
+        gameView = initializeForView(new RngFight(new AndroidActionResolver(getApplicationContext())), cfg);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);
@@ -97,5 +101,10 @@ public class AndroidLauncher extends AndroidApplication {
     public void onDestroy() {
         if (adView != null) adView.destroy();
         super.onDestroy();
+    }
+
+
+    public static void openLeaderBoard(){
+       // startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, LEADERBOARD_ID), REQUEST_LEADERBOARD);
     }
 }

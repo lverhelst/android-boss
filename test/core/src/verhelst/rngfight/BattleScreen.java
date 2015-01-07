@@ -123,9 +123,6 @@ public class BattleScreen implements Screen, InputProcessor {
                         break;
                     case Player2Win:
                         message = "Victory! " + a.getName() + " defeated!";
-                        DamageNumber dn = new DamageNumber("Score x2", (bView.getScoreX()), bView.getScoreY());
-                        dn.setAngle(45);
-                        soloMessage.add(dn);
                         break;
                     case Tie:
                         message = "D-D-D-Double Kill!";
@@ -443,8 +440,10 @@ public class BattleScreen implements Screen, InputProcessor {
                             score = brh.getScore(hits, btl.getLeftside());
 
                             if (bswNumList.isEmpty()) {
-                                btl.getLeftside().setDisplay_hp(lst[2]);
-                                btl.getRightside().setDisplay_hp(lst[3]);
+                                if(lst != null) {
+                                    btl.getLeftside().setDisplay_hp(lst[2]);
+                                    btl.getRightside().setDisplay_hp(lst[3]);
+                                }
                                 battling = false;
                                 break;
                             }
