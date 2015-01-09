@@ -113,6 +113,14 @@ public class MainScreen implements Screen, InputProcessor {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if(RngFight.actionResolver.isSignedIn()) {
+            leaders.setVisible(true);
+            achieve.setVisible(true);
+            submitscore.setVisible(true);
+            signin.setDisplaysprite(Assets.signout);
+        }
+
+
         RngFight.batch.begin();
         renderDamageNumbers(RngFight.batch);
         mt.draw(RngFight.batch, 1);
@@ -236,11 +244,9 @@ public class MainScreen implements Screen, InputProcessor {
                         signin.setDisplaysprite(Assets.signin);
                         RngFight.actionResolver.signOut();
                     } else {
-                        leaders.setVisible(true);
-                        achieve.setVisible(true);
-                        submitscore.setVisible(true);
-                        signin.setDisplaysprite(Assets.signout);
-                        RngFight.actionResolver.signIn();
+                      RngFight.actionResolver.signIn();
+
+
                     }
                 }else if(screenX > achieve.getX() && screenX < achieve.getX() + achieve.getWidth()){
                     if (RngFight.actionResolver.isSignedIn()) {

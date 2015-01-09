@@ -48,8 +48,9 @@ public class AndroidActionResolver implements ActionResolver, GoogleApiClient.Co
         }
     }
 
-    public void start(){
+    public boolean start(){
         mGoogleApiClient.connect();
+        return true;
     }
 
     public void stop(){
@@ -62,7 +63,7 @@ public class AndroidActionResolver implements ActionResolver, GoogleApiClient.Co
         if (isSignedIn()) {
             AndroidLauncher.instance.startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), RC_UNUSED);
         } else {
-            Toast.makeText(ctx, "Sign In to view Achievments", Toast.LENGTH_LONG);
+           makeToast("Sign In to view Achievments");
         }
     }
 
@@ -70,7 +71,7 @@ public class AndroidActionResolver implements ActionResolver, GoogleApiClient.Co
         if (isSignedIn()) {
             AndroidLauncher.instance.startActivityForResult(Games.Leaderboards.getAllLeaderboardsIntent(mGoogleApiClient), RC_UNUSED);
         } else {
-            Toast.makeText(ctx, "Sign In to view LeaderBoards", Toast.LENGTH_LONG);
+            makeToast("Sign In to view LeaderBoards");
         }
     }
 
@@ -78,43 +79,66 @@ public class AndroidActionResolver implements ActionResolver, GoogleApiClient.Co
         if (isSignedIn()) {
             Games.Leaderboards.submitScore(mGoogleApiClient, ctx.getResources().getString(R.string.leaderboard_leaderboard), score);
         } else {
-            Toast.makeText(ctx, "Sign In to view LeaderBoards", Toast.LENGTH_LONG);
+            makeToast("Sign In to view LeaderBoards");
         }
         return true;
     }
 
 
-    /*
-        <string name="app_id">225240267219</string>
-          <string name="achievement_its_over_9000">CgkI0_P2iscGEAIQAg</string>
-          <string name="achievement_millennial">CgkI0_P2iscGEAIQAw</string>
-          <string name="achievement_lucky">CgkI0_P2iscGEAIQBA</string>
-          <string name="achievement_quikfite">CgkI0_P2iscGEAIQBQ</string>
-          <string name="achievement_achievement_unlocked">CgkI0_P2iscGEAIQBg</string>
-          <string name="leaderboard_leaderboard">CgkI0_P2iscGEAIQAA</string>
+    private void makeToast(final String message){
+        System.out.println("Toast: " + message);
+
+        AndroidLauncher.instance.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(ctx, message, Toast.LENGTH_LONG);
+            }
+        });
+    }
 
 
-     */
     public boolean unlockAchievement(String achievement){
+
         if(!isSignedIn()){
-            Toast.makeText(ctx, "Not Signed In", Toast.LENGTH_LONG);
+
+            makeToast("Not Signed In. Would have unlocked: " + achievement);
+
             return false;
         }else{
             if(achievement.equalsIgnoreCase("its_over_9000")){
                 Games.Achievements.unlock(mGoogleApiClient, ctx.getResources().getString(R.string.achievement_its_over_9000) );
-                Toast.makeText(ctx, "Achievement unlocked: It's Over 9000!", Toast.LENGTH_LONG);
+                makeToast("Achievement unlocked: It's Over 9000!");
             }else if(achievement.equalsIgnoreCase("millennial")){
                 Games.Achievements.unlock(mGoogleApiClient, ctx.getResources().getString(R.string.achievement_millennial) );
-                Toast.makeText(ctx, "Achievement unlocked: Millennial!", Toast.LENGTH_LONG);
+                makeToast("Achievement unlocked: Millennial!");
             }else if(achievement.equalsIgnoreCase("lucky")){
                 Games.Achievements.unlock(mGoogleApiClient, ctx.getResources().getString(R.string.achievement_lucky) );
-                Toast.makeText(ctx, "Achievement unlocked: Lucky!", Toast.LENGTH_LONG);
+
+                makeToast( "Achievement unlocked: Lucky!");
             }else if(achievement.equalsIgnoreCase("quikfite")){
                 Games.Achievements.unlock(mGoogleApiClient, ctx.getResources().getString(R.string.achievement_quikfite) );
-                Toast.makeText(ctx, "Achievement unlocked: QuikFite!", Toast.LENGTH_LONG);
+                makeToast("Achievement unlocked: QuikFite!");
             }else if(achievement.equalsIgnoreCase("achievement_unlocked")){
                 Games.Achievements.unlock(mGoogleApiClient, ctx.getResources().getString(R.string.achievement_achievement_unlocked) );
-                Toast.makeText(ctx, "Achievement unlocked: Achievement Unlocked!", Toast.LENGTH_LONG);
+                makeToast("Achievement unlocked: Achievement Unlocked!");
+            }else if(achievement.equalsIgnoreCase("equipsuit")){
+                Games.Achievements.unlock(mGoogleApiClient, ctx.getResources().getString(R.string.achievement_well_put_together) );
+                makeToast("Achievement unlocked: Well Put Together!");
+            }else if(achievement.equalsIgnoreCase("milkbutt")){
+                Games.Achievements.unlock(mGoogleApiClient, ctx.getResources().getString(R.string.achievement_i_came_here_to_drink_milk_and_kick_butt) );
+                makeToast( "Achievement unlocked: I cam here to drink milk and kick butt...");
+            }else if(achievement.equalsIgnoreCase("loser")){
+                Games.Achievements.unlock(mGoogleApiClient, ctx.getResources().getString(R.string.achievement_lehuesaheer) );
+                makeToast("Achievement unlocked: Le-hue-sa-heer");
+            }else if(achievement.equalsIgnoreCase("fifty")){
+                Games.Achievements.unlock(mGoogleApiClient, ctx.getResources().getString(R.string.achievement_level_50) );
+                makeToast("Achievement unlocked: Level 50");
+            }else if(achievement.equalsIgnoreCase("missiles")){
+                Games.Achievements.unlock(mGoogleApiClient, ctx.getResources().getString(R.string.achievement_launch_the_missiles) );
+                makeToast("Achievement unlocked: Launch the missiles!!!");
+            }else if(achievement.equalsIgnoreCase("millionaire")){
+                Games.Achievements.unlock(mGoogleApiClient, ctx.getResources().getString(R.string.achievement_millionaire) );
+                makeToast("Achievement unlocked: Millionaire!");
             }
         }
         return true;
@@ -135,7 +159,7 @@ public class AndroidActionResolver implements ActionResolver, GoogleApiClient.Co
             displayName = p.getDisplayName();
         }
 
-        Toast.makeText(ctx, "Welcome " + displayName + "!", Toast.LENGTH_LONG);
+        makeToast("Welcome " + displayName + "!");
     }
 
     @Override
@@ -145,7 +169,7 @@ public class AndroidActionResolver implements ActionResolver, GoogleApiClient.Co
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Toast.makeText(ctx, "Sign In Failed", Toast.LENGTH_LONG);
+        makeToast("Sign In Failed");
     }
 
     public void signOut(){
@@ -154,8 +178,8 @@ public class AndroidActionResolver implements ActionResolver, GoogleApiClient.Co
         stop();
     }
 
-    public void signIn(){
-        start();
+    public boolean signIn(){
+        return start();
     }
 }
 

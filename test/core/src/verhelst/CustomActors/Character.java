@@ -13,6 +13,7 @@ import java.util.Random;
 import verhelst.bones.Model;
 import verhelst.rngfight.Assets;
 import verhelst.rngfight.BattleScreen;
+import verhelst.rngfight.RngFight;
 import verhelst.rngfight.Weapon;
 
 /**
@@ -481,6 +482,7 @@ public class Character extends Actor {
                 m.updateSprite("elbow", toequip);
                 break;
         }
+        checkIsAchiev();
     }
 
     public void setBodyPart(String part, Sprite sprite, int index) {
@@ -502,6 +504,19 @@ public class Character extends Actor {
             spriteindices[4] = index;
 
         m.updateSprite(part, toequip);
+
+        checkIsAchiev();
+    }
+
+    public void checkIsAchiev(){
+        boolean isgood = true;
+        for(int i = 1; i < spriteindices.length; i++){
+            isgood &= (spriteindices[i-1] == spriteindices[i]);
+            isgood &= spriteindices[i] != 0;
+        }
+        if(isgood){
+            RngFight.actionResolver.unlockAchievement("equipsuit");
+        }
     }
 
     public int getMax_level() {

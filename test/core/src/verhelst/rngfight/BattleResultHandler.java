@@ -13,18 +13,6 @@ public class BattleResultHandler {
     protected int max_hitcount, min_hitcount, max_level_reached, games, player2wins, player2losses, draws, score, max_score;
     public int[] stats = new int[8];
 
-    /*
-        <string name="app_id">225240267219</string>
-          <string name="achievement_its_over_9000">CgkI0_P2iscGEAIQAg</string>
-          <string name="achievement_millennial">CgkI0_P2iscGEAIQAw</string>
-          <string name="achievement_lucky">CgkI0_P2iscGEAIQBA</string>
-          <string name="achievement_quikfite">CgkI0_P2iscGEAIQBQ</string>
-          <string name="achievement_achievement_unlocked">CgkI0_P2iscGEAIQBg</string>
-          <string name="leaderboard_leaderboard">CgkI0_P2iscGEAIQAA</string>
-    
-
-     */
-
     public BattleResultHandler() {
         reset();
     }
@@ -108,7 +96,8 @@ public class BattleResultHandler {
 
         if(score > 9000)
             RngFight.actionResolver.unlockAchievement("its_over_9000");
-
+        if(score >= 1000000)
+            RngFight.actionResolver.unlockAchievement("millionaire");
 
         if(games == 1000)
             RngFight.actionResolver.unlockAchievement("millennial");
@@ -116,6 +105,12 @@ public class BattleResultHandler {
             RngFight.actionResolver.unlockAchievement("lucky");
         if(hitcount < 25)
             RngFight.actionResolver.unlockAchievement("quickfite");
+        if(b.getWin_streak() == 15)
+            RngFight.actionResolver.unlockAchievement("milkbutt");
+        if(b.getWin_streak() == -15)
+            RngFight.actionResolver.unlockAchievement("loser");
+        if(max_level_reached == 50)
+            RngFight.actionResolver.unlockAchievement("fifty");
 
 
         return resultsList.toArray(new BattleResult[resultsList.size()]);

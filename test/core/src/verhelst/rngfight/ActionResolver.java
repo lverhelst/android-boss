@@ -9,7 +9,7 @@ public interface ActionResolver {
     public void showLeaderBoard();
     public boolean submitHighScore(int score);
     public boolean unlockAchievement(String achievement);
-    public void signIn();
+    public boolean signIn();
     public void signOut();
     public boolean isSignedIn();
 

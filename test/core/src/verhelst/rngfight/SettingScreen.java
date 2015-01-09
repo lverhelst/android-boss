@@ -109,6 +109,7 @@ public class SettingScreen implements Screen, InputProcessor {
             reset_state = 0;
             SaveGame.reset();
             resetButton.setDisplaysprite(new Sprite(Assets.reset_closed));
+            RngFight.actionResolver.unlockAchievement("missiles");
         }
         RngFight.batch.end();
 
