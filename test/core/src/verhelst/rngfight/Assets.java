@@ -29,7 +29,7 @@ public class Assets {
     public static BitmapFont HUDbf;
     public static Texture dmgIconTxture, hrtIconTxture, glow, glow_ylw;
     public static Sprite dmgIcon, hrtIcon;
-    public static Sprite butterBeaver, landing_pad, landing_pad_glow, back_btn, reset_closed, reset_opened, reset_pressed, mystery_sprite, FITE_SIGN, STATS, DRES, INDEV, game_controller, game_leader, game_achieve, signin, signout;
+    public static Sprite butterBeaver, landing_pad, landing_pad_glow, back_btn, reset_closed, reset_opened, reset_pressed, mystery_sprite, FITE_SIGN, STATS, DRES, INDEV, game_controller, game_leader, game_achieve, signin, signout, submitscore;
     private static int armcount, pantcount, shirtcount, shouldercount, facecount, weaponcount;
     private static Random rng = new Random();
 
@@ -149,6 +149,7 @@ public class Assets {
         game_achieve =  new Sprite(new Texture(Gdx.files.internal("bb_achievements.png")));
         signin =  new Sprite(new Texture(Gdx.files.internal("bb_signin.png")));
         signout =  new Sprite(new Texture(Gdx.files.internal("bb_signout.png")));
+        submitscore =  new Sprite(new Texture(Gdx.files.internal("submitscore.png")));
     }
 
 

@@ -32,14 +32,15 @@ public class MainScreen implements Screen, InputProcessor {
     ArrayList<DamageNumber> stringlist = new ArrayList<DamageNumber>();
     Iterator<DamageNumber> i;
 
-    String[] thingsToSay = {"QUIKFITE", "QuikFite", "quikfite", "ioi", "get a job", "you lose", "you win", "yes", "no", "That's ridiculous", "Well I say!", "Uplifting Message!", "CHEN SMASH", ",", "i++", "Subliminal Suggestions!",
+    String[] thingsToSay = { "ACHIEVMENT UNLOCKED!","QUIKFITE", "QuikFite", "quikfite", "ioi", "get a job", "you lose", "you win", "yes", "no", "That's ridiculous", "Well I say!", "Uplifting Message!", "CHEN SMASH", ",", "i++", "Subliminal Suggestions!",
         "Namtab: MY PARENT'S ARE ALIVE!", "Namtab: I'll fight your tax return!", "The fire rises", "Looking good!", "Please like and subscribe!",
-        "It really helps!", "It puts the lotion on the skin", "MATH.PI", "LIBGDX", "Wowee", "Call me: 1-800-not a real number.com", "ACHIEVMENT UNLOCKED!", "Get rekt", "Tyranasauras Rekt",
+        "It really helps!", "It puts the lotion on the skin", "MATH.PI", "LIBGDX", "Wowee", "Call me: 1-800-not a real number.com", "Get rekt", "Tyranasauras Rekt",
         "Heeey there", "Butterbeaver", "Pee gee!", "Android", "Fighting Game", "P ZEN Q", "P -> Q"};
 
-    Image achieve, leaders;
+    Image achieve, leaders, submitscore;
     SpriteActor signin;
 
+    int skore;
 
 
 
@@ -57,7 +58,10 @@ public class MainScreen implements Screen, InputProcessor {
         highscore.setIsHUD(true);
 
         st.addRow();
-        st.addActor(new Image(Assets.game_controller),true);
+        st.addActor(new Image(Assets.game_controller), true);
+        submitscore = new Image(Assets.submitscore);
+        submitscore.setVisible(false);
+        st.addActor(submitscore);
         st.addActor(highscore);
         st.addRow();
         //TODO: Make into SIGN IN, ACHIEVEMENTS, LEADERBOARD buttons
@@ -102,7 +106,7 @@ public class MainScreen implements Screen, InputProcessor {
     }
 
     public void updateHighscore(int score){
-
+        skore = score;
         highscore.setText("Highscore: " +  NumberFormat.getNumberInstance(Locale.US).format(score));
     }
 
@@ -209,19 +213,32 @@ public class MainScreen implements Screen, InputProcessor {
             }
         }
 
-        if(screenX < Gdx.graphics.getWidth()/2){
-            addDmgNum(thingsToSay[new Random().nextInt(thingsToSay.length)], screenX, actualY);
+
+        if(screenX > submitscore.getX() && screenX <  submitscore.getX() +  submitscore.getWidth() &&
+                actualY > submitscore.getY() && actualY < submitscore.getY() + submitscore.getHeight()) {
+            if(RngFight.actionResolver.isSignedIn()){
+                RngFight.actionResolver.submitHighScore(skore);
+            }
+        }
+
+            if(screenX < Gdx.graphics.getWidth()/2){
+                int index = new Random().nextInt(thingsToSay.length);
+                if(index == 0)
+                    RngFight.actionResolver.unlockAchievement("achievement_unlocked");
+                addDmgNum(thingsToSay[index], screenX, actualY);
 
             if(actualY > signin.getY() && actualY < signin.getY() + signin.getHeight()) {
                 if (screenX > signin.getX() && screenX < signin.getX() + signin.getWidth()) {
                     if (RngFight.actionResolver.isSignedIn()) {
                         leaders.setVisible(false);
                         achieve.setVisible(false);
+                        submitscore.setVisible(false);
                         signin.setDisplaysprite(Assets.signin);
                         RngFight.actionResolver.signOut();
                     } else {
                         leaders.setVisible(true);
                         achieve.setVisible(true);
+                        submitscore.setVisible(true);
                         signin.setDisplaysprite(Assets.signout);
                         RngFight.actionResolver.signIn();
                     }

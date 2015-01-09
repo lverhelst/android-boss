@@ -106,6 +106,18 @@ public class BattleResultHandler {
 
 
 
+        if(score > 9000)
+            RngFight.actionResolver.unlockAchievement("its_over_9000");
+
+
+        if(games == 1000)
+            RngFight.actionResolver.unlockAchievement("millennial");
+        if(games == 500 && ((float)player2wins/player2losses >= 1.0))
+            RngFight.actionResolver.unlockAchievement("lucky");
+        if(hitcount < 25)
+            RngFight.actionResolver.unlockAchievement("quickfite");
+
+
         return resultsList.toArray(new BattleResult[resultsList.size()]);
     }
 
