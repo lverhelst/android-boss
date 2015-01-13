@@ -119,6 +119,11 @@ public class MainScreen implements Screen, InputProcessor {
             submitscore.setVisible(true);
             signin.setDisplaysprite(Assets.signout);
         }
+        if(RngFight.actionResolver.isSigningIn()){
+            signin.setVisible(false);
+        }else{
+            signin.setVisible(true);
+        }
 
 
         RngFight.batch.begin();
@@ -230,10 +235,7 @@ public class MainScreen implements Screen, InputProcessor {
         }
 
             if(screenX < Gdx.graphics.getWidth()/2){
-                int index = new Random().nextInt(thingsToSay.length);
-                if(index == 0)
-                    RngFight.actionResolver.unlockAchievement("achievement_unlocked");
-                addDmgNum(thingsToSay[index], screenX, actualY);
+
 
             if(actualY > signin.getY() && actualY < signin.getY() + signin.getHeight()) {
                 if (screenX > signin.getX() && screenX < signin.getX() + signin.getWidth()) {
@@ -245,8 +247,6 @@ public class MainScreen implements Screen, InputProcessor {
                         RngFight.actionResolver.signOut();
                     } else {
                       RngFight.actionResolver.signIn();
-
-
                     }
                 }else if(screenX > achieve.getX() && screenX < achieve.getX() + achieve.getWidth()){
                     if (RngFight.actionResolver.isSignedIn()) {
@@ -257,6 +257,11 @@ public class MainScreen implements Screen, InputProcessor {
                         RngFight.actionResolver.showLeaderBoard();
                     }
                 }
+            }else{
+                int index = new Random().nextInt(thingsToSay.length);
+                if(index == 0)
+                    RngFight.actionResolver.unlockAchievement("achievement_unlocked");
+                addDmgNum(thingsToSay[index], screenX, actualY);
             }
         }
         return false;

@@ -20,7 +20,7 @@ public class DesktopActionResolver implements ActionResolver {
 
     @Override
     public boolean submitHighScore(int score) {
-        System.out.println("Submite score " + score);
+        System.out.println("Submit score " + score);
         return false;
     }
 
@@ -32,9 +32,10 @@ public class DesktopActionResolver implements ActionResolver {
     }
 
     @Override
-    public void signIn() {
+    public boolean signIn() {
         isSignedIn = true;
         System.out.println("Sign In");
+        return true;
     }
 
     @Override
@@ -46,5 +47,15 @@ public class DesktopActionResolver implements ActionResolver {
     @Override
     public boolean isSignedIn() {
         return isSignedIn;
+    }
+
+    @Override
+    public boolean isSigningIn() {
+        return false;
+    }
+
+    @Override
+    public void postMessage(String message) {
+        System.out.println(message);
     }
 }

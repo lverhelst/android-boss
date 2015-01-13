@@ -115,4 +115,5 @@ idea {
 }
 dependencies {
     compile 'com.google.android.gms:play-services:5.0.77'
+    compile project(':BaseGameUtils')
 }

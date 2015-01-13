@@ -12,5 +12,6 @@ public interface ActionResolver {
     public boolean signIn();
     public void signOut();
     public boolean isSignedIn();
-
+    public boolean isSigningIn();
+    public void showTextView();
 }
