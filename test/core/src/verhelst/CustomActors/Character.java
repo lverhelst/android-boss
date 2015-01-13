@@ -512,7 +512,7 @@ public class Character extends Actor {
         boolean isgood = true;
         for(int i = 1; i < spriteindices.length; i++){
             isgood &= (spriteindices[i-1] == spriteindices[i]);
-            isgood &= spriteindices[i] != 0;
+            isgood &= spriteindices[i] != 1;
         }
         if(isgood){
             RngFight.actionResolver.unlockAchievement("equipsuit");

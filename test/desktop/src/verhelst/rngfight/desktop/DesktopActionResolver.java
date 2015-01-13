@@ -55,7 +55,7 @@ public class DesktopActionResolver implements ActionResolver {
     }
 
     @Override
-    public void postMessage(String message) {
-        System.out.println(message);
+    public void showTextView() {
+        System.out.println("show txt view");
     }
 }

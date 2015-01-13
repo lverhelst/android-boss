@@ -321,7 +321,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         if (isSignedIn()) {
             AndroidLauncher.instance.startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), RC_UNUSED);
         } else {
-            makeToast("Sign In to view Achievments");
+            makeToast("Sign In to view Achievements");
         }
     }
 

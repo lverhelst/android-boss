@@ -193,15 +193,30 @@ public class Assets {
 
         Sprite[] suit = new Sprite[5];
         //head
-        suit[0] = faces[Math.min(index, facecount - 1)];
+        if(index < facecount -1)
+            suit[0] = faces[index];
+        else
+            suit[0] = faces[rng.nextInt(facecount)];
         //torso
-        suit[1] = shirts[Math.min(index, shirtcount - 1)];
+        if(index < shirtcount - 1)
+            suit[1] = shirts[index];
+        else
+            suit[1] = shirts[rng.nextInt(shirtcount)];
         //leg
-        suit[2] = pants[Math.min(index, pantcount - 1)];
+        if(index  < pantcount -1)
+            suit[2] = pants[index];
+        else
+            suit[2] = pants[rng.nextInt(pantcount)];
         //arm
-        suit[3] = shoulders[Math.min(index, shouldercount - 1)];
+        if(index  < shouldercount - 1)
+            suit[3] = shoulders[index];
+        else
+            suit[3] = shoulders[rng.nextInt(shouldercount)];
         //elbow
-        suit[4] = arms[Math.min(index, armcount - 1)];
+        if(index < armcount - 1)
+            suit[4] = arms[index];
+        else
+            suit[4] = arms[rng.nextInt(armcount)];
         return suit;
     }
 
