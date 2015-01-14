@@ -27,7 +27,7 @@ public class Assets {
     public static BitmapFont dmgNumFnt;
     public static BitmapFont bf;
     public static BitmapFont HUDbf;
-    public static Texture dmgIconTxture, hrtIconTxture, glow, glow_ylw;
+    public static Texture dmgIconTxture, dmgIconSmallTxture, hrtIconTxture, glow, glow_ylw;
     public static Sprite dmgIcon, hrtIcon;
     public static Sprite butterBeaver, landing_pad, landing_pad_glow, back_btn, reset_closed, reset_opened, reset_pressed, mystery_sprite, FITE_SIGN, STATS, DRES, INDEV, game_controller, game_leader, game_achieve, signin, signout, submitscore;
     private static int armcount, pantcount, shirtcount, shouldercount, facecount, weaponcount;
@@ -111,6 +111,8 @@ public class Assets {
 
         dmgIcon = new Sprite(new Texture(Gdx.files.internal("In Development\\DmgIcon.png")));
         dmgIconTxture = new Texture(Gdx.files.internal("In Development\\DmgIcon.png"));
+        dmgIconSmallTxture = new Texture(Gdx.files.internal("In Development\\DmgIconSmall.png"));
+
         hrtIcon = new Sprite(new Texture(Gdx.files.internal("In Development\\HrtIcon.png")));
         hrtIconTxture = new Texture(Gdx.files.internal("In Development\\HrtIcon.png"));
 

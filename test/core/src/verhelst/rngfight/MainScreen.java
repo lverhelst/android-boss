@@ -118,6 +118,11 @@ public class MainScreen implements Screen, InputProcessor {
             achieve.setVisible(true);
             submitscore.setVisible(true);
             signin.setDisplaysprite(Assets.signout);
+        }else{
+            leaders.setVisible(false);
+            achieve.setVisible(false);
+            submitscore.setVisible(false);
+            signin.setDisplaysprite(Assets.signin);
         }
         if(RngFight.actionResolver.isSigningIn()){
             signin.setVisible(false);
@@ -234,9 +239,7 @@ public class MainScreen implements Screen, InputProcessor {
             }
         }
 
-            if(screenX < Gdx.graphics.getWidth()/2){
-
-
+        if(screenX < Gdx.graphics.getWidth()/2){
             if(actualY > signin.getY() && actualY < signin.getY() + signin.getHeight()) {
                 if (screenX > signin.getX() && screenX < signin.getX() + signin.getWidth()) {
                     if (RngFight.actionResolver.isSignedIn()) {
@@ -246,7 +249,7 @@ public class MainScreen implements Screen, InputProcessor {
                         signin.setDisplaysprite(Assets.signin);
                         RngFight.actionResolver.signOut();
                     } else {
-                      RngFight.actionResolver.signIn();
+                        RngFight.actionResolver.signIn();
                     }
                 }else if(screenX > achieve.getX() && screenX < achieve.getX() + achieve.getWidth()){
                     if (RngFight.actionResolver.isSignedIn()) {

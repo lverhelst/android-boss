@@ -503,16 +503,17 @@ public class Character extends Actor {
         if (part.equalsIgnoreCase("elbow"))
             spriteindices[4] = index;
 
-        m.updateSprite(part, toequip);
 
+        m.updateSprite(part, toequip);
         checkIsAchiev();
+
     }
 
     public void checkIsAchiev(){
         boolean isgood = true;
         for(int i = 1; i < spriteindices.length; i++){
             isgood &= (spriteindices[i-1] == spriteindices[i]);
-            isgood &= spriteindices[i] != 1;
+            isgood &= spriteindices[i] != 0;
         }
         if(isgood){
             RngFight.actionResolver.unlockAchievement("equipsuit");

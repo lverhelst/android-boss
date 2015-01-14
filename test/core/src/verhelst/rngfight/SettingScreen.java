@@ -107,8 +107,8 @@ public class SettingScreen implements Screen, InputProcessor {
         mainT.draw(RngFight.batch, 1);
         if (reset_state == 2 && (reset_time != -1 && System.currentTimeMillis() > reset_time)) {
             reset_state = 0;
-            SaveGame.reset();
             resetButton.setDisplaysprite(new Sprite(Assets.reset_closed));
+            SaveGame.reset();
             RngFight.actionResolver.unlockAchievement("missiles");
         }
         RngFight.batch.end();

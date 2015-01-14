@@ -35,8 +35,8 @@ public class Weapon extends Actor {
 
 
     private Sprite sprite, displaysprite;
-    private Label lldmg, llhrt;
-    private String dmgstring, heartstring;
+    private Label llmindmg, llmaxdmg, llhrt;
+    private String mindmgstring, maxdmgstring, heartstring;
 
     private DAMAGETYPE extra_type;
     private POSITION posi;
@@ -90,7 +90,8 @@ public class Weapon extends Actor {
         this.posi = POSITION.LOOT_POSITION;
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
-        lldmg = new Label(dmgstring, skin);
+        llmindmg = new Label(mindmgstring, skin);
+        llmaxdmg = new Label(maxdmgstring, skin);
         //lldmg.setText(dmgstring);
         llhrt = new Label(heartstring, skin);
         //llhrt.setText(heartstring);
@@ -112,11 +113,14 @@ public class Weapon extends Actor {
 
         this.sprite_initWidth = (int) sprite.getWidth();
         this.wdi_initWidth = (int) Assets.weapon_data_icon.getWidth();
-        this.dmgstring = min_damage + "-" + max_damage;
+        this.mindmgstring = "" + min_damage;
+        this.maxdmgstring = "" + max_damage;
         this.heartstring = hp_multiplier * 200 + "";
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-        lldmg = new Label(dmgstring, skin);
-        lldmg.setText(dmgstring);
+        llmindmg = new Label(mindmgstring, skin);
+        llmindmg.setText(mindmgstring);
+        llmaxdmg = new Label(maxdmgstring, skin);
+        llmaxdmg.setText(maxdmgstring);
         llhrt = new Label(heartstring, skin);
         llhrt.setText(heartstring);
         root = getTable();
@@ -137,14 +141,14 @@ public class Weapon extends Actor {
         this.sprite_initWidth = (int) to_copy.sprite_initWidth;
 
         this.wdi_initWidth = (int) Assets.weapon_data_icon.getWidth();
-        this.dmgstring = min_damage + "-" + max_damage;
+        this.mindmgstring = "" + min_damage;
+        this.maxdmgstring = "" + max_damage;
         this.heartstring = hp_multiplier * 200 + "";
-
-//        System.out.println(this.getName() + " copy from " + to_copy.getName());
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-        lldmg = new Label(dmgstring, skin);
-
-        lldmg.setText(dmgstring);
+        llmindmg = new Label(mindmgstring, skin);
+        llmindmg.setText(mindmgstring);
+        llmaxdmg = new Label(maxdmgstring, skin);
+        llmaxdmg.setText(maxdmgstring);
         llhrt = new Label(heartstring, skin);
         llhrt.setText(heartstring);
         root = getTable();
@@ -152,14 +156,14 @@ public class Weapon extends Actor {
     }
 
     private void rebuildUI() {
-        this.dmgstring = min_damage + "-" + max_damage;
+        this.mindmgstring = "" + min_damage;
+        this.maxdmgstring = "" + max_damage;
         this.heartstring = hp_multiplier * 200 + "";
-
-//        System.out.println(this.getName() + " copy from " + to_copy.getName());
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-        lldmg = new Label(dmgstring, skin);
-
-        lldmg.setText(dmgstring);
+        llmindmg = new Label(mindmgstring, skin);
+        llmindmg.setText(mindmgstring);
+        llmaxdmg = new Label(maxdmgstring, skin);
+        llmaxdmg.setText(maxdmgstring);
         llhrt = new Label(heartstring, skin);
         llhrt.setText(heartstring);
         root = getTable();
@@ -284,11 +288,14 @@ public class Weapon extends Actor {
         LTable dataTable = new LTable(0, 0, 100, 100);
         //dataTable.columnDefaults(1).width(32);
         //dataTable.setDebug(true);
-        lldmg.setFontScale((float) (Gdx.graphics.getDensity() * 1.25));
+        llmindmg.setFontScale((float) (Gdx.graphics.getDensity() * 1.25));
+        llmaxdmg.setFontScale((float) (Gdx.graphics.getDensity() * 1.25));
 
-
+        dataTable.addActor(new Image(Assets.dmgIconSmallTxture), true);//.center().pad(5).fill().expand();
+        dataTable.addActor(llmindmg);//.center().pad(5).expand().fill();
+        dataTable.addRow();
         dataTable.addActor(new Image(Assets.dmgIconTxture), true);//.center().pad(5).fill().expand();
-        dataTable.addActor(lldmg);//.center().pad(5).expand().fill();
+        dataTable.addActor(llmaxdmg);//.center().pad(5).expand().fill();
         dataTable.addRow();
         llhrt.setFontScale((float) (Gdx.graphics.getDensity() * 1.25));
         dataTable.addActor(new Image(Assets.hrtIconTxture), true);//.center().pad(5).fill().expand();

@@ -443,6 +443,9 @@ public class BattleScreen implements Screen, InputProcessor {
                                 if(lst != null) {
                                     btl.getLeftside().setDisplay_hp(lst[2]);
                                     btl.getRightside().setDisplay_hp(lst[3]);
+                                    anim_h1 = lst[2];
+                                    anim_h2 = lst[3];
+                                    hits = lst[4];
                                 }
                                 battling = false;
                                 break;

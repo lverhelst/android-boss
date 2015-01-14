@@ -8,6 +8,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
@@ -15,8 +16,11 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.badlogic.gdx.files.FileHandle;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -30,6 +34,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 
 import verhelst.rngfight.ActionResolver;
 import verhelst.rngfight.RngFight;
@@ -47,9 +52,22 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     private static int RC_SIGN_IN = 9001;
     private static final int RC_UNUSED = 5001;
     private boolean mResolvingConnectionFailure = false;
-    private boolean mAutoStartSignInflow = true;
+    private boolean mAutoStartSignInflow = false;
     private boolean mSignInClicked = false;
 
+    private static Preferences pref;
+
+
+
+    enum ACH_STATE {
+        LOCKED,
+        UNLOCKED_TOSUBMIT,
+        UNLOCKED_SUBMITTED
+    }
+
+    private HashMap<String, ACH_STATE> achieveDict;
+
+    private long lastAchieveSubmit = 0;
 
 
     @Override
@@ -63,6 +81,11 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                 .addOnConnectionFailedListener(this)
                 .addApi(Games.API).addScope(Games.SCOPE_GAMES)
                 .build();
+
+
+        achieveDict = new HashMap<String, ACH_STATE>();
+
+
 
         instance = this;
 
@@ -86,14 +109,40 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         //TextView lg = createTextView();
         //layout.addView(lg);
 
-
-
-
-
         setContentView(layout);
         if(false)
             startAdvertising(admobView);
 
+        if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
+            Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(
+                    "/sdcard/", null));
+        }
+        //Load Achievements
+        pref = Gdx.app.getPreferences("achieve");
+        String data = pref.getString("achieve");
+
+        if (data == null || data.equalsIgnoreCase("")) {
+            data = "";
+            pref.putString("achieve", data);
+            pref.flush();
+        }else{
+            String[] data2 = data.split(";");
+            for(int i = 0; i < data2.length; i+= 2){
+                if(data2[i] != "")
+                    achieveDict.put(data2[i], ACH_STATE.valueOf(data2[i+1]));
+            }
+        }
+
+        //Load is auto sign on
+        pref = Gdx.app.getPreferences("autosignon");
+        data = pref.getString("autosignon");
+        if (data == null || data.equalsIgnoreCase("")) {
+            data = "0";
+            pref.putString("autosignon", data);
+            pref.flush();
+        }else{
+            mAutoStartSignInflow = data.equalsIgnoreCase("1");
+        }
 
     }
 
@@ -155,6 +204,10 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     public void onResume() {
         super.onResume();
         if (adView != null) adView.resume();
+        if(mGoogleApiClient != null){
+            if(mAutoStartSignInflow)
+                mGoogleApiClient.connect();
+        }
     }
 
     @Override
@@ -177,6 +230,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             if (resultCode == RESULT_OK) {
                 mGoogleApiClient.connect();
             } else {
+                mAutoStartSignInflow = false;
                 // Bring up an error dialog to alert the user that sign-in
                 // failed. The R.string.signin_failure should reference an error
                 // string in your strings.xml file that tells the user they
@@ -226,7 +280,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     @Override
     protected void onStart() {
         super.onStart();
-     //   mGoogleApiClient.connect();
+        if(mAutoStartSignInflow)
+           mGoogleApiClient.connect();
 
     }
 
@@ -249,8 +304,10 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         } else {
             displayName = p.getDisplayName();
         }
-
         makeToast("Welcome " + displayName + "!");
+        if(System.currentTimeMillis() > lastAchieveSubmit + 10000){
+            localAchieveSubmit();
+        }
     }
 
     private void makeToast(final String message){
@@ -259,7 +316,9 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         AndroidLauncher.instance.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                Toast t = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
+                t.setGravity(Gravity.TOP,0,-120);
+                t.show();
             }
         });
     }
@@ -280,7 +339,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         // if the sign-in button was clicked or if auto sign-in is enabled,
         // launch the sign-in flow
         if (mSignInClicked || mAutoStartSignInflow) {
-            mAutoStartSignInflow = false;
             mSignInClicked = false;
             mResolvingConnectionFailure = true;
 
@@ -292,6 +350,10 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                     mGoogleApiClient, connectionResult,
                     RC_SIGN_IN, getResources().getString(R.string.signin_other_error))) {
                 mResolvingConnectionFailure = false;
+            }else{
+                if(System.currentTimeMillis() > lastAchieveSubmit + 10000){
+                    localAchieveSubmit();
+                }
             }
         }
 
@@ -301,13 +363,24 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     // Call when the sign-in button is clicked
     private void signInClicked() {
         mSignInClicked = true;
+        mAutoStartSignInflow = true;
+        saveAutoSignOn();
+
         mGoogleApiClient.connect();
     }
 
     // Call when the sign-out button is clicked
     private void signOutclicked() {
         mSignInClicked = false;
+        mAutoStartSignInflow = false;
+        saveAutoSignOn();
         Games.signOut(mGoogleApiClient);
+    }
+
+    private void saveAutoSignOn(){
+        pref = Gdx.app.getPreferences("autosignon");
+        pref.putString("autosignon", (mAutoStartSignInflow? "1":"0"));
+        pref.flush();
     }
 
 
@@ -346,7 +419,17 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
     @Override
     public boolean unlockAchievement(String achievement) {
+        localAchieveUnlock(achievement);
+        if(System.currentTimeMillis() > lastAchieveSubmit + 10000){
+            localAchieveSubmit();
+        }
 
+
+        return true;
+    }
+
+
+    private boolean cloudAchieveUnlock(String achievement){
         if(!isSignedIn()){
 
             makeToast("Not Signed In. Would have unlocked: " + achievement);
@@ -361,7 +444,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                 makeToast("Achievement unlocked: Millennial!");
             }else if(achievement.equalsIgnoreCase("lucky")){
                 Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_lucky) );
-
                 makeToast( "Achievement unlocked: Lucky!");
             }else if(achievement.equalsIgnoreCase("quikfite")){
                 Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_quikfite) );
@@ -392,6 +474,34 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         return true;
     }
 
+    private void localAchieveUnlock(String achievement){
+        if(achieveDict != null){
+            achieveDict.put(achievement, ACH_STATE.UNLOCKED_TOSUBMIT);
+        }
+    }
+
+    private void localAchieveSubmit(){
+        for(String key : achieveDict.keySet()){
+            if(achieveDict.get(key).equals(ACH_STATE.UNLOCKED_TOSUBMIT)){
+                if(cloudAchieveUnlock(key)){
+                    achieveDict.put(key, ACH_STATE.UNLOCKED_SUBMITTED);
+                }
+            }
+        }
+        saveAchievements();
+    }
+
+    private void saveAchievements(){
+        String data = "";
+        for(String key : achieveDict.keySet()){
+            data += key + ";" + achieveDict.get(key) + ";";
+        }
+        pref = Gdx.app.getPreferences("achieve");
+        pref.putString("achieve", data);
+        pref.flush();
+    }
+
+
     @Override
     public boolean signIn() {
         signInClicked();
@@ -412,6 +522,11 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     public boolean isSigningIn() {
         return mGoogleApiClient.isConnecting();
     }
+
+
+
+
+
 
 
 }
