@@ -19,7 +19,7 @@ public class DesktopActionResolver implements ActionResolver {
     }
 
     @Override
-    public boolean submitHighScore(int score) {
+    public boolean submitHighScore(int score, int maxhits, int maxlvl) {
         System.out.println("Submit score " + score);
         return false;
     }

@@ -7,7 +7,7 @@ public interface ActionResolver {
 
     public void showAchievements();
     public void showLeaderBoard();
-    public boolean submitHighScore(int score);
+    public boolean submitHighScore(int score, int maxhits, int maxlvl);
     public boolean unlockAchievement(String achievement);
     public boolean signIn();
     public void signOut();

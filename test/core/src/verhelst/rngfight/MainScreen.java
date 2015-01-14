@@ -40,7 +40,7 @@ public class MainScreen implements Screen, InputProcessor {
     Image achieve, leaders, submitscore;
     SpriteActor signin;
 
-    int skore;
+    int skore, maxhits, maxlvl;
 
 
 
@@ -57,12 +57,13 @@ public class MainScreen implements Screen, InputProcessor {
         highscore = new LLabel("Highscore", RngFight.skin);
         highscore.setIsHUD(true);
 
+
+        lt.addActor(highscore);
         st.addRow();
         st.addActor(new Image(Assets.game_controller), true);
         submitscore = new Image(Assets.submitscore);
         submitscore.setVisible(false);
         st.addActor(submitscore);
-        st.addActor(highscore);
         st.addRow();
         //TODO: Make into SIGN IN, ACHIEVEMENTS, LEADERBOARD buttons
         signin = new SpriteActor(Assets.signin);
@@ -105,9 +106,11 @@ public class MainScreen implements Screen, InputProcessor {
         mt.addActor(entrances);
     }
 
-    public void updateHighscore(int score){
+    public void updateHighscore(int score, int maxhits, int maxlvl){
         skore = score;
-        highscore.setText("Highscore: " +  NumberFormat.getNumberInstance(Locale.US).format(score));
+        this.maxhits = maxhits;
+        this.maxlvl = maxlvl;
+        highscore.setText(NumberFormat.getNumberInstance(Locale.US).format(score));
     }
 
     @Override
@@ -235,7 +238,7 @@ public class MainScreen implements Screen, InputProcessor {
         if(screenX > submitscore.getX() && screenX <  submitscore.getX() +  submitscore.getWidth() &&
                 actualY > submitscore.getY() && actualY < submitscore.getY() + submitscore.getHeight()) {
             if(RngFight.actionResolver.isSignedIn()){
-                RngFight.actionResolver.submitHighScore(skore);
+                RngFight.actionResolver.submitHighScore(skore, maxhits, maxlvl);
             }
         }
 

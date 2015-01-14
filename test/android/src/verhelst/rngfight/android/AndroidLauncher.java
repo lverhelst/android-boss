@@ -143,7 +143,6 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         }else{
             mAutoStartSignInflow = data.equalsIgnoreCase("1");
         }
-
     }
 
 
@@ -374,7 +373,10 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         mSignInClicked = false;
         mAutoStartSignInflow = false;
         saveAutoSignOn();
-        Games.signOut(mGoogleApiClient);
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            Games.signOut(mGoogleApiClient);
+            mGoogleApiClient.disconnect();
+        }
     }
 
     private void saveAutoSignOn(){
@@ -401,16 +403,19 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     @Override
     public void showLeaderBoard() {
         if (isSignedIn()) {
-            AndroidLauncher.instance.startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, getApplicationContext().getString(R.string.leaderboard_leaderboard)), 100);
+            AndroidLauncher.instance.startActivityForResult(Games.Leaderboards.getAllLeaderboardsIntent(mGoogleApiClient), 100);
         } else {
             makeToast("Sign In to view LeaderBoards");
         }
     }
 
     @Override
-    public boolean submitHighScore(int score) {
+    public boolean submitHighScore(int score, int maxhits, int maxlvl) {
         if (isSignedIn()) {
-            Games.Leaderboards.submitScore(mGoogleApiClient, getApplicationContext().getString(R.string.leaderboard_leaderboard), score);
+            Games.Leaderboards.submitScore(mGoogleApiClient, getApplicationContext().getString(R.string.leaderboard_highscore), score);
+            Games.Leaderboards.submitScore(mGoogleApiClient, getApplicationContext().getString(R.string.leaderboard_hit_count), maxhits);
+            Games.Leaderboards.submitScore(mGoogleApiClient, getApplicationContext().getString(R.string.leaderboard_level_reached), maxlvl);
+            makeToast("Scored Uploaded");
         } else {
             makeToast("Sign In to view LeaderBoards");
         }
@@ -431,11 +436,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
     private boolean cloudAchieveUnlock(String achievement){
         if(!isSignedIn()){
-
-            makeToast("Not Signed In. Would have unlocked: " + achievement);
-
             return false;
-        }else{
+        }else if (achieveDict.get(achievement).equals(ACH_STATE.UNLOCKED_TOSUBMIT)){
             if(achievement.equalsIgnoreCase("its_over_9000")){
                 Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_its_over_9000) );
                 makeToast("Achievement unlocked: It's Over 9000!");
@@ -476,7 +478,11 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
 
     private void localAchieveUnlock(String achievement){
         if(achieveDict != null){
-            achieveDict.put(achievement, ACH_STATE.UNLOCKED_TOSUBMIT);
+            if(!isSignedIn() && !achieveDict.containsKey(achievement)) {
+                makeToast("Not Signed In. Would have unlocked: " + achievement);
+            }
+            if(!achieveDict.containsKey(achievement))
+                achieveDict.put(achievement, ACH_STATE.UNLOCKED_TOSUBMIT);
         }
     }
 

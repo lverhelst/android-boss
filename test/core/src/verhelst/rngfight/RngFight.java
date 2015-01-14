@@ -86,7 +86,7 @@ public class RngFight extends com.badlogic.gdx.Game {
                 Gdx.input.setInputProcessor(settingsScreen);
                 break;
             case 4:
-                mainScreen.updateHighscore(gameScreen.brh.getMax_score());
+                mainScreen.updateHighscore(gameScreen.brh.getMax_score(), gameScreen.brh.max_hitcount, gameScreen.brh.max_level_reached);
                 setScreen(mainScreen);
                 Gdx.input.setInputProcessor(mainScreen);
         }
