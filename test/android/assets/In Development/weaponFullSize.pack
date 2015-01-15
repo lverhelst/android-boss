@@ -3,14 +3,14 @@ weaponFullSize.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-weapon07
+weapon15
   rotate: false
   xy: 1, 46
   size: 57, 17
   orig: 57, 17
   offset: 0, 0
   index: -1
-weapon15
+weapon07
   rotate: false
   xy: 1, 24
   size: 53, 20
@@ -38,7 +38,7 @@ weapon50
   orig: 53, 20
   offset: 0, 0
   index: -1
-weapon38
+weapon22
   rotate: false
   xy: 170, 43
   size: 51, 20
@@ -52,109 +52,102 @@ weapon39
   orig: 51, 20
   offset: 0, 0
   index: -1
-weapon09
+weapon04
   rotate: false
   xy: 276, 44
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon20
+weapon09
   rotate: false
   xy: 329, 44
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon21
+weapon20
   rotate: false
   xy: 382, 44
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon22
+weapon23
   rotate: false
   xy: 435, 44
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon23
+weapon25
   rotate: false
   xy: 488, 44
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon24
+weapon26
   rotate: false
   xy: 541, 44
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon25
+weapon27
   rotate: false
   xy: 594, 44
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon26
+weapon28
   rotate: false
   xy: 647, 44
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon27
+weapon29
   rotate: false
   xy: 700, 44
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon28
+weapon30
   rotate: false
   xy: 753, 44
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon29
+weapon31
   rotate: false
   xy: 806, 44
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon31
+weapon32
   rotate: false
   xy: 859, 44
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon32
+weapon34
   rotate: false
   xy: 912, 44
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon33
+weapon35
   rotate: false
   xy: 965, 44
   size: 51, 19
   orig: 51, 19
-  offset: 0, 0
-  index: -1
-weapon08
-  rotate: false
-  xy: 56, 29
-  size: 56, 12
-  orig: 56, 12
   offset: 0, 0
   index: -1
 weapon16
@@ -164,30 +157,37 @@ weapon16
   orig: 40, 21
   offset: 0, 0
   index: -1
-weapon34
+weapon02
   rotate: false
-  xy: 114, 22
-  size: 51, 19
-  orig: 51, 19
+  xy: 56, 24
+  size: 39, 17
+  orig: 39, 17
   offset: 0, 0
   index: -1
-weapon35
+weapon18
   rotate: false
-  xy: 95, 1
-  size: 51, 19
-  orig: 51, 19
+  xy: 97, 29
+  size: 56, 12
+  orig: 56, 12
   offset: 0, 0
   index: -1
 weapon36
   rotate: false
-  xy: 148, 1
+  xy: 155, 22
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
 weapon37
   rotate: false
-  xy: 167, 22
+  xy: 95, 1
+  size: 51, 19
+  orig: 51, 19
+  offset: 0, 0
+  index: -1
+weapon38
+  rotate: false
+  xy: 148, 1
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
@@ -201,7 +201,7 @@ weapon40
   index: -1
 weapon41
   rotate: false
-  xy: 220, 22
+  xy: 208, 22
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
@@ -213,128 +213,128 @@ weapon42
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon14
+weapon43
   rotate: false
-  xy: 273, 22
-  size: 33, 19
-  orig: 33, 19
+  xy: 261, 22
+  size: 51, 19
+  orig: 51, 19
   offset: 0, 0
   index: -1
-weapon43
+weapon47
   rotate: false
   xy: 307, 1
   size: 51, 19
   orig: 51, 19
   offset: 0, 0
   index: -1
-weapon13
+weapon08
   rotate: false
-  xy: 308, 27
+  xy: 314, 27
   size: 50, 15
   orig: 50, 15
   offset: 0, 0
   index: -1
-weapon18
+weapon13
   rotate: false
-  xy: 360, 27
+  xy: 366, 27
   size: 50, 15
   orig: 50, 15
   offset: 0, 0
   index: -1
 weapon19
   rotate: false
-  xy: 412, 27
+  xy: 418, 27
   size: 50, 15
   orig: 50, 15
   offset: 0, 0
   index: -1
 weapon05
   rotate: false
-  xy: 464, 28
+  xy: 470, 28
+  size: 49, 14
+  orig: 49, 14
+  offset: 0, 0
+  index: -1
+weapon24
+  rotate: false
+  xy: 521, 28
   size: 49, 14
   orig: 49, 14
   offset: 0, 0
   index: -1
 weapon45
   rotate: false
-  xy: 515, 28
+  xy: 572, 28
   size: 49, 14
   orig: 49, 14
   offset: 0, 0
   index: -1
 weapon46
   rotate: false
-  xy: 566, 28
-  size: 49, 14
-  orig: 49, 14
-  offset: 0, 0
-  index: -1
-weapon47
-  rotate: false
-  xy: 617, 28
+  xy: 623, 28
   size: 49, 14
   orig: 49, 14
   offset: 0, 0
   index: -1
 weapon48
   rotate: false
-  xy: 668, 28
+  xy: 674, 28
   size: 49, 14
   orig: 49, 14
   offset: 0, 0
   index: -1
 weapon12
   rotate: false
-  xy: 719, 33
+  xy: 725, 33
   size: 51, 9
   orig: 51, 9
   offset: 0, 0
   index: -1
-weapon03
+weapon01
   rotate: false
-  xy: 772, 29
+  xy: 778, 29
   size: 43, 13
   orig: 43, 13
   offset: 0, 0
   index: -1
-weapon01
+weapon14
   rotate: false
-  xy: 817, 15
+  xy: 823, 30
+  size: 42, 12
+  orig: 42, 12
+  offset: 0, 0
+  index: -1
+weapon21
+  rotate: false
+  xy: 823, 1
   size: 41, 27
   orig: 41, 27
   offset: 0, 0
   index: -1
-weapon30
+weapon33
   rotate: false
-  xy: 860, 15
+  xy: 866, 1
   size: 41, 27
   orig: 41, 27
   offset: 0, 0
   index: -1
 weapon44
   rotate: false
-  xy: 903, 15
+  xy: 909, 15
   size: 41, 27
   orig: 41, 27
   offset: 0, 0
   index: -1
-weapon02
-  rotate: false
-  xy: 946, 25
-  size: 39, 17
-  orig: 39, 17
-  offset: 0, 0
-  index: -1
 weapon06
   rotate: false
-  xy: 360, 1
-  size: 42, 12
-  orig: 42, 12
+  xy: 952, 23
+  size: 33, 19
+  orig: 33, 19
   offset: 0, 0
   index: -1
-weapon04
+weapon03
   rotate: false
-  xy: 946, 12
+  xy: 867, 31
   size: 39, 11
   orig: 39, 11
   offset: 0, 0
@@ -348,7 +348,7 @@ weapon17
   index: -1
 weapon11
   rotate: false
-  xy: 987, 7
+  xy: 360, 11
   size: 35, 14
   orig: 35, 14
   offset: 0, 0
