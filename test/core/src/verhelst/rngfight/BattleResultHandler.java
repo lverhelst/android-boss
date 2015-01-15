@@ -101,6 +101,8 @@ public class BattleResultHandler {
 
         if(games == 1000)
             RngFight.actionResolver.unlockAchievement("millennial");
+        if(games == 2000)
+            RngFight.actionResolver.unlockAchievement("21century");
         if(games == 500 && ((float)player2wins/player2losses >= 1.0))
             RngFight.actionResolver.unlockAchievement("lucky");
         if(hitcount < 25)
@@ -111,7 +113,15 @@ public class BattleResultHandler {
             RngFight.actionResolver.unlockAchievement("loser");
         if(max_level_reached == 50)
             RngFight.actionResolver.unlockAchievement("fifty");
+        if(max_level_reached == 100)
+            RngFight.actionResolver.unlockAchievement("one_hundred");
+        if(max_level_reached == 200)
+            RngFight.actionResolver.unlockAchievement("two_hundred");
 
+        if(hitcount > 1000000)
+            RngFight.actionResolver.unlockAchievement("showgoeson");
+        if(hitcount > 3000000)
+            RngFight.actionResolver.unlockAchievement("andonandon");
 
         return resultsList.toArray(new BattleResult[resultsList.size()]);
     }

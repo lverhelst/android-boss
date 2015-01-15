@@ -19,6 +19,7 @@ public class SettingScreen implements Screen, InputProcessor {
     SpriteActor backBtn, resetButton;
     int reset_state = 0; //0 closed, 1 open, 2 pressed
     long reset_time;
+    int max_level;
 
     RngFight game2;
 
@@ -69,7 +70,6 @@ public class SettingScreen implements Screen, InputProcessor {
                     if ((Gdx.graphics.getHeight() - screenY) < resetButton.getY() + resetButton.getHeight() / 2) {
                         resetButton.setDisplaysprite(new Sprite(Assets.reset_pressed));
                         reset_state = 2;
-
                         reset_time = System.currentTimeMillis();
                     } else {
                         reset_state = 0;
@@ -108,8 +108,11 @@ public class SettingScreen implements Screen, InputProcessor {
         if (reset_state == 2 && (reset_time != -1 && System.currentTimeMillis() > reset_time)) {
             reset_state = 0;
             resetButton.setDisplaysprite(new Sprite(Assets.reset_closed));
+            if(max_level == 199)
+                RngFight.actionResolver.unlockAchievement("hardcore");
             SaveGame.reset();
             RngFight.actionResolver.unlockAchievement("missiles");
+            max_level = 0;
         }
         RngFight.batch.end();
 
@@ -143,5 +146,9 @@ public class SettingScreen implements Screen, InputProcessor {
     @Override
     public void dispose() {
 
+    }
+
+    public void setMax_level(int max){
+        this.max_level = max;
     }
 }

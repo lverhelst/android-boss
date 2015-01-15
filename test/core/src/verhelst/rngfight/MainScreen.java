@@ -59,6 +59,7 @@ public class MainScreen implements Screen, InputProcessor {
 
 
         lt.addActor(highscore);
+        lt.addRow();
         st.addRow();
         st.addActor(new Image(Assets.game_controller), true);
         submitscore = new Image(Assets.submitscore);
@@ -110,7 +111,7 @@ public class MainScreen implements Screen, InputProcessor {
         skore = score;
         this.maxhits = maxhits;
         this.maxlvl = maxlvl;
-        highscore.setText(NumberFormat.getNumberInstance(Locale.US).format(score));
+        highscore.setText("Highscore: " + NumberFormat.getNumberInstance(Locale.US).format(score));
     }
 
     @Override

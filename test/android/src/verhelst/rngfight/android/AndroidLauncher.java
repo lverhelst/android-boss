@@ -444,6 +444,9 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             }else if(achievement.equalsIgnoreCase("millennial")){
                 Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_millennial) );
                 makeToast("Achievement unlocked: Millennial!");
+            }else if(achievement.equalsIgnoreCase("21century")){
+                Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_21st_century_person) );
+                makeToast("Achievement unlocked: 21st Century Person!");
             }else if(achievement.equalsIgnoreCase("lucky")){
                 Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_lucky) );
                 makeToast( "Achievement unlocked: Lucky!");
@@ -465,12 +468,36 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             }else if(achievement.equalsIgnoreCase("fifty")){
                 Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_level_50) );
                 makeToast("Achievement unlocked: Level 50");
+            }else if(achievement.equalsIgnoreCase("one_hundred")){
+                Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_level_100) );
+                makeToast("Achievement unlocked: Level 100");
+            }else if(achievement.equalsIgnoreCase("two_hundred")){
+                Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_level_200) );
+                makeToast("Achievement unlocked: Level 200");
             }else if(achievement.equalsIgnoreCase("missiles")){
                 Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_launch_the_missiles) );
                 makeToast("Achievement unlocked: Launch the missiles!!!");
+            }else if(achievement.equalsIgnoreCase("multi_millionaire")){
+                Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_mmmmulti_millionaire) );
+                makeToast("Achievement unlocked: M-M-M-Multi Millionaire!");
+            }else if(achievement.equalsIgnoreCase("weapon_master")){
+                Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_weapon_master) );
+                makeToast("Achievement unlocked: Weapon Master!");
+            }else if(achievement.equalsIgnoreCase("shopaholic")){
+                Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_shopaholic) );
+                makeToast("Achievement unlocked: Shopaholic!");
+            }else if(achievement.equalsIgnoreCase("showgoeson")){
+                Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_the_show_goes_on____) );
+                makeToast("Achievement unlocked: The show goes on...");
+            }else if(achievement.equalsIgnoreCase("andonandon")){
+                Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_and_on_and_on___) );
+                makeToast("Achievement unlocked: ... and on and on ...");
             }else if(achievement.equalsIgnoreCase("millionaire")){
                 Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_millionaire) );
                 makeToast("Achievement unlocked: Millionaire!");
+            }else if(achievement.equalsIgnoreCase("hardcore")){
+                Games.Achievements.unlock(mGoogleApiClient, getApplicationContext().getString(R.string.achievement_hardcore) );
+                makeToast("Achievement unlocked: Hardcore! (I can't believe you just did that for 5 measly points)");
             }
         }
         return true;

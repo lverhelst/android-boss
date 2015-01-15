@@ -2,21 +2,27 @@
 <resources>
     <string name="app_name">QuikFite</string>
     <string name="app_id">225240267219</string>
-    <string name="achievement_its_over_9000">CgkI0_P2iscGEAIQAg</string>
     <string name="achievement_millennial">CgkI0_P2iscGEAIQAw</string>
-    <string name="achievement_lucky">CgkI0_P2iscGEAIQBA</string>
+    <string name="achievement_21st_century_person">CgkI0_P2iscGEAIQFA</string>
     <string name="achievement_quikfite">CgkI0_P2iscGEAIQBQ</string>
     <string name="achievement_achievement_unlocked">CgkI0_P2iscGEAIQBg</string>
     <string name="achievement_well_put_together">CgkI0_P2iscGEAIQBw</string>
     <string name="achievement_i_came_here_to_drink_milk_and_kick_butt">CgkI0_P2iscGEAIQCA</string>
     <string name="achievement_lehuesaheer">CgkI0_P2iscGEAIQCQ</string>
-    <string name="achievement_level_50">CgkI0_P2iscGEAIQCg</string>
-    <string name="achievement_launch_the_missiles">CgkI0_P2iscGEAIQCw</string>
+    <string name="achievement_its_over_9000">CgkI0_P2iscGEAIQAg</string>
     <string name="achievement_millionaire">CgkI0_P2iscGEAIQDA</string>
-    <string name="achievement_mean_green_fighting_machine">CgkI0_P2iscGEAIQDQ</string>
+    <string name="achievement_mmmmulti_millionaire">CgkI0_P2iscGEAIQFQ</string>
+    <string name="achievement_level_50">CgkI0_P2iscGEAIQCg</string>
+    <string name="achievement_level_100">CgkI0_P2iscGEAIQEg</string>
+    <string name="achievement_level_200">CgkI0_P2iscGEAIQEw</string>
+    <string name="achievement_lucky">CgkI0_P2iscGEAIQBA</string>
+    <string name="achievement_launch_the_missiles">CgkI0_P2iscGEAIQCw</string>
+    <string name="achievement_weapon_master">CgkI0_P2iscGEAIQFg</string>
+    <string name="achievement_shopaholic">CgkI0_P2iscGEAIQFw</string>
+    <string name="achievement_the_show_goes_on_...">CgkI0_P2iscGEAIQGQ</string>
+    <string name="achievement_and_on_and_on...">CgkI0_P2iscGEAIQGA</string>
+    <string name="achievement_hardcore">CgkI0_P2iscGEAIQGg</string>
     <string name="leaderboard_highscore">CgkI0_P2iscGEAIQAA</string>
     <string name="leaderboard_hit_count">CgkI0_P2iscGEAIQEA</string>
     <string name="leaderboard_level_reached">CgkI0_P2iscGEAIQEQ</string>
-    <string name="signin_failure">Unable to sign in</string>
-    <string name="signin_other_error">There was an issue with sign-in, please try again later</string>
 </resources>

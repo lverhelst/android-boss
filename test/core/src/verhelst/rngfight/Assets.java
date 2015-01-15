@@ -263,10 +263,35 @@ public class Assets {
     }
 
     public static void unlockItem(int type, int index) {
-        if(type == -1)
+        boolean unlock = true;
+        if(type == -1) {
             weaponUnlocks[index] = 1;
-        else
+
+            for(int i = 0; i < weaponUnlocks.length; i++){
+                unlock &= weaponUnlocks[i] == 1;
+                if(!unlock)
+                    break;
+            }
+            if(unlock)
+                RngFight.actionResolver.unlockAchievement("weapon_master");
+
+        }
+        else {
             unclocks[type][index] = 1;
+
+            for(int i = 0; i < unclocks.length; i++){
+                for(int j = 0; j < unclocks[i].length; j++){
+                    unlock &= unclocks[i][j] == 1;
+                    if(!unlock)
+                        break;
+                }
+                if(!unlock)
+                    break;
+            }
+            if(unlock)
+                RngFight.actionResolver.unlockAchievement("shopaholic");
+
+        }
     }
 
     public static List<Sprite> getWeaponsList() {
