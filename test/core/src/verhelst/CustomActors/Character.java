@@ -116,7 +116,7 @@ public class Character extends Actor {
         m.updateSprite("shoulder", sprites[3]);
         m.updateSprite("elbow", sprites[4]);
         for (int i = 0; i < 5; i++) {
-            spriteindices[1] = (int) level / 10;
+            spriteindices[i] = (int) level / 5;
         }
     }
 
@@ -132,7 +132,7 @@ public class Character extends Actor {
         m.updateSprite("shoulder", sprites[3]);
         m.updateSprite("elbow", sprites[4]);
         for (int i = 0; i < 5; i++) {
-            spriteindices[1] = (int) level / 10;
+            spriteindices[i] = Assets.lastSuitGiven[i];
         }
     }
 

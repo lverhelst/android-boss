@@ -316,7 +316,7 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
             @Override
             public void run() {
                 Toast t = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
-                t.setGravity(Gravity.TOP,0,-120);
+                t.setGravity(Gravity.TOP,0, 240);
                 t.show();
             }
         });

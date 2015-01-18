@@ -19,6 +19,9 @@ public class BattleResultHandler {
 
 
     public BattleResult[] getResults(verhelst.CustomActors.Character a, Character b, int hitcount) {
+
+
+
         games++;
         List<BattleResult> resultsList = new ArrayList<BattleResult>();
         //Decide winner
@@ -94,6 +97,8 @@ public class BattleResultHandler {
 
 
 
+
+
         if(score > 9000)
             RngFight.actionResolver.unlockAchievement("its_over_9000");
         if(score >= 1000000)
@@ -105,8 +110,7 @@ public class BattleResultHandler {
             RngFight.actionResolver.unlockAchievement("21century");
         if(games == 500 && ((float)player2wins/player2losses >= 1.0))
             RngFight.actionResolver.unlockAchievement("lucky");
-        if(hitcount < 25)
-            RngFight.actionResolver.unlockAchievement("quickfite");
+
         if(b.getWin_streak() == 15)
             RngFight.actionResolver.unlockAchievement("milkbutt");
         if(b.getWin_streak() == -15)
@@ -118,6 +122,8 @@ public class BattleResultHandler {
         if(max_level_reached == 200)
             RngFight.actionResolver.unlockAchievement("two_hundred");
 
+        if(hitcount < 25)
+            RngFight.actionResolver.unlockAchievement("quikfite");
         if(hitcount > 1000000)
             RngFight.actionResolver.unlockAchievement("showgoeson");
         if(hitcount > 3000000)

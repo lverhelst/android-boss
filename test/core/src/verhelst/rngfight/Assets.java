@@ -42,6 +42,8 @@ public class Assets {
     //weapons
     static int[] weaponUnlocks = new int [100];
 
+    public static int[] lastSuitGiven = new int[5];
+
     public Assets() {
         weapons_sprites = new ArrayList<Sprite>();
         facecount = 19;
@@ -61,7 +63,7 @@ public class Assets {
             unclocks[i][0] = 1;
         }
 
-        debug = true;
+        debug = false;
 
 
     }
@@ -194,31 +196,52 @@ public class Assets {
         int index = lvl / 5;
 
         Sprite[] suit = new Sprite[5];
+        int i = index;
         //head
-        if(index < facecount -1)
+        if (index < facecount) {
             suit[0] = faces[index];
-        else
-            suit[0] = faces[rng.nextInt(facecount)];
+            i = index;
+        } else {
+            i = rng.nextInt(facecount);
+            suit[0] = faces[i];
+        }
+        lastSuitGiven[0] = i;
         //torso
-        if(index < shirtcount - 1)
+        if (index < shirtcount){
             suit[1] = shirts[index];
-        else
-            suit[1] = shirts[rng.nextInt(shirtcount)];
+            i = index;
+        }else {
+            i = rng.nextInt(shirtcount);
+            suit[1] = shirts[i];
+        }
+        lastSuitGiven[1] = i;
         //leg
-        if(index  < pantcount -1)
+        if(index  < pantcount) {
+            i = index;
             suit[2] = pants[index];
-        else
-            suit[2] = pants[rng.nextInt(pantcount)];
+        }else {
+            i = rng.nextInt(pantcount);
+            suit[2] = pants[i];
+        }
+        lastSuitGiven[2] = i;
         //arm
-        if(index  < shouldercount - 1)
+        if(index  < shouldercount) {
+            i = index;
             suit[3] = shoulders[index];
-        else
-            suit[3] = shoulders[rng.nextInt(shouldercount)];
+        }else {
+            i = rng.nextInt(shouldercount);
+            suit[3] = shoulders[i];
+        }
+        lastSuitGiven[3] = i;
         //elbow
-        if(index < armcount - 1)
+        if(index < armcount ) {
+            i = index;
             suit[4] = arms[index];
-        else
-            suit[4] = arms[rng.nextInt(armcount)];
+        }else {
+            i = rng.nextInt(armcount);
+            suit[4] = arms[i];
+        }
+        lastSuitGiven[4] = i;
         return suit;
     }
 

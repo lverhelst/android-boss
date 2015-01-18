@@ -78,8 +78,6 @@ public class SaveGame extends DefaultHandler {
     }
 
     public static void saveGame(Character A, Character B, int[] stats) {
-        int indexForLevel = Math.min(A.getLevel() / 5, Assets.faces.length - 1);
-
         String unclocksString = Assets.unclocks.length + ";" + Assets.unclocks[0].length + ";";
         for (int i = 0; i < Assets.unclocks.length; i++) {
             for (int j = 0; j < Assets.unclocks[i].length; j++) {
@@ -111,11 +109,11 @@ public class SaveGame extends DefaultHandler {
                         "<Max_WTNL>" + A.getMax_wtnl() + "</Max_WTNL>" +
                         "<WinStreak>" + A.getWin_streak() + "</WinStreak>" +
                         "<LoseStreak>" + A.getLose_streak() + "</LoseStreak>" +
-                        "<Head>" + indexForLevel + "</Head>" +
-                        "<Torso>" + indexForLevel + "</Torso>" +
-                        "<Legs>" + indexForLevel + "</Legs>" +
-                        "<Shoulder>" + indexForLevel + "</Shoulder>" +
-                        "<Elbow>" + indexForLevel + "</Elbow>" +
+                        "<Head>" + A.getSpriteindices()[0] + "</Head>" +
+                        "<Torso>" + A.getSpriteindices()[1] + "</Torso>" +
+                        "<Legs>" + A.getSpriteindices()[2] + "</Legs>" +
+                        "<Shoulder>" + A.getSpriteindices()[3] + "</Shoulder>" +
+                        "<Elbow>" + A.getSpriteindices()[4] + "</Elbow>" +
                         "<Weapon>" +
                             "<SpriteNumber>" + (A.getEquipped_weapon() == null ? -1 : A.getEquipped_weapon().spriteindex) + "</SpriteNumber>" +
                             "<MaxDamage>" + (A.getEquipped_weapon() == null ? 0 : A.getEquipped_weapon().getMax_damage()) + "</MaxDamage>" +

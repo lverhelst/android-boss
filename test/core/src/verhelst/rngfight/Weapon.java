@@ -61,20 +61,20 @@ public class Weapon extends Actor {
 
     public static Weapon generateRandomWeapon(int lvl, POSITION position) {
         int a_roll = rng.nextInt(lvl);
-        int b_roll = rng.nextInt((int)(lvl * 1.5)) + 1;
+        int b_roll = rng.nextInt((int)(lvl * 1.75)) + 1;
 
         return new Weapon(Math.min(a_roll, b_roll), Math.max(a_roll, b_roll), DAMAGETYPE.NORMAL, Math.max(rng.nextInt(lvl) / 3, 1), (float) 0.1, lvl, position);
 
     }
 
     public static Weapon generateScaledWeapon(int lvl, POSITION position) {
-        double average_dmg = Math.pow(lvl, 1.1); //(mindmg + max_damage )/2.0;
+        double average_dmg = Math.pow(lvl, 1.05); //(mindmg + max_damage )/2.0;
         int offset_roll = rng.nextInt((int) average_dmg);//(int)average_dmg - mindmg;
         int min_dmg = (int) Math.min(lvl, average_dmg - offset_roll);
         int max_dmg = (int) Math.min(lvl * 2, average_dmg + offset_roll);
 
        // System.out.println("A,O,A-O,A+O: " + average_dmg + " " + offset_roll + " " + min_dmg + " " + max_dmg);
-        return new Weapon(min_dmg, max_dmg, DAMAGETYPE.NORMAL, Math.max(rng.nextInt(lvl) / 3, Math.max(lvl / 5, 1)), (float) (0.1), lvl, position);
+        return new Weapon(min_dmg, max_dmg, DAMAGETYPE.NORMAL, Math.max(rng.nextInt(lvl) / 3, Math.max((int)(lvl / (3.75)), 1)), (float) (0.1), lvl, position);
     }
 
     //Dummy Constructor

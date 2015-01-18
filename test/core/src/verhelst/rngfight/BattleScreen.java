@@ -417,6 +417,12 @@ public class BattleScreen implements Screen, InputProcessor {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    try {
+                        //Slow down consuming the battle to AT LEAST visible
+                        Thread.currentThread().sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
                     while (battling) {
                         try {
