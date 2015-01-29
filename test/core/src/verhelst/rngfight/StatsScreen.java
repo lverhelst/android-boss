@@ -154,12 +154,13 @@ public class StatsScreen implements Screen {
 
     public void reload(){
         Character chara;
-        characterSuitList.clear();
+        //characterSuitList.clear();
+
         for (int k = 0; k < Assets.faces.length; k++) {
-            chara = new Character("Enemy");
+            chara = (Character)characterSuitList.get(k);// new Character("Enemy");
             chara.setLevel(10 * k + 1);
             chara.equipSuit();
-            characterSuitList.add(chara);
+          //  characterSuitList.add(chara);
         }
 
         weaponsImgList.clear();
@@ -184,8 +185,9 @@ public class StatsScreen implements Screen {
         maxlvl.setText("    Max Lvl: " + maxlevel);
 
         //rebuild character list
-         reload();
         //rebuild weapon list
+         reload();
+
 
     }
 

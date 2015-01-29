@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
@@ -110,13 +111,13 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         //layout.addView(lg);
 
         setContentView(layout);
-        if(false)
-            startAdvertising(admobView);
+        ///if(false)
+        startAdvertising(admobView);
 
-        if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
+      /*  if(!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler)) {
             Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler(
                     "/sdcard/", null));
-        }
+        }*/
         //Load Achievements
         pref = Gdx.app.getPreferences("achieve");
         String data = pref.getString("achieve");
@@ -185,7 +186,11 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
         adView = new AdView(this);
         adView.setAdSize(AdSize.SMART_BANNER);
         adView.setAdUnitId(AD_UNIT_ID);
-        adView.setId(adView.generateViewId());
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            adView.setId(Util.generateViewId());
+        }else{
+            adView.setId(adView.generateViewId());
+        }
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL, RelativeLayout.TRUE);

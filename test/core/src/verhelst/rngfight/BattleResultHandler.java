@@ -103,12 +103,14 @@ public class BattleResultHandler {
             RngFight.actionResolver.unlockAchievement("its_over_9000");
         if(score >= 1000000)
             RngFight.actionResolver.unlockAchievement("millionaire");
+        if(score >= 10000000)
+            RngFight.actionResolver.unlockAchievement("multi_millionaire");
 
         if(games == 1000)
             RngFight.actionResolver.unlockAchievement("millennial");
         if(games == 2000)
             RngFight.actionResolver.unlockAchievement("21century");
-        if(games == 500 && ((float)player2wins/player2losses >= 1.0))
+        if(games == 100 && ((float)player2wins/player2losses >= 1.0))
             RngFight.actionResolver.unlockAchievement("lucky");
 
         if(b.getWin_streak() == 15)
@@ -144,6 +146,8 @@ public class BattleResultHandler {
             games = SaveGame.stats[5];
             max_level_reached = SaveGame.stats[6];
             max_score = SaveGame.stats[7];
+            if(max_score >= 10000000)
+                RngFight.actionResolver.unlockAchievement("multi_millionaire");
 
         } catch (Exception e) {
             System.out.println("Could not load stats");
