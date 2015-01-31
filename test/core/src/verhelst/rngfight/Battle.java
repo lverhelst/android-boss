@@ -49,12 +49,12 @@ public class Battle implements Runnable {
             dmgtoplayer += leftside.attack(rightside, healing_scaler);
             dmgtoboss += rightside.attack(leftside, healing_scaler);
 
-            leftside.setHealth(1);
+            /*leftside.setHealth(1);
             rightside.setHealth(1);
             if(hitcount > 30000000){
                 leftside.setHealth(0);
                 rightside.setHealth(0);
-            }
+            }*/
 
 
             if (hitcount % Math.max(13, (int) (Math.log(hitcount) + hitcount/50000)) == 0) {
