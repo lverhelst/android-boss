@@ -30,7 +30,7 @@ public class Model {
 
         } else {
 
-            scale = (float) Math.max(height / 96, 2.25);
+            scale = (float) Math.max(height / 96, 1.00);
         }
       //  System.out.println("Scale" + scale);
 

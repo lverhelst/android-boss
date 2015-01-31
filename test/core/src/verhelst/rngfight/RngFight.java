@@ -12,6 +12,11 @@ public class RngFight extends com.badlogic.gdx.Game {
 
     public static final int VIRTUAL_WIDTH = 400;
     public static final int VITRUAL_HEIGHT = 800;
+
+    private static final int MS_PER_RENDER = 30;
+    private long renderstart;
+
+
     //Used by all screens
     public static SpriteBatch batch;
 
@@ -115,9 +120,19 @@ public class RngFight extends com.badlogic.gdx.Game {
 
     }
 
+    //this is where we will control the render speed
+
+
     @Override
     public void render() {
+        renderstart = System.currentTimeMillis();
         super.render();
+        if(System.currentTimeMillis() - renderstart < MS_PER_RENDER)
+            try {
+                Thread.sleep(renderstart + MS_PER_RENDER - System.currentTimeMillis());
+            }catch(InterruptedException ie){
+                //Do nothing
+            }
     }
 
 }

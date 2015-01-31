@@ -183,14 +183,9 @@ public class BattleScreen implements Screen, InputProcessor {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        statetime += Gdx.graphics.getDeltaTime();
         if (!battling)
             handleBattleResults();
-
-
         bView.update(anim_h1, anim_h2, showLoot, brh.getMax_score(), message, hits, score);
-
-
         bView.getStage().draw();
         renderDamageNumbers(RngFight.batch);
 
@@ -436,6 +431,7 @@ public class BattleScreen implements Screen, InputProcessor {
 
                             lst = bswNumList.poll();
                             if(lst != null) {
+
                                 btl.getLeftside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst[0]), Character.DmgListSide.LEFT);
                                 btl.getRightside().consumeDmgNumPost((custom_mode_on ? custom_mode_string : "" + lst[1]), Character.DmgListSide.RIGHT);
 

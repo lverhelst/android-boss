@@ -8,12 +8,12 @@ import java.util.Random;
  * Created by Leon I. Verhelst on 10/19/2014.
  */
 public class DamageNumber {
-    private float x;
-    private float y;
+    private float x, origX;
+    private float y, origY;
     private float angle;
     private float alpha;
     private int value;
-    private int render_iterations;
+    private int update_iterations;
     private CharSequence cs;
     private boolean isRemoveable;
     private Random random;
@@ -22,7 +22,7 @@ public class DamageNumber {
     private float green;
     private float blue;
 
-    private static final float densS = Gdx.graphics.getDensity();
+    private static final float densS = Gdx.graphics.getDensity() * 2;
 
     public void setCs(CharSequence cs) {
         this.cs = cs;
@@ -54,17 +54,21 @@ public class DamageNumber {
 
     public void setY(float y) {
         this.y = y;
+        this.origY = y;
     }
 
     public void setX(float x) {
         this.x = x;
+        this.origX = x;
     }
 
     public DamageNumber(int amount, int screenx, int screeny) {
         this.value = amount;
         this.x = screenx;
         this.y = screeny;
-        this.render_iterations = 0;
+        this.origX = screenx;
+        this.origY = screeny;
+        this.update_iterations = 0;
         this.alpha = 1.0f;
 
         this.isRemoveable = false;
@@ -100,7 +104,9 @@ public class DamageNumber {
         this.value = Integer.MAX_VALUE;
         this.x = screenx;
         this.y = screeny;
-        this.render_iterations = 0;
+        this.origX = screenx;
+        this.origY = screeny;
+        this.update_iterations = 0;
         this.alpha = 1.0f;
 
 
@@ -117,14 +123,15 @@ public class DamageNumber {
         this.blue = 1.0f;
     }
 
-    public void update() {
 
+    public void update() {
+        update_iterations++;
         this.x += Math.cos(this.angle) * densS;  //CAH
         //use the alpha value to pull the number down, this gives a nice curve without complicated computations
         //the * 1.1 is just to adjust the intensity of the (-1 + alpha) portion
         //+ 1/(value == 0? 1: value)
         this.y += (Math.sin(this.angle) + (-1 + this.alpha) + rand_force) * densS; //SOH
-        this.alpha += -0.01f;
+        this.alpha -= 0.03f;
         //at an alpha < 0, the random number can be removed from where it is displayed
         //since it will be invisible
         if (this.alpha <= 0) {
@@ -132,8 +139,8 @@ public class DamageNumber {
         }
     }
 
-    public int getRender_iterations() {
-        return this.render_iterations;
+    public int getUpdate_iterations() {
+        return this.update_iterations;
     }
 
     public boolean isRemoveable() {
@@ -181,7 +188,7 @@ public class DamageNumber {
         this.value = Integer.MAX_VALUE;
         this.x = -100;
         this.y = -100;
-        this.render_iterations = 0;
+        this.update_iterations = 0;
         this.alpha = 1.0f;
 
 

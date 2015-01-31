@@ -7,8 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Stack;
 
 import verhelst.bones.Model;
 import verhelst.rngfight.Assets;
@@ -34,7 +36,7 @@ public class Character extends Actor {
     int win_streak = 0;
     int lose_streak = 0;
     //Damage Numbers during battle
-    ArrayList<DamageNumber> dnListA = new ArrayList<DamageNumber>();
+    LinkedList<DamageNumber> dnListA = new LinkedList<DamageNumber>();
     Queue<DamageNumber> availablepool = new ArrayDeque<DamageNumber>();
     //For rendering damage numbers
     Iterator<DamageNumber> i;
@@ -52,6 +54,8 @@ public class Character extends Actor {
     private boolean glow;
     private Model m;
 
+
+     DamageNumber test;
 
     public Character(String name) {
         rng = new Random();
@@ -73,9 +77,10 @@ public class Character extends Actor {
             m = new Model((int) (getX() + getWidth() / 2), (int) (getY() + getHeight()), false, getHeight());
             m.hideWeapon();
 
-        for (int i = 0; i < 1500; i++) {
+        for (int i = 0; i < 320; i++) {
             availablepool.add(new DamageNumber(-9999, -100, -100));
         }
+
     }
 
 
@@ -341,7 +346,7 @@ public class Character extends Actor {
             dn.setX(x);
             dn.setY(y);
             synchronized (dnListA) {
-                dnListA.add(dn);
+                dnListA.addFirst(dn);
             }
         }
 
@@ -384,19 +389,23 @@ public class Character extends Actor {
 
         //Add Damage Numbers to screen
         synchronized (dnListA) {
+            int j = 0;
 
             for (i = dnListA.iterator(); i.hasNext(); ) {
-
+                j++;
                 DamageNumber dn = i.next();
-                if (dn.isRemoveable()) {
+
+                //prune list if we are getting too close to the end
+                if (dn.isRemoveable() || j > 290) {
                     synchronized (availablepool) {
                         availablepool.add(dn.reset());
                     }
                     i.remove();
                 } else {
+                    dn.update();
                     Assets.dmgNumFnt.setColor(dn.getRed(), dn.getGreen(), dn.getBlue(), dn.getAlpha());
                     Assets.dmgNumFnt.draw(batch, dn.getCs(), dn.getX(), dn.getY());
-                    dn.update();
+
                 }
             }
         }

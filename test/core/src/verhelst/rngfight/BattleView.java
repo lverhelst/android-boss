@@ -323,6 +323,10 @@ public class BattleView {
 
         streaklbl.setText("Streak: " + b.getRightside().getWin_streak());
         hitcount.setText("Hits: " +  NumberFormat.getNumberInstance(Locale.US).format(hits));
+
+        if(score > highscore){
+            highscore = score;
+        }
         highscorelbl.setText("Highscore: " +  NumberFormat.getNumberInstance(Locale.US).format(highscore));
         line = "";
         if(message.contains("Victory")){
