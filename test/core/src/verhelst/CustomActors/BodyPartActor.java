@@ -19,7 +19,6 @@ public class BodyPartActor extends Actor {
         LEGS,
         SHOULDER,
         ELBOW
-
     }
 
     Sprite partSprite;

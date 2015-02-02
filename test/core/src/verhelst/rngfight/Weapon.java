@@ -12,13 +12,47 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import java.util.Random;
 
 import verhelst.Comp.LTable;
+import verhelst.Craft.Item;
+import verhelst.Craft.CraftableType;
+import verhelst.Craft.cTOKEN;
 
 /**
  * Created by Orion on 10/23/2014.
  */
 
 
-public class Weapon extends Actor {
+public class Weapon extends Actor implements Item {
+
+    @Override
+    public cTOKEN getCTOKEN() {
+        return cTOKEN.WEAPON;
+    }
+
+    @Override
+    public CraftableType getCraftableType() {
+        return CraftableType.COMPOUND;
+    }
+
+    @Override
+    public Integer getIntegerValue(String attribute) {
+        if(attribute.equals("MINDAMAGE"))
+            return min_damage;
+        if(attribute.equals("MAXDAMAGE"))
+            return max_damage;
+        if(attribute.equals("HEART"))
+            return hp_multiplier;
+        return 0;
+    }
+
+    @Override
+    public void setIntegerValue(String attribute, Integer value) {
+        if(attribute.equals("MINDAMAGE"))
+            min_damage = value;
+        if(attribute.equals("MAXDAMAGE"))
+            max_damage = value;
+        if(attribute.equals("HEART"))
+           hp_multiplier = value;
+    }
 
     enum DAMAGETYPE {
         NORMAL,
@@ -27,7 +61,7 @@ public class Weapon extends Actor {
         POISON
     }
 
-    enum POSITION {
+    public enum POSITION {
         LEFT_POSITION,
         RIGHT_POSITION,
         LOOT_POSITION
@@ -40,7 +74,7 @@ public class Weapon extends Actor {
 
     private DAMAGETYPE extra_type;
     private POSITION posi;
-    private int max_damage, min_damage, hp_multiplier;
+    private int max_damage, min_damage, hp_multiplier; //TODO: Put into the VALUES hashmap
     private float life_steal;
 
     public int spriteindex;
@@ -50,14 +84,7 @@ public class Weapon extends Actor {
 
     private final static Random rng = new Random();
 
-    private String nm;
     public Skin skin;
-
-    //glowy stuff here
-    int glow_type = 0;
-    boolean glow;
-
-
 
     public static Weapon generateRandomWeapon(int lvl, POSITION position) {
         int a_roll = rng.nextInt(lvl);
@@ -98,7 +125,6 @@ public class Weapon extends Actor {
 
     public Weapon(int mindmg, int maxdmg, DAMAGETYPE dmg_type, int hp_multiplier, float life_steal, int level, POSITION position) {
         this.setName("Weap" + System.currentTimeMillis());
-        this.nm = this.getName();
         this.min_damage = mindmg;
         this.max_damage = maxdmg;
         this.extra_type = dmg_type;

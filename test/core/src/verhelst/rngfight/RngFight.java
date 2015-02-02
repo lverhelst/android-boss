@@ -13,7 +13,7 @@ public class RngFight extends com.badlogic.gdx.Game {
     public static final int VIRTUAL_WIDTH = 400;
     public static final int VITRUAL_HEIGHT = 800;
 
-    private static final int MS_PER_RENDER = 30;
+    private static final int MS_PER_RENDER = 22;
     private long renderstart;
 
 
