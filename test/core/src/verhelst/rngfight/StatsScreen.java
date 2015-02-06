@@ -121,7 +121,7 @@ public class StatsScreen implements Screen {
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
                 System.out.println(screenX + " " + (Gdx.graphics.getHeight() - screenY));
                 if (screenX > backBtn.getX() && (Gdx.graphics.getHeight() - screenY) < backBtn.getY() + backBtn.getHeight()) {
-                    game2.switchScreens(4);
+                    game2.switchScreens(5);
                 }
                /* if (screenX < resetButton.getX() + resetButton.getWidth() && (Gdx.graphics.getHeight() - screenY) < resetButton.getY() + resetButton.getHeight()) {
                     switch (reset_state) {

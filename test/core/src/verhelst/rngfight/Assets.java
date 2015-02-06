@@ -7,10 +7,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import verhelst.Craft.cTOKEN;
 
 /**
  * Created by Leon I. Verhelst on 10/25/2014.
@@ -18,6 +21,7 @@ import java.util.Random;
 public class Assets {
 
     public static Animation face_anim;
+    public static Skin skin;
     public static List<Sprite> weapons_sprites;
     public static Sprite weapon_data_icon;
     public static Sprite resting_face;
@@ -30,6 +34,7 @@ public class Assets {
     public static Texture dmgIconTxture, dmgIconSmallTxture, hrtIconTxture, glow, glow_ylw;
     public static Sprite dmgIcon, hrtIcon;
     public static Sprite butterBeaver, landing_pad, landing_pad_glow, back_btn, reset_closed, reset_opened, reset_pressed, mystery_sprite, FITE_SIGN, STATS, DRES, INDEV, game_controller, game_leader, game_achieve, signin, signout, submitscore;
+    public static Sprite IRON, DUST, CLOTH, BONE;
     private static int armcount, pantcount, shirtcount, shouldercount, facecount, weaponcount;
     private static Random rng = new Random();
 
@@ -70,7 +75,7 @@ public class Assets {
 
     //Load graphical assets
     public void loadAssets() {
-
+        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         //Load character images & animation
         TextureAtlas ta = new TextureAtlas(Gdx.files.internal("face_sprites\\sprite.pack"));
         //TextureRegion[] hairframes = {new TextureRegion(ta.findRegion("face11")),new TextureRegion(ta.findRegion("face12")),new TextureRegion(ta.findRegion("face13")),new TextureRegion(ta.findRegion("face14"))};
@@ -154,6 +159,13 @@ public class Assets {
         signin =  new Sprite(new Texture(Gdx.files.internal("bb_signin.png")));
         signout =  new Sprite(new Texture(Gdx.files.internal("bb_signout.png")));
         submitscore =  new Sprite(new Texture(Gdx.files.internal("submitscore.png")));
+
+
+        IRON = new Sprite(new Texture(Gdx.files.internal("In Development\\Materials\\IRON.png")));
+        DUST = new Sprite(new Texture(Gdx.files.internal("In Development\\Materials\\DUST.png")));
+        BONE = new Sprite(new Texture(Gdx.files.internal("In Development\\Materials\\BONE.png")));
+        CLOTH = new Sprite(new Texture(Gdx.files.internal("In Development\\Materials\\CLOTH.png")));
+
     }
 
 
@@ -327,5 +339,15 @@ public class Assets {
             }
         }
         return las;
+    }
+
+    public static Sprite getMatSprite(cTOKEN token){
+        switch(token){
+            case IRON: return IRON;
+            case CLOTH: return CLOTH;
+            case BONE: return BONE;
+            case DUST: return DUST;
+            default: return mystery_sprite;
+        }
     }
 }

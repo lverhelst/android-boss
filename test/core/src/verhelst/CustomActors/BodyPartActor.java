@@ -6,19 +6,63 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.Random;
 
+import verhelst.Craft.CraftableType;
+import verhelst.Craft.Inventory;
+import verhelst.Craft.Item;
+import verhelst.Craft.cTOKEN;
 import verhelst.rngfight.Assets;
 
 /**
  * Created by Leon I. Verhelst on 11/17/2014.
  */
-public class BodyPartActor extends Actor {
+public class BodyPartActor extends Actor implements Item{
 
     public enum BodyPartType {
         HEAD,
         TORSO,
         LEGS,
-        SHOULDER,
-        ELBOW
+        UPPERARM,
+        LOWERARM
+    }
+
+    @Override
+    public CraftableType getCraftableType() {
+        return CraftableType.COMPOUND;
+    }
+
+    @Override
+    public cTOKEN getCTOKEN() {
+        return cTOKEN.valueOf(btype.name());
+    }
+
+    @Override
+    public Integer getIntegerValue(String attribute) {
+        return 0;
+    }
+
+    @Override
+    public void setIntegerValue(String attribute, Integer value) {
+    }
+
+    @Override
+    public Actor getActor() {
+        return this;
+    }
+
+    public String decompose(){
+        int itemindex = 1 + rng.nextInt(3);
+        int number = rng.nextInt(4) + 1;
+        int j = 0;
+        for(int i = 0; i < number; i++) {
+            if (Inventory.addItem(itemindex))
+                j++;
+
+        }
+        if(j > 0)
+            return cTOKEN.values()[itemindex] + " + " + j;
+        else
+            return "Max " + cTOKEN.values()[itemindex] + "  Reached";
+
     }
 
     Sprite partSprite;
@@ -28,6 +72,18 @@ public class BodyPartActor extends Actor {
 
 
     BodyPartType btype;
+
+    public static BodyPartActor generateRandomBodyPart(){
+        int types = BodyPartActor.BodyPartType.values().length;
+        int loooooot = new Random().nextInt(types);
+        return new BodyPartActor(BodyPartActor.BodyPartType.values()[loooooot], 200);
+
+    }
+
+    public static BodyPartActor generateBodyPartForType(BodyPartType type){
+        return new BodyPartActor(type, 200);
+    }
+
 
     public BodyPartActor() {
 
@@ -42,11 +98,11 @@ public class BodyPartActor extends Actor {
                 part_index = rng.nextInt(Math.min(Assets.faces.length,lvl));
                 partSprite = new Sprite(Assets.faces[part_index]);
                 break;
-            case SHOULDER:
+            case UPPERARM:
                 part_index = rng.nextInt(Math.min(Assets.shoulders.length,lvl));
                 partSprite = new Sprite(Assets.shoulders[part_index]);
                 break;
-            case ELBOW:
+            case LOWERARM:
                 part_index = rng.nextInt(Math.min(Assets.arms.length,lvl));
                 partSprite = new Sprite(Assets.arms[part_index]);
                 break;
@@ -87,10 +143,10 @@ public class BodyPartActor extends Actor {
             case HEAD:
                 //   partSprite.rotate90(true);
                 break;
-            case SHOULDER:
+            case UPPERARM:
                 //drawSprite.rotate90(true);
                 break;
-            case ELBOW:
+            case LOWERARM:
                 drawSprite.rotate90(true);
                 drawSprite.rotate90(true);
                 break;

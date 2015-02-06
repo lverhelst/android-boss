@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import verhelst.Craft.Inventory;
+import verhelst.CustomActors.*;
+
 
 /**
  * Created by Orion on 10/21/2014.
@@ -25,15 +28,15 @@ public class RngFight extends com.badlogic.gdx.Game {
     static DressingScreen dressingScreen;
     static SettingScreen settingsScreen;
     static MainScreen mainScreen;
+    static CraftingScreen craftingScreen;
 
-    static Skin skin;
-
-
-
+    public static int lvl = 1;
     private int currentscreen;
     SaveGame sg;
 
     public static ActionResolver actionResolver;
+
+    verhelst.CustomActors.Character player;
 
     public RngFight(ActionResolver ar){
         this.actionResolver = ar;
@@ -42,7 +45,6 @@ public class RngFight extends com.badlogic.gdx.Game {
 
     @Override
     public void create() {
-        Skin skin = new Skin(Gdx.files.internal("data/uiskin.json"));
         Assets assets = new Assets();
         assets.loadAssets();
         try {
@@ -62,16 +64,19 @@ public class RngFight extends com.badlogic.gdx.Game {
         mainScreen = new MainScreen(this);
         gameScreen = new BattleScreen(this);
         viewerAndStats = new StatsScreen(this);
+        player = gameScreen.a2;
         dressingScreen = new DressingScreen(this, gameScreen.a2);
         settingsScreen = new SettingScreen(this);
+        craftingScreen = new CraftingScreen(this);
 
-        switchScreens(4);
+        switchScreens(5);
     }
 
 
     public void switchScreens(int screen) {
         switch(screen) {
             case 0:
+                gameScreen.updateWeps();
                 setScreen(gameScreen);
                 Gdx.input.setInputProcessor(gameScreen);
                 break;
@@ -91,10 +96,17 @@ public class RngFight extends com.badlogic.gdx.Game {
                 setScreen(settingsScreen);
                 Gdx.input.setInputProcessor(settingsScreen);
                 break;
-            case 4:
+            case 5:
                 mainScreen.updateHighscore(gameScreen.brh.getMax_score(), gameScreen.brh.max_hitcount, gameScreen.brh.max_level_reached);
                 setScreen(mainScreen);
                 Gdx.input.setInputProcessor(mainScreen);
+                break;
+            case 4:
+                craftingScreen.refreshChosenItems();
+                setScreen(craftingScreen);
+                Gdx.input.setInputProcessor(craftingScreen);
+                break;
+
         }
         currentscreen = screen;
     }
@@ -112,13 +124,21 @@ public class RngFight extends com.badlogic.gdx.Game {
      //   viewerAndStats = new StatsScreen(this);
 
         //gameScreen = new BattleScreen(this);
+        RngFight.lvl = 1;
         gameScreen.reload();
         viewerAndStats.reload();
         dressingScreen = new DressingScreen(this, gameScreen.a2);
+        craftingScreen.reset();
+        Inventory.reset();
 
         switchScreens(currentscreen);
 
     }
+
+    public static void SaveGame(){
+        SaveGame.saveGame(gameScreen.a, gameScreen.a2, gameScreen.brh.stats);
+    }
+
 
     //this is where we will control the render speed
 

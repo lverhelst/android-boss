@@ -21,7 +21,10 @@ public class LLabel extends Widget {
         this.text = text;
         this.skin = skin;
 
+
     }
+
+
 
     public void setText(String newText) {
         this.text = newText;

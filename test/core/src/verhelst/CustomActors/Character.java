@@ -5,12 +5,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
-import java.util.Stack;
 
 import verhelst.bones.Model;
 import verhelst.rngfight.Assets;
@@ -482,11 +480,11 @@ public class Character extends Actor {
                 spriteindices[2] = hsa.part_index;
                 m.updateSprite("leg", toequip);
                 break;
-            case SHOULDER:
+            case UPPERARM:
                 spriteindices[3] = hsa.part_index;
                 m.updateSprite("shoulder", toequip);
                 break;
-            case ELBOW:
+            case LOWERARM:
                 spriteindices[4] = hsa.part_index;
                 m.updateSprite("elbow", toequip);
                 break;

@@ -326,7 +326,7 @@ public class DressingScreen implements Screen, InputProcessor {
                 if(screenX > b.getX() && screenX < b.getX() + b.getWidth() &&
                         actualY > b.getY() && actualY < b.getY() + b.getHeight()){
                     if(i == 6)
-                        game.switchScreens(4); //go to main screen
+                        game.switchScreens(5); //go to main screen
                     else{
                         dragme = null;
                         loadCoverFlow(i);

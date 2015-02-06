@@ -10,6 +10,12 @@
         <max_level_reached>0</max_level_reached>
         <max_score>0</max_score>
     </Stats>
+    <Inventory>
+        <IRON>0</IRON>
+        <CLOTH>0</CLOTH>
+        <DUST>0</DUST>
+        <BONE>0</BONE>
+    </Inventory>
     <Character>
         <index>1</index>
         <Name>Enemy</Name>

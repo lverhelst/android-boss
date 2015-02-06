@@ -77,6 +77,7 @@ public class BattleResultHandler {
         }
 
         max_level_reached = a.getMax_level();
+        RngFight.lvl = a.getMax_level();
 
         System.out.println(resultsList);
         // System.out.println("        CL " + a.getLevel() + " ws " + a.getWin_streak() + " ml" + a.max_level + " mwtl" + a.max_wtnl + " ls " + a.getLose_streak() + " lscheck" + a.getLose_streak() % (a.wins_to_level + 1));

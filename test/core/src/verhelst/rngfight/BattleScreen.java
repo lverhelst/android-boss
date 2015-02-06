@@ -335,7 +335,7 @@ public class BattleScreen implements Screen, InputProcessor {
             float rectby11 = butterDragMe.getY();
             if (rectax11 <= rectbx21 && rectax21 >= rectbx11
                     && rectay11 <= rectby21 && rectay21 >= rectby11) {
-                fight.switchScreens(4);
+                fight.switchScreens(5);
             }
             if (butterDragMe != null)
                 butterDragMe.remove();
@@ -395,6 +395,18 @@ public class BattleScreen implements Screen, InputProcessor {
                         btl.getRightside().setBodyPart((BodyPartActor) bView.lootActor);
                     }
                 }
+                if(bView.statsTable.getX() <= rectbx2 && bView.statsTable.getX() + bView.statsTable.getWidth() >= rectbx1
+                        && bView.statsTable.getY()  <= rectby2 && bView.statsTable.getY() + bView.statsTable.getHeight() >= rectby1)
+                {
+                    if (bView.lootActor instanceof Weapon) {
+                        soloMessage.add(new DamageNumber(((Weapon)bView.lootActor).decompose(), Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight() * 3/4 ));
+                    }
+                    if (bView.lootActor instanceof BodyPartActor) {
+                        soloMessage.add(new DamageNumber(((BodyPartActor)bView.lootActor).decompose(), Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight() * 3/4 ));
+                    }
+                }
+
+
             }
         }
         if (dragme != null)
@@ -560,6 +572,12 @@ public class BattleScreen implements Screen, InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    public void updateWeps(){
+        Weapon aWep = btl.getLeftside().getEquipped_weapon();
+        Weapon bWep = btl.getRightside().getEquipped_weapon();
+        bView.updateCharacterWeapons(aWep, bWep);
     }
 }
 

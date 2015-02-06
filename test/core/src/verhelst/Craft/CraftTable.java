@@ -1,5 +1,8 @@
 package verhelst.Craft;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -31,10 +34,12 @@ public class CraftTable {
             Item a = items.removeFirst();
             Item b = items.removeFirst();
 
+            System.out.println(a.getCTOKEN() + "  " + b.getCTOKEN());
+
             if(a.getCraftableType() == CraftableType.COMPOUND){
-                items.addFirst(getScriptRuleForMats(a,b).evaluate(a));
+                items.addFirst(getScriptRuleForMats(a.getCTOKEN(),b.getCTOKEN()).evaluate(a));
             }else{
-                items.addFirst(getRuleForMats(a,b).evaluate());
+                items.addFirst(getRuleForMats(a.getCTOKEN(),b.getCTOKEN()).evaluate());
             }
         }
         return items.get(0);
@@ -45,15 +50,18 @@ public class CraftTable {
      * TODO: Make a proper tokenizer && parser
      */
     private void loadRules(){
-        try{
+       // try{
             
-                BufferedReader br = new BufferedReader(new FileReader("rules.txt"));
+                //BufferedReader br = new BufferedReader(new FileReader("rules.txt"));
+                FileHandle fh = Gdx.files.internal("rules.txt");
+
+
                 //Load the file into our string buffer
-                String line;
-                while((line = br.readLine()) != null)
-                    fileAsString += "\n" + line;
-                fileAsString += '\u001a';
-                fileAsLines = fileAsString.split("\n");
+                //String line;
+                //while((line = br.readLine()) != null)
+                 //   fileAsString += "\n" + line;
+                //fileAsString += '\u001a';
+                fileAsLines = fh.readString().split("\n");
                 
                 //state: -1 = Started, 0 = reading rules, 1 = reading instructions
                 int state = -1;
@@ -101,35 +109,43 @@ public class CraftTable {
                         String[] rss = ls[1].split("\\|");
                         for(String sec : rss){
                             if(sides[1].startsWith("INST")){
-                                String instKey = sides[1].replace("INST(","").replace(");","");
+                                String instKey = sides[1].replace("\r","").replace("INST(","").replace(");","");
                                 scriptrules.add(new ScriptRule(cTOKEN.valueOf(ls[0]), cTOKEN.valueOf(sec), instructions.get(instKey)));
                             }else{
-                                rules.add(new Rule(cTOKEN.valueOf(ls[0]), cTOKEN.valueOf(sec), cTOKEN.valueOf(sides[1].replace(";", ""))));
+
+                                rules.add(new Rule(cTOKEN.valueOf(ls[0]), cTOKEN.valueOf(sec), cTOKEN.valueOf(sides[1].substring(0,sides[1].indexOf(';')))));
                             }
                         }
                     }
-                    
+
                 }
-        }catch(IOException e){
-               System.out.print("Administrative Console: " + e.toString());
-        }
+       // }catch(IOException e){
+         //      System.out.print("Administrative Console: " + e.toString());
+       // }
     }
     
     
-    public Rule getRuleForMats(Item m, Item m2){
+    public Rule getRuleForMats(cTOKEN m, cTOKEN m2){
         for(Rule r : rules){
-            if(r.l.equals(m.getCTOKEN())
-                    && r.r.equals(m2.getCTOKEN())){
+            if(r.l.equals(m)
+                    && r.r.equals(m2)){
                 return r;
             }
         }
         return null;
     }
 
-    public ScriptRule getScriptRuleForMats(Item m, Item m2){
+    public ScriptRule getScriptRuleForMats(cTOKEN m, cTOKEN m2){
+        if(m.equals(cTOKEN.HEAD) || m.equals(cTOKEN.TORSO) ||
+                m.equals(cTOKEN.LEGS) || m.equals(cTOKEN.UPPERARM) || m.equals(cTOKEN.LOWERARM))
+            m = cTOKEN.BODYPART;
+
+
+
+
         for(ScriptRule r : scriptrules){
-            if(r.ls.equals(m.getCTOKEN())
-                    && r.rs.equals(m2.getCTOKEN())) {
+            if(r.ls.equals(m)
+                    && r.rs.equals(m2)) {
                 return r;
             }
         }

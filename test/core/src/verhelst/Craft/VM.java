@@ -4,6 +4,9 @@ package verhelst.Craft;
 import java.util.Random;
 import java.util.Stack;
 
+import verhelst.CustomActors.BodyPartActor;
+import verhelst.rngfight.RngFight;
+
 
 /*
  * @author Leon I. Verhelst
@@ -13,7 +16,8 @@ public class VM {
     static Stack vmStack = new Stack();
     
     public static Item executeScript(Item item, String code){
-        
+
+        System.out.println(code);
         String[] instructions = code.split(";");
         
         for(int i = 0; i < instructions.length; i++){
@@ -63,7 +67,7 @@ public class VM {
                 vmStack.push(item.getIntegerValue(c));
             }
             if(instructions[i].equals("GETLEVEL")){
-                vmStack.push(10);
+                vmStack.push(RngFight.lvl);
             }
             if(instructions[i].equals("ROLL")){
                 int val = Integer.parseInt(vmStack.pop().toString());
@@ -71,9 +75,8 @@ public class VM {
             }
             if(instructions[i].equals("BODYPART")){
                 int val = Integer.parseInt(vmStack.pop().toString());
-                //TODO: return bodypart for integer 
-                //1 = HEAD, etc.
-                item = null;
+                //TODO: return bodypart for integer
+                item = BodyPartActor.generateRandomBodyPart();
             }
             System.out.println(instructions[i] + ": " + vmStack.toString());
         }

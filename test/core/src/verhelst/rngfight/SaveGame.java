@@ -17,6 +17,7 @@ import java.io.ByteArrayInputStream;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import verhelst.Craft.Inventory;
 import verhelst.CustomActors.Character;
 
 /**
@@ -33,7 +34,7 @@ public class SaveGame extends DefaultHandler {
     private int charind;
 
     private enum States {
-        OTHER, STATS, CHAR1, CHAR2, UNCLOCKS
+        OTHER, STATS, INVENTORY, CHAR1, CHAR2, UNCLOCKS
     }
 
     private States state;
@@ -101,6 +102,12 @@ public class SaveGame extends DefaultHandler {
                         "<max_level_reached>" + stats[6] + "</max_level_reached>" +
                         "<max_score>" + stats[7] + "</max_score>" +
                     "</Stats>" +
+                    "<Inventory>" +
+                        "<IRON>" + Inventory.getCount(0) + "</IRON>" +
+                        "<CLOTH>" + Inventory.getCount(1) + "</CLOTH>" +
+                        "<DUST>"+ Inventory.getCount(2) +"</DUST>" +
+                        "<BONE>"+ Inventory.getCount(3) +"</BONE>" +
+                    "</Inventory>" +
                     "<Character>" +
                         "<index>1</index>" +
                         "<Name>" + A.getName() + "</Name>" +
@@ -209,6 +216,7 @@ public class SaveGame extends DefaultHandler {
                 }
                 if (currentNode.equalsIgnoreCase("max_level_reached")) {
                     stats[6] = Integer.parseInt(str);
+                    RngFight.lvl = stats[6];
                 }
                 if (currentNode.equalsIgnoreCase("max_score")) {
                     stats[7] = Integer.parseInt(str);
@@ -372,6 +380,24 @@ public class SaveGame extends DefaultHandler {
                     state = States.OTHER;
                 }
                 break;
+            case INVENTORY:
+                if(currentNode.equals(""))
+                    break;
+                if(currentNode.equalsIgnoreCase("IRON")){
+                    Inventory.setCount(0,Integer.parseInt(str));
+                }else if(currentNode.equals("CLOTH")){
+                    Inventory.setCount(1,Integer.parseInt(str));
+                }else if(currentNode.equals("DUST")){
+                    Inventory.setCount(2,Integer.parseInt(str));
+                }else if(currentNode.equals("BONE")){
+                    Inventory.setCount(3,Integer.parseInt(str));
+                }else if(currentNode.equals("Inventory")){
+
+                }else{
+                    state = States.OTHER;
+                }
+
+                break;
         }
     }
 
@@ -404,6 +430,10 @@ public class SaveGame extends DefaultHandler {
         if (currentNode.equalsIgnoreCase("unclocks")) {
             state = States.UNCLOCKS;
         }
+        if(currentNode.equalsIgnoreCase("inventory")){
+            state = States.INVENTORY;
+        }
+
         super.startElement(uri, localName, qName, attributes);
     }
 

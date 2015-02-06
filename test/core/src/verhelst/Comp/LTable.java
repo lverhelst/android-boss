@@ -30,6 +30,11 @@ public class LTable extends Actor {
         table.add(new ArrayList<LCell>());
     }
 
+    public LTable(){
+        table = new ArrayList<ArrayList<LCell>>();
+        table.add(new ArrayList<LCell>());
+    }
+
 
     public void addRow() {
         table.add(new ArrayList<LCell>());
@@ -111,6 +116,13 @@ public class LTable extends Actor {
             rowindex++;
         }
         sortCells();
+    }
+
+    public LCell[] getLCells(){
+        if(sortedCells == null)
+            sortCells();
+        LCell[] cells = new LCell[sortedCells.size()];
+        return sortedCells.toArray(cells);
     }
 
     private void sortCells() {
@@ -209,15 +221,12 @@ public class LTable extends Actor {
     @Override
     public void setVisible(boolean visible) {
         for (ArrayList<LCell> row : table) {
-
-
             for (int i = 0; i < row.size(); i++) {
                 LCell lc = row.get(i);
                 lc.setVisible(visible);
             }
 
         }
-
         super.setVisible(visible);
     }
 }

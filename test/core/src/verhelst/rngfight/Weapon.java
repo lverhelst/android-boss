@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import java.util.Random;
 
 import verhelst.Comp.LTable;
+import verhelst.Craft.Inventory;
 import verhelst.Craft.Item;
 import verhelst.Craft.CraftableType;
 import verhelst.Craft.cTOKEN;
@@ -22,6 +23,14 @@ import verhelst.Craft.cTOKEN;
 
 
 public class Weapon extends Actor implements Item {
+
+
+    @Override
+    public Actor getActor() {
+
+        rebuildUI();
+        return root;
+    }
 
     @Override
     public cTOKEN getCTOKEN() {
@@ -46,12 +55,37 @@ public class Weapon extends Actor implements Item {
 
     @Override
     public void setIntegerValue(String attribute, Integer value) {
-        if(attribute.equals("MINDAMAGE"))
-            min_damage = value;
-        if(attribute.equals("MAXDAMAGE"))
-            max_damage = value;
+        if(attribute.equals("MINDAMAGE")) {
+            min_damage = Math.min(value, max_damage);
+            max_damage = Math.max(value, max_damage);
+        }
+        if(attribute.equals("MAXDAMAGE")) {
+            min_damage = Math.min(value, max_damage);
+            max_damage = Math.max(value, max_damage);
+        }
         if(attribute.equals("HEART"))
            hp_multiplier = value;
+    }
+
+    public String decompose(){
+        //Garunteed
+        int i = 0;
+        if(Inventory.addItem(0))
+            i++;
+        //50 % Chance
+        if(rng.nextBoolean()){
+            if(Inventory.addItem(0))
+                i++;
+        }
+        //25 % chance
+        if(rng.nextBoolean() && rng.nextBoolean()){
+            if(Inventory.addItem(0))
+                i++;
+        }
+        if(i >0)
+        return cTOKEN.values()[0] + " + " + i;
+        else
+            return "Max " +cTOKEN.values()[0] + " reached";
     }
 
     enum DAMAGETYPE {

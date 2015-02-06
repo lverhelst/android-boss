@@ -8,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import verhelst.CustomActors.BodyPartActor;
 import verhelst.rngfight.Assets;
 
-import static verhelst.CustomActors.BodyPartActor.BodyPartType.ELBOW;
-import static verhelst.CustomActors.BodyPartActor.BodyPartType.SHOULDER;
+import static verhelst.CustomActors.BodyPartActor.BodyPartType.LOWERARM;
+import static verhelst.CustomActors.BodyPartActor.BodyPartType.UPPERARM;
 
 /**
  * Created by Leon I. Verhelst on 11/22/2014.
@@ -90,7 +90,7 @@ public class LCell extends Actor {
                 //   System.out.println("w " + w + " h " + h + " xs " + x_scale + " ys " + y_scale + " s " + scale + "\r\n " + "x_coor " + x_coord + " witdh" + width + "ycoord " + y_coord + " " + height +
                 // "\r\n w" + (w * scale) + " h" + (h * scale));
                 scale *= 0.75;
-                if (((BodyPartActor) actor).getBtype() == SHOULDER || ((BodyPartActor) actor).getBtype() == ELBOW) {
+                if (((BodyPartActor) actor).getBtype() == UPPERARM || ((BodyPartActor) actor).getBtype() == LOWERARM) {
                     scale *= 0.55;
                 }
 

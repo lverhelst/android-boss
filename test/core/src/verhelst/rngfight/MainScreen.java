@@ -54,7 +54,7 @@ public class MainScreen implements Screen, InputProcessor {
         lt.addRow();
 
 
-        highscore = new LLabel("Highscore", RngFight.skin);
+        highscore = new LLabel("Highscore", Assets.skin);
         highscore.setIsHUD(true);
 
 
@@ -66,7 +66,6 @@ public class MainScreen implements Screen, InputProcessor {
         submitscore.setVisible(false);
         st.addActor(submitscore);
         st.addRow();
-        //TODO: Make into SIGN IN, ACHIEVEMENTS, LEADERBOARD buttons
         signin = new SpriteActor(Assets.signin);
         st.addActor(signin,true);
         achieve = new Image(Assets.game_achieve);
@@ -97,6 +96,14 @@ public class MainScreen implements Screen, InputProcessor {
         img3.setName("img2");
         entrances.addActor(img3, true);
         entrances.addRow();
+
+        //Crafting room
+        Image img3pt5 = new Image(Assets.butterBeaver);
+        img3pt5.setName("img4");
+        entrances.addActor(img3pt5, true);
+        entrances.addRow();
+
+
         //Settings/Info screen
         Image img4 = new Image(Assets.INDEV);
         img4.setName("img3");
@@ -225,7 +232,7 @@ public class MainScreen implements Screen, InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         int actualY = Gdx.graphics.getHeight() - screenY;
 
-        for(int i = 0; i < 4; i++){
+        for(int i = 0; i < 5; i++){
             LCell b = entrances.getLCellForActorName("img" + i);
 
             if(screenX > b.getX() && screenX < b.getX() + b.getWidth() &&

@@ -1,6 +1,7 @@
 
 package verhelst.Craft;
 
+import verhelst.CustomActors.BodyPartActor;
 import verhelst.rngfight.BattleResultHandler;
 import verhelst.rngfight.RngFight;
 import verhelst.rngfight.Weapon;
@@ -38,21 +39,28 @@ public class Rule {
                  case CLOTH:
                  case BONE:
                  case DUST:
+                     item = new Mat(o.name(),o);
                      break;
                  case WEAPON:
-                     item = Weapon.generateRandomWeapon(100, Weapon.POSITION.LOOT_POSITION);
+                     item = Weapon.generateRandomWeapon(RngFight.lvl, Weapon.POSITION.LOOT_POSITION);
                      break;
                  case BODYPART:
+                     item = BodyPartActor.generateRandomBodyPart();
                      break;
                  case HEAD:
+                     item = BodyPartActor.generateBodyPartForType(BodyPartActor.BodyPartType.HEAD);
                      break;
                  case TORSO:
+                     item = BodyPartActor.generateBodyPartForType(BodyPartActor.BodyPartType.TORSO);
                      break;
                  case LEGS:
+                     item = BodyPartActor.generateBodyPartForType(BodyPartActor.BodyPartType.LEGS);
                      break;
                  case UPPERARM:
+                     item = BodyPartActor.generateBodyPartForType(BodyPartActor.BodyPartType.UPPERARM);
                      break;
                  case LOWERARM:
+                     item = BodyPartActor.generateBodyPartForType(BodyPartActor.BodyPartType.LOWERARM);
                      break;
              }
              return item;
