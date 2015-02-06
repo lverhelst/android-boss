@@ -21,7 +21,6 @@ public class LLabel extends Widget {
         this.text = text;
         this.skin = skin;
 
-
     }
 
 
@@ -53,5 +52,13 @@ public class LLabel extends Widget {
             Assets.HUDbf.draw(batch, text, getX(), getY() + Assets.bf.getBounds(text).height - 2);
     }
 
+    @Override
+    public float getWidth() {
+        return 1;
+    }
 
+    @Override
+    public float getHeight() {
+        return Assets.bf.getBounds(text).height;
+    }
 }

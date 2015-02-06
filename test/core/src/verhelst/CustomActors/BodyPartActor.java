@@ -56,7 +56,6 @@ public class BodyPartActor extends Actor implements Item{
         for(int i = 0; i < number; i++) {
             if (Inventory.addItem(itemindex))
                 j++;
-
         }
         if(j > 0)
             return cTOKEN.values()[itemindex] + " + " + j;

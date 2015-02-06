@@ -61,6 +61,8 @@ public class LCell extends Actor {
         this.y_coord = y;
         this.width = width;
         this.height = height;
+
+
     }
 
     @Override
@@ -81,7 +83,6 @@ public class LCell extends Actor {
             //keep aspect ratio of actor
             float w = actor.getWidth();
             float h = actor.getHeight();
-
             float x_scale = width / w;
             float y_scale = height / h;
 
@@ -93,13 +94,13 @@ public class LCell extends Actor {
                 if (((BodyPartActor) actor).getBtype() == UPPERARM || ((BodyPartActor) actor).getBtype() == LOWERARM) {
                     scale *= 0.55;
                 }
-
             }
+
             actor.setSize(w * scale, h * scale);
             actor.setOrigin(w * scale / 2, h * scale / 2);
             actor.setPosition(x_coord + (width - (w * scale)) / 2, y_coord + (height - (h * scale)) / 2);
-        }
 
+        }
 
         if (actor.isVisible())
             actor.draw(batch, parentAlpha);

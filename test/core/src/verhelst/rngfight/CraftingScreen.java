@@ -54,7 +54,7 @@ public class CraftingScreen implements Screen, InputProcessor {
     CraftTable craftTable;
     LinkedList<Item> chosenItems = new LinkedList<Item>();
 
-    Label[] inventoryLabels = new Label[4];
+    LLabel[] inventoryLabels = new LLabel[4];
 
     Actor dragme;
 
@@ -92,8 +92,9 @@ public class CraftingScreen implements Screen, InputProcessor {
         // tableOfLeftSide.addActor(new Image(Assets.butterBeaver), true);
         tableOfLeftSide.addActor(chara);
         for(int i = 0; i < 4; i++){
-            inventoryLabels[i] = new Label(Inventory.getCount(i)+ "", Assets.skin);
-            tableOfCounts.addActor(inventoryLabels[i]);
+            inventoryLabels[i] = new LLabel(Inventory.getCount(i)+ "", Assets.skin);
+            inventoryLabels[i].setIsHUD(true);
+            tableOfCounts.addActor(inventoryLabels[i], true);
             tableOfCounts.addRow();
         }
         tableOfInventory.addActor(new Image(Assets.IRON), true);
@@ -111,7 +112,7 @@ public class CraftingScreen implements Screen, InputProcessor {
         tableOfInventory.addRow();
 
         tableOfRightSide.addActor(tableOfInventory);
-        tableOfRightSide.addActor(tableOfCounts);
+        //tableOfRightSide.addActor(tableOfCounts);
         tableOfRightSide.addRow();
         tableOfRightSide.addActor(backButtonImage, true);
         mainTable.addActor(tableOfLeftSide);
@@ -276,9 +277,9 @@ public class CraftingScreen implements Screen, InputProcessor {
         for(LCell cell : tableOfChosenItems.getLCells()){
             if(actorHit(cell.getActor(), screenX, actualY)){
                 if(chosenItems.size() > i) {
+                   // if(cell.getActor() instanceof  Item)
+                    Inventory.addItem(((Item)chosenItems.get(i)).getCTOKEN().ordinal());
                     chosenItems.remove(i);
-                    if(cell.getActor() instanceof  Item)
-                        Inventory.addItem(((Item)cell.getActor()).getCTOKEN().ordinal());
                     refreshChosenItems();
                 }
             }
@@ -304,7 +305,10 @@ public class CraftingScreen implements Screen, InputProcessor {
          * return all items in chosenitems to the inventory
          */
         if(actorHit(backButtonImage, screenX, actualY)){
-
+            for(Item it : chosenItems){
+               Inventory.addItem(it.getCTOKEN().ordinal());
+            }
+            chosenItems.clear();
             refreshChosenItems();
             game.switchScreens(5);
         }
@@ -382,6 +386,10 @@ public class CraftingScreen implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         RngFight.batch.begin();
         mainTable.draw(RngFight.batch, 1);
+        tableOfCounts.setX(tableOfInventory.getX());
+        tableOfCounts.setY(tableOfInventory.getY());
+        tableOfCounts.setSize(tableOfInventory.getWidth(), tableOfInventory.getHeight());
+        tableOfCounts.draw(RngFight.batch, 1);
         if(dragme != null) {
             dragme.draw(RngFight.batch, 1);
             System.out.println(dragme.getX() + " " + dragme.getY());
@@ -427,7 +435,6 @@ public class CraftingScreen implements Screen, InputProcessor {
 
     public void refreshChosenItems(){
         for(int i = 0; i < 6; i++){
-
             if(i >= chosenItems.size()) {
                 tableOfChosenItems.getLCells()[i].setActor(mysteryImage);
             }
@@ -435,14 +442,13 @@ public class CraftingScreen implements Screen, InputProcessor {
                 Item c = chosenItems.get(i);
                 tableOfChosenItems.getLCells()[i].setActor(c.getActor());
             }
-
         }
         refreshInventoryLabels();
     }
 
     private void refreshInventoryLabels(){
         int i = 0;
-        for(Label l : inventoryLabels){
+        for(LLabel l : inventoryLabels){
             l.setText(Inventory.getCount(i++) + " ");
         }
     }

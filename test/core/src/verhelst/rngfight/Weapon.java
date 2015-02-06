@@ -68,24 +68,25 @@ public class Weapon extends Actor implements Item {
     }
 
     public String decompose(){
-        //Garunteed
+
+        //Guaranteed
         int i = 0;
-        if(Inventory.addItem(0))
+        int j = rng.nextInt(4);
+        if(rng.nextBoolean())
+            j = 0;
+
+        if(Inventory.addItem(j))
             i++;
-        //50 % Chance
-        if(rng.nextBoolean()){
-            if(Inventory.addItem(0))
-                i++;
-        }
+
         //25 % chance
         if(rng.nextBoolean() && rng.nextBoolean()){
-            if(Inventory.addItem(0))
+            if(Inventory.addItem(j))
                 i++;
         }
         if(i >0)
-        return cTOKEN.values()[0] + " + " + i;
+            return cTOKEN.values()[j] + " + " + i;
         else
-            return "Max " +cTOKEN.values()[0] + " reached";
+            return "Max " +cTOKEN.values()[j] + " reached";
     }
 
     enum DAMAGETYPE {

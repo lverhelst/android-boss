@@ -383,8 +383,9 @@ public class BattleScreen implements Screen, InputProcessor {
                         Weapon bWep = btl.getRightside().getEquipped_weapon();
 
                         bView.updateCharacterWeapons(aWep, bWep);
+                        canDecompose = false;
                     }
-                    canDecompose = false;
+
                 }
                 else
                 if (rectax1 <= rectbx2 && rectax2 >= rectbx1
