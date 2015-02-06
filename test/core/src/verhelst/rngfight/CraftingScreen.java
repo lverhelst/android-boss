@@ -86,11 +86,15 @@ public class CraftingScreen implements Screen, InputProcessor {
         tableOfLeftSide.addActor(tableOfChosenItems);
         tableOfLeftSide.addRow();
         output = new Mat("PLACEHOLDER", cTOKEN.BODYPART);
-        tableOfLeftSide.addActor(craftButtonImage, true);
-        tableOfLeftSide.addRow();
+
         tableOfLeftSide.addActor(output.getActor(), true);
+        tableOfLeftSide.addRow();
+        tableOfLeftSide.addActor(craftButtonImage, true);
+
+        tableOfLeftSide.addRow();
         // tableOfLeftSide.addActor(new Image(Assets.butterBeaver), true);
         tableOfLeftSide.addActor(chara);
+        tableOfLeftSide.addActor(chara.getEquipped_weapon().getActor());
         for(int i = 0; i < 4; i++){
             inventoryLabels[i] = new LLabel(Inventory.getCount(i)+ "", Assets.skin);
             inventoryLabels[i].setIsHUD(true);
@@ -248,8 +252,11 @@ public class CraftingScreen implements Screen, InputProcessor {
 
         int actualY = Gdx.graphics.getHeight() - screenY;
         LCell b = tableOfLeftSide.getLCellForActor(chara);
+        LCell c = tableOfLeftSide.getLCellForActor(chara.getEquipped_weapon().getActor());
         b.setGlow_type(0);
         b.setGlow(false);
+        c.setGlow_type(0);
+        c.setGlow(false);
 
         //check touch on the inventory buttons
         /**
@@ -292,7 +299,7 @@ public class CraftingScreen implements Screen, InputProcessor {
 
             craft item
          */
-        if(actorHit(craftButtonImage, screenX, screenY)){
+        if(actorHit(craftButtonImage, screenX, actualY)){
             if(chosenItems.size() >= 2) {
                 craft();
                 refreshChosenItems();
@@ -322,10 +329,13 @@ public class CraftingScreen implements Screen, InputProcessor {
 
 
             b = tableOfLeftSide.getLCellForActor(chara);
-            if (screenX > b.getX() && screenX < b.getX() + b.getWidth() &&
+            c = tableOfLeftSide.getLCellForActor(chara.getEquipped_weapon().getActor());
+            if (screenX > b.getX() && screenX < b.getX() + b.getWidth() + c.getWidth() &&
                     actualY > b.getY() && actualY < b.getY() + b.getHeight()) {
                 if(output instanceof  Weapon){
+                    b = tableOfLeftSide.getLCellForActor(chara.getEquipped_weapon().getActor());
                     chara.setEquipped_weapon((Weapon)output);
+                    b.setActor(chara.getEquipped_weapon().getActor());
                     RngFight.SaveGame();
                 }
                 if(dragme instanceof  BodyPartActor){
@@ -359,13 +369,18 @@ public class CraftingScreen implements Screen, InputProcessor {
             dragme.setPosition(screenX - dragme.getWidth()/2, actualY - dragme.getHeight()/2);
 
             LCell b = tableOfLeftSide.getLCellForActor(chara);
-            if (screenX > b.getX() && screenX < b.getX() + b.getWidth() &&
+            LCell c = tableOfLeftSide.getLCellForActor(chara.getEquipped_weapon().getActor());
+            if (screenX > b.getX() && screenX < b.getX() + b.getWidth() + c.getWidth() &&
                     actualY > b.getY() && actualY < b.getY() + b.getHeight()) {
                 b.setGlow_type(2);
                 b.setGlow(true);
+                c.setGlow_type(2);
+                c.setGlow(true);
             }else{
                 b.setGlow_type(0);
                 b.setGlow(false);
+                c.setGlow_type(0);
+                c.setGlow(false);
             }
         }
         return false;
@@ -451,6 +466,11 @@ public class CraftingScreen implements Screen, InputProcessor {
         for(LLabel l : inventoryLabels){
             l.setText(Inventory.getCount(i++) + " ");
         }
+        resetCharacterWeapon();
+    }
+
+    private void resetCharacterWeapon(){
+         tableOfLeftSide.getLCells()[tableOfLeftSide.getLCells().length - 1].setActor(chara.getEquipped_weapon().getActor());
     }
 
     public void reset(){
