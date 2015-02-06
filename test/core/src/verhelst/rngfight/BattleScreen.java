@@ -318,7 +318,7 @@ public class BattleScreen implements Screen, InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         bView.landingPadGlow(false);
-
+        boolean canDecompose = showLoot;
         if (butterDragMe != null) {
 
             float rectax11 = bView.landingpad.getX();
@@ -384,7 +384,7 @@ public class BattleScreen implements Screen, InputProcessor {
 
                         bView.updateCharacterWeapons(aWep, bWep);
                     }
-
+                    canDecompose = false;
                 }
                 else
                 if (rectax1 <= rectbx2 && rectax2 >= rectbx1
@@ -394,19 +394,23 @@ public class BattleScreen implements Screen, InputProcessor {
 
                         btl.getRightside().setBodyPart((BodyPartActor) bView.lootActor);
                     }
-                }
-                if(bView.statsTable.getX() <= rectbx2 && bView.statsTable.getX() + bView.statsTable.getWidth() >= rectbx1
-                        && bView.statsTable.getY()  <= rectby2 && bView.statsTable.getY() + bView.statsTable.getHeight() >= rectby1)
-                {
-                    if (bView.lootActor instanceof Weapon) {
-                        soloMessage.add(new DamageNumber(((Weapon)bView.lootActor).decompose(), Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight() * 3/4 ));
-                    }
-                    if (bView.lootActor instanceof BodyPartActor) {
-                        soloMessage.add(new DamageNumber(((BodyPartActor)bView.lootActor).decompose(), Gdx.graphics.getWidth()/3, Gdx.graphics.getHeight() * 3/4 ));
-                    }
+                    canDecompose = false;
                 }
 
 
+
+
+
+            }
+        }
+
+
+        if(canDecompose){
+            if (bView.lootActor instanceof Weapon) {
+                soloMessage.add(new DamageNumber(((Weapon)bView.lootActor).decompose(), (int)(bView.lootActor.getX() + bView.lootActor.getWidth()/2), (int)( bView.lootActor.getHeight() + bView.lootActor.getY()) ));
+            }
+            if (bView.lootActor instanceof BodyPartActor) {
+                soloMessage.add(new DamageNumber(((BodyPartActor)bView.lootActor).decompose(),  (int)(bView.lootActor.getX() + bView.lootActor.getWidth()/2), (int)( bView.lootActor.getHeight() + bView.lootActor.getY()) ));
             }
         }
         if (dragme != null)
