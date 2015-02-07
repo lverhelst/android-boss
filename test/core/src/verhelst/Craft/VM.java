@@ -16,8 +16,6 @@ public class VM {
     static Stack vmStack = new Stack();
     
     public static Item executeScript(Item item, String code){
-
-        System.out.println(code);
         String[] instructions = code.split(";");
         
         for(int i = 0; i < instructions.length; i++){

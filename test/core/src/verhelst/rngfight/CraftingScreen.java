@@ -57,6 +57,8 @@ public class CraftingScreen implements Screen, InputProcessor {
     LLabel[] inventoryLabels = new LLabel[4];
 
     Actor dragme;
+    int screenHeight = Gdx.graphics.getHeight();
+    LCell characterCell, characterWeaponCell, outputCell;
 
     public CraftingScreen(RngFight fight){
         game = fight;
@@ -129,18 +131,18 @@ public class CraftingScreen implements Screen, InputProcessor {
     public void craft(){
         if(chosenItems.size() >= 2) {
 
-            LCell lc = tableOfLeftSide.getLCellForActor(output.getActor());
+            outputCell = tableOfLeftSide.getLCellForActor(output.getActor());
             output = craftTable.craftItem(chosenItems);
             System.out.println("Crafted: " + (output != null ? output.toString() : "NOTHING"));
 
 
-            lc.setActor(output.getActor());
+            outputCell.setActor(output.getActor());
             if(output.getCTOKEN() == cTOKEN.WEAPON) {
-                lc.setKeep_aspect_ratio(false);
+                outputCell.setKeep_aspect_ratio(false);
                 Assets.unlockItem(-1, ((Weapon)output).spriteindex);
             }
             else {
-                lc.setKeep_aspect_ratio(true);
+                outputCell.setKeep_aspect_ratio(true);
                 if(output instanceof  BodyPartActor) {
                     Assets.unlockItem(((BodyPartActor)output).getBtype().ordinal(), ((BodyPartActor)output).part_index);
                 }
@@ -192,9 +194,6 @@ public class CraftingScreen implements Screen, InputProcessor {
         if(chosenItems == null)
             chosenItems = new LinkedList<Item>();
         chosenItems.add(new Mat(token.name(), token));
-
-        System.out.println(Inventory.getCount(index));
-        System.out.println(chosenItems);
     }
 
     @Override
@@ -218,18 +217,14 @@ public class CraftingScreen implements Screen, InputProcessor {
             if(output visible)
                 dragme = output;
          */
-        int actualY = Gdx.graphics.getHeight() - screenY;
+        int actualY = screenHeight - screenY;
 
         if(actorHit(output.getActor(), screenX, actualY)){
             if (output instanceof Weapon) {
                 dragme = new Weapon();
-
                 ((Weapon) dragme).copyWeapon((Weapon)output, Weapon.POSITION.RIGHT_POSITION);
                 dragme = ((Weapon) dragme).getTable();
-
-
                 dragme.setSize(((Weapon) output).getWidth() / 2, ((Weapon) output).getHeight() / 2);
-                System.out.println(((Weapon) output).getMax_damage() + " " + ((Weapon) output).dragy);
             }
             if (output instanceof BodyPartActor) {
                 dragme = new BodyPartActor();
@@ -250,13 +245,13 @@ public class CraftingScreen implements Screen, InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
-        int actualY = Gdx.graphics.getHeight() - screenY;
-        LCell b = tableOfLeftSide.getLCellForActor(chara);
-        LCell c = tableOfLeftSide.getLCellForActor(chara.getEquipped_weapon().getActor());
-        b.setGlow_type(0);
-        b.setGlow(false);
-        c.setGlow_type(0);
-        c.setGlow(false);
+        int actualY = screenHeight - screenY;
+        characterCell = tableOfLeftSide.getLCellForActor(chara);
+        characterWeaponCell = tableOfLeftSide.getLCellForActor(chara.getEquipped_weapon().getActor());
+        characterCell.setGlow_type(0);
+        characterCell.setGlow(false);
+        characterWeaponCell.setGlow_type(0);
+        characterWeaponCell.setGlow(false);
 
         //check touch on the inventory buttons
         /**
@@ -328,14 +323,14 @@ public class CraftingScreen implements Screen, InputProcessor {
         if(dragme != null) {
 
 
-            b = tableOfLeftSide.getLCellForActor(chara);
-            c = tableOfLeftSide.getLCellForActor(chara.getEquipped_weapon().getActor());
-            if (screenX > b.getX() && screenX < b.getX() + b.getWidth() + c.getWidth() &&
-                    actualY > b.getY() && actualY < b.getY() + b.getHeight()) {
+            characterCell = tableOfLeftSide.getLCellForActor(chara);
+            characterWeaponCell = tableOfLeftSide.getLCellForActor(chara.getEquipped_weapon().getActor());
+            if (screenX > characterCell.getX() && screenX < characterCell.getX() + characterCell.getWidth() + characterWeaponCell.getWidth() &&
+                    actualY > characterCell.getY() && actualY < characterCell.getY() + characterCell.getHeight()) {
                 if(output instanceof  Weapon){
-                    b = tableOfLeftSide.getLCellForActor(chara.getEquipped_weapon().getActor());
+                    characterCell = tableOfLeftSide.getLCellForActor(chara.getEquipped_weapon().getActor());
                     chara.setEquipped_weapon((Weapon)output);
-                    b.setActor(chara.getEquipped_weapon().getActor());
+                    characterCell.setActor(chara.getEquipped_weapon().getActor());
                     RngFight.SaveGame();
                 }
                 if(dragme instanceof  BodyPartActor){
@@ -345,12 +340,9 @@ public class CraftingScreen implements Screen, InputProcessor {
 
             }
             //Show explosion!!!
-            LCell lc = tableOfLeftSide.getLCellForActor(output.getActor());
+            outputCell = tableOfLeftSide.getLCellForActor(output.getActor());
             output =  new Mat("PLACEHOLDER", cTOKEN.BODYPART);
-            lc.setActor(output.getActor());
-
-
-
+            outputCell.setActor(output.getActor());
         }
 
 
@@ -364,23 +356,23 @@ public class CraftingScreen implements Screen, InputProcessor {
 
         if(dragme != null) {
 
-            int actualY = Gdx.graphics.getHeight() - screenY;
+            int actualY = screenHeight - screenY;
 
             dragme.setPosition(screenX - dragme.getWidth()/2, actualY - dragme.getHeight()/2);
 
-            LCell b = tableOfLeftSide.getLCellForActor(chara);
-            LCell c = tableOfLeftSide.getLCellForActor(chara.getEquipped_weapon().getActor());
-            if (screenX > b.getX() && screenX < b.getX() + b.getWidth() + c.getWidth() &&
-                    actualY > b.getY() && actualY < b.getY() + b.getHeight()) {
-                b.setGlow_type(2);
-                b.setGlow(true);
-                c.setGlow_type(2);
-                c.setGlow(true);
+            characterCell = tableOfLeftSide.getLCellForActor(chara);
+            characterWeaponCell = tableOfLeftSide.getLCellForActor(chara.getEquipped_weapon().getActor());
+            if (screenX > characterCell.getX() && screenX < characterCell.getX() + characterCell.getWidth() + characterWeaponCell.getWidth() &&
+                    actualY > characterCell.getY() && actualY < characterCell.getY() + characterCell.getHeight()) {
+                characterCell.setGlow_type(2);
+                characterCell.setGlow(true);
+                characterWeaponCell.setGlow_type(2);
+                characterWeaponCell.setGlow(true);
             }else{
-                b.setGlow_type(0);
-                b.setGlow(false);
-                c.setGlow_type(0);
-                c.setGlow(false);
+                characterCell.setGlow_type(0);
+                characterCell.setGlow(false);
+                characterWeaponCell.setGlow_type(0);
+                characterWeaponCell.setGlow(false);
             }
         }
         return false;
@@ -407,7 +399,6 @@ public class CraftingScreen implements Screen, InputProcessor {
         tableOfCounts.draw(RngFight.batch, 1);
         if(dragme != null) {
             dragme.draw(RngFight.batch, 1);
-            System.out.println(dragme.getX() + " " + dragme.getY());
         }
         RngFight.batch.end();
     }
