@@ -97,7 +97,7 @@ public class Joint {
         }
     }
 
-    public void renderWithSprites(Batch batch, float x, float y) {
+    public void renderWithSprites(Batch batch, float x, float y, float parentAlpha) {
         x += (x_adj * (isFlipped ? -1 : 1));
         y += (y_adj); //Do not flip, flipping is only horizonatal (x-axis)
         float offx = x + (float) (Math.cos(Math.toRadians(this.angle)) * length);
@@ -123,17 +123,17 @@ public class Joint {
         if (isRenderChildrenFirst) {
             for (Joint j : children) {
 
-                j.renderWithSprites(batch, offx, offy);
+                j.renderWithSprites(batch, offx, offy, parentAlpha);
             }
             if (!name.equals("root") && isVisible)
-                this.testS.draw(batch);
+                this.testS.draw(batch, parentAlpha);
         } else {
             if (!name.equals("root") && isVisible)
-                this.testS.draw(batch);
+                this.testS.draw(batch, parentAlpha);
 
             for (Joint j : children) {
 
-                j.renderWithSprites(batch, offx, offy);
+                j.renderWithSprites(batch, offx, offy, parentAlpha);
             }
         }
 

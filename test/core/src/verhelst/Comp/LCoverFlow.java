@@ -345,7 +345,7 @@ public class LCoverFlow extends Actor implements InputProcessor {
             }
             computeSizeAndPosition(i, index);
 
-            items.get(index).draw(batch, parentAlpha);
+            items.get(index).draw(batch, 1.0f + -1 * Math.abs(.33f * i));
         }
         //super.draw(batch, parentAlpha);
     }

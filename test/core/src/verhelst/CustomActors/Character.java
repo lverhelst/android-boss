@@ -320,7 +320,7 @@ public class Character extends Actor {
         m.originy = (int) (getY() + getHeight() / 2);
         renderDamageNumbers(batch);
         //  System.out.println(this.name);
-        m.render(batch);
+        m.render(batch, parentAlpha);
 
     }
 

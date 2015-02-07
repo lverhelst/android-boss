@@ -52,7 +52,7 @@ public class Model {
 
     }
 
-    public void render(Batch batch) {
+    public void render(Batch batch, float parentAlpha) {
 
 
         Joint shoulder = root.children.get(2);
@@ -119,7 +119,7 @@ public class Model {
             batch.begin();
         } else {
 
-            root.renderWithSprites(batch, originx, originy);
+            root.renderWithSprites(batch, originx, originy, parentAlpha);
         }
 
     }
