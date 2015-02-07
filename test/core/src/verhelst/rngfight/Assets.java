@@ -1,6 +1,7 @@
 package verhelst.rngfight;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,6 +21,13 @@ import verhelst.Craft.cTOKEN;
  */
 public class Assets {
 
+    public enum STATE {
+        LOADINGTEXTUREATLASES,
+        LOADINGOTHERTEXTURES,
+        ALLDONE,
+        DONESKI;
+    }
+
     public static Animation face_anim;
     public static Skin skin;
     public static List<Sprite> weapons_sprites;
@@ -34,7 +42,7 @@ public class Assets {
     public static BitmapFont HUDbf;
     public static Texture dmgIconTxture, dmgIconSmallTxture, hrtIconTxture, glow, glow_ylw;
     public static Sprite dmgIcon, hrtIcon;
-    public static Sprite butterBeaver, landing_pad, landing_pad_glow, back_btn, reset_closed, reset_opened, reset_pressed, mystery_sprite, FITE_SIGN, STATS, DRES, INDEV, game_controller, game_leader, game_achieve, signin, signout, submitscore;
+    public static Sprite butterBeaver, landing_pad, landing_pad_glow, back_btn, reset_closed, reset_opened, reset_pressed, mystery_sprite, FITE_SIGN, STATS, DRES, INDEV, game_controller, game_leader, game_achieve, signin, signout, submitscore, bbCraft;
     public static Sprite IRON, DUST, CLOTH, BONE;
     private static int armcount, pantcount, shirtcount, shouldercount, facecount, weaponcount;
     private static Random rng = new Random();
@@ -50,7 +58,10 @@ public class Assets {
 
     public static int[] lastSuitGiven = new int[5];
 
+    AssetManager manager;
+
     public Assets() {
+        manager = new AssetManager();
         weapons_sprites = new ArrayList<Sprite>();
         facecount = 19;
         armcount = 19;
@@ -71,23 +82,43 @@ public class Assets {
 
         debug = false;
 
-
+        loadTextureAtlases();
     }
 
     //Load graphical assets
     public void loadAssets() {
-        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+        //skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+
         //Load character images & animation
-        TextureAtlas ta = new TextureAtlas(Gdx.files.internal("face_sprites\\sprite.pack"));
+        //TextureAtlas ta = new TextureAtlas(Gdx.files.internal("face_sprites\\sprite.pack"));
         //TextureRegion[] hairframes = {new TextureRegion(ta.findRegion("face11")),new TextureRegion(ta.findRegion("face12")),new TextureRegion(ta.findRegion("face13")),new TextureRegion(ta.findRegion("face14"))};
         //face_anim = new Animation(0.075f, hairframes);
+
+
+        //Load Weapon Sprites
+        //TODO: Make more weapon sprites
+
+    }
+
+    public static STATE state;
+
+    public void loadTextureAtlases(){
+        state = STATE.LOADINGTEXTUREATLASES;
+        manager.load("face_sprites\\sprite.pack", TextureAtlas.class);
+        manager.load("In Development\\weaponFullSize.pack", TextureAtlas.class);
+
+    }
+
+    public void setSuitsAndWeapons(){
+        manager.finishLoading();
+        TextureAtlas ta = manager.get("face_sprites/sprite.pack");
         resting_face = new Sprite(ta.findRegion("face1"));
         dead_face = new Sprite(ta.findRegion("face1"));
+
         //faces
 
-
         for (int i = 1; i <= facecount; i++) {
-          //  System.out.println(i);
+            //  System.out.println(i);
             faces[i - 1] = new Sprite(ta.findRegion("face" + i));
         }
         //torsos
@@ -107,25 +138,77 @@ public class Assets {
             shoulders[i - 1] = new Sprite(ta.findRegion("shoulder" + i));
         }
 
-
-        //Load Weapon Sprites
-        //TODO: Make more weapon sprites
-
-        ta = new TextureAtlas(Gdx.files.internal("In Development\\weaponFullSize.pack"));
+        ta = manager.get("In Development/weaponFullSize.pack");
         for (int i = 1; i <= weaponcount; i++) {
             weapons_sprites.add(new Sprite(ta.findRegion("weapon" + String.format("%02d", i))));
         }
-        weapon_data_icon = new Sprite(new Texture(Gdx.files.internal("wepdataicon.png")));
 
-        dmgIcon = new Sprite(new Texture(Gdx.files.internal("In Development\\DmgIcon.png")));
-        dmgIconTxture = new Texture(Gdx.files.internal("In Development\\DmgIcon.png"));
-        dmgIconSmallTxture = new Texture(Gdx.files.internal("In Development\\DmgIconSmall.png"));
+    }
 
-        hrtIcon = new Sprite(new Texture(Gdx.files.internal("In Development\\HrtIcon.png")));
-        hrtIconTxture = new Texture(Gdx.files.internal("In Development\\HrtIcon.png"));
 
-        glow = new Texture(Gdx.files.internal("In Development\\glow.png"));
-        glow_ylw = new Texture(Gdx.files.internal("In Development\\glow_ylw.png"));
+
+    public void loadOtherAssets(){
+        state = STATE.LOADINGOTHERTEXTURES;
+        manager.load("data/uiskin.json", Skin.class);
+        manager.load("wepdataicon.png", Texture.class);
+
+        manager.load("wepdataicon.png", Texture.class);
+
+        manager.load("In Development\\DmgIcon.png", Texture.class);
+        manager.load("In Development\\DmgIcon.png", Texture.class);
+        manager.load("In Development\\DmgIconSmall.png", Texture.class);
+
+        manager.load("In Development\\HrtIcon.png", Texture.class);
+        manager.load("In Development\\HrtIcon.png", Texture.class);
+
+        manager.load("In Development\\glow.png", Texture.class);
+        manager.load("In Development\\glow_ylw.png", Texture.class);
+
+        manager.load("In Development\\repBB.png", Texture.class);
+        manager.load("In Development\\bbFITE.png", Texture.class);
+        manager.load("In Development\\bbSTAT.png", Texture.class);
+        manager.load("In Development\\bbDRES.png", Texture.class);
+        manager.load("In Development\\bbOTHE.png", Texture.class);
+        manager.load("In Development\\bbCraft.png", Texture.class);
+
+
+        manager.load("In Development\\repOG.png", Texture.class);
+        manager.load("In Development\\repOG_hover.png", Texture.class);
+        manager.load("In Development\\craft.png", Texture.class);
+        manager.load("In Development\\repARW.png", Texture.class);
+        manager.load("In Development\\ResetButtonClosed.png", Texture.class);
+        manager.load("In Development\\ResetButtonOpen.png", Texture.class);
+        manager.load("In Development\\ResetButtonDepressed.png", Texture.class);
+        manager.load("In Development\\mystery_sprite.png", Texture.class);
+        manager.load("games_controller.png", Texture.class);
+        manager.load("bb_leaderboards.png", Texture.class);
+        manager.load("bb_achievements.png", Texture.class);
+        manager.load("bb_signin.png", Texture.class);
+        manager.load("bb_signout.png", Texture.class);
+        manager.load("submitscore.png", Texture.class);
+
+
+        manager.load("In Development\\Materials\\IRON.png", Texture.class);
+        manager.load("In Development\\Materials\\DUST.png", Texture.class);
+        manager.load("In Development\\Materials\\BONE.png", Texture.class);
+        manager.load("In Development\\Materials\\CLOTH.png", Texture.class);
+
+
+    }
+
+    public void setOtherAssets(){
+
+        weapon_data_icon = new Sprite((Texture)manager.get("wepdataicon.png"));
+
+        dmgIcon = new Sprite((Texture)manager.get("In Development/DmgIcon.png"));
+        dmgIconTxture = (Texture)manager.get("In Development/DmgIcon.png");
+        dmgIconSmallTxture = (Texture)manager.get("In Development/DmgIconSmall.png");
+
+        hrtIcon = new Sprite((Texture)manager.get("In Development/HrtIcon.png"));
+        hrtIconTxture = (Texture)manager.get("In Development/HrtIcon.png");
+
+        glow = (Texture)manager.get("In Development/glow.png");
+        glow_ylw = (Texture)manager.get("In Development/glow_ylw.png");
 
         FreeTypeFontGenerator ftfg = new FreeTypeFontGenerator(Gdx.files.internal("game_font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter ftfp = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -141,33 +224,42 @@ public class Assets {
         ftfp.size = Math.round(20 * Gdx.graphics.getDensity());
         HUDbf = ftfg.generateFont(ftfp);
 
-        butterBeaver = new Sprite(new Texture(Gdx.files.internal("In Development\\repBB.png")));
-        FITE_SIGN = new Sprite(new Texture(Gdx.files.internal("In Development\\bbFITE.png")));
-        STATS = new Sprite(new Texture(Gdx.files.internal("In Development\\bbSTAT.png")));
-        DRES = new Sprite(new Texture(Gdx.files.internal("In Development\\bbDRES.png")));
-        INDEV = new Sprite(new Texture(Gdx.files.internal("In Development\\bbOTHE.png")));
-
-        landing_pad = new Sprite(new Texture(Gdx.files.internal("In Development\\repOG.png")));
-        landing_pad_glow = new Sprite(new Texture(Gdx.files.internal("In Development\\repOG_hover.png")));
-        craft_btn = new Sprite(new Texture(Gdx.files.internal("In Development\\craft.png")));
-        back_btn = new Sprite(new Texture(Gdx.files.internal("In Development\\repARW.png")));
-        reset_closed = new Sprite(new Texture(Gdx.files.internal("In Development\\ResetButtonClosed.png")));
-        reset_opened = new Sprite(new Texture(Gdx.files.internal("In Development\\ResetButtonOpen.png")));
-        reset_pressed = new Sprite(new Texture(Gdx.files.internal("In Development\\ResetButtonDepressed.png")));
-        mystery_sprite = new Sprite(new Texture(Gdx.files.internal("In Development\\mystery_sprite.png")));
-        game_controller =  new Sprite(new Texture(Gdx.files.internal("games_controller.png")));
-        game_leader =  new Sprite(new Texture(Gdx.files.internal("bb_leaderboards.png")));
-        game_achieve =  new Sprite(new Texture(Gdx.files.internal("bb_achievements.png")));
-        signin =  new Sprite(new Texture(Gdx.files.internal("bb_signin.png")));
-        signout =  new Sprite(new Texture(Gdx.files.internal("bb_signout.png")));
-        submitscore =  new Sprite(new Texture(Gdx.files.internal("submitscore.png")));
+        butterBeaver = new Sprite((Texture)manager.get("In Development/repBB.png"));
+        FITE_SIGN = new Sprite((Texture)manager.get("In Development/bbFITE.png"));
+        STATS = new Sprite((Texture)manager.get("In Development/bbSTAT.png"));
+        DRES = new Sprite((Texture)manager.get("In Development/bbDRES.png"));
+        INDEV = new Sprite((Texture)manager.get("In Development/bbOTHE.png"));
+        bbCraft = new Sprite((Texture)manager.get("In Development/bbCraft.png"));
 
 
-        IRON = new Sprite(new Texture(Gdx.files.internal("In Development\\Materials\\IRON.png")));
-        DUST = new Sprite(new Texture(Gdx.files.internal("In Development\\Materials\\DUST.png")));
-        BONE = new Sprite(new Texture(Gdx.files.internal("In Development\\Materials\\BONE.png")));
-        CLOTH = new Sprite(new Texture(Gdx.files.internal("In Development\\Materials\\CLOTH.png")));
+        landing_pad = new Sprite((Texture)manager.get("In Development/repOG.png"));
+        landing_pad_glow = new Sprite((Texture)manager.get("In Development/repOG_hover.png"));
+        craft_btn = new Sprite((Texture)manager.get("In Development/craft.png"));
+        back_btn = new Sprite((Texture)manager.get("In Development/repARW.png"));
+        reset_closed = new Sprite((Texture)manager.get("In Development/ResetButtonClosed.png"));
+        reset_opened = new Sprite((Texture)manager.get("In Development/ResetButtonOpen.png"));
+        reset_pressed = new Sprite((Texture)manager.get("In Development/ResetButtonDepressed.png"));
+        mystery_sprite = new Sprite((Texture)manager.get("In Development/mystery_sprite.png"));
+        game_controller =  new Sprite((Texture)manager.get("games_controller.png"));
+        game_leader =  new Sprite((Texture)manager.get("bb_leaderboards.png"));
+        game_achieve =  new Sprite((Texture)manager.get("bb_achievements.png"));
+        signin =  new Sprite((Texture)manager.get("bb_signin.png"));
+        signout =  new Sprite((Texture)manager.get("bb_signout.png"));
+        submitscore =  new Sprite((Texture)manager.get("submitscore.png"));
 
+
+        IRON = new Sprite((Texture)manager.get("In Development/Materials/IRON.png"));
+        DUST = new Sprite((Texture)manager.get("In Development/Materials/DUST.png"));
+        BONE = new Sprite((Texture)manager.get("In Development/Materials/BONE.png"));
+        CLOTH = new Sprite((Texture)manager.get("In Development/Materials/CLOTH.png"));
+
+
+
+        state = STATE.ALLDONE;
+    }
+
+    public boolean managerUpdate(){
+        return manager.update();
     }
 
 

@@ -98,7 +98,7 @@ public class MainScreen implements Screen, InputProcessor {
         entrances.addRow();
 
         //Crafting room
-        Image img3pt5 = new Image(Assets.butterBeaver);
+        Image img3pt5 = new Image(Assets.bbCraft);
         img3pt5.setName("img4");
         entrances.addActor(img3pt5, true);
         entrances.addRow();

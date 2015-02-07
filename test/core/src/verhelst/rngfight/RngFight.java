@@ -36,6 +36,8 @@ public class RngFight extends com.badlogic.gdx.Game {
 
     public static ActionResolver actionResolver;
 
+    private Assets assets;
+
     verhelst.CustomActors.Character player;
 
     public RngFight(ActionResolver ar){
@@ -45,33 +47,19 @@ public class RngFight extends com.badlogic.gdx.Game {
 
     @Override
     public void create() {
-        Assets assets = new Assets();
-        assets.loadAssets();
-        try {
-            sg = new SaveGame(this);
-            sg.readGameSave();
-            if(SaveGame.unclocks != null)
-                Assets.unclocks = SaveGame.unclocks;
-            if(SaveGame.weapon_unlocks != null)
-                Assets.weaponUnlocks = SaveGame.weapon_unlocks;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            Gdx.app.error("Load Game error: ", e.getMessage(), e);
-
-        }
         batch = new SpriteBatch();
-        mainScreen = new MainScreen(this);
-        gameScreen = new BattleScreen(this);
-        viewerAndStats = new StatsScreen(this);
-        player = gameScreen.a2;
-        dressingScreen = new DressingScreen(this, gameScreen.a2);
-        settingsScreen = new SettingScreen(this);
-        craftingScreen = new CraftingScreen(this);
+        setScreen(new LoadingScreen());
+        assets = new Assets();
+//        assets.loadTextureAtlases();
 
-        switchScreens(5);
+
+
+
+
     }
 
+    //TODO: Put loading of screens when needed here
+    //May require loading screen
 
     public void switchScreens(int screen) {
         switch(screen) {
@@ -102,6 +90,7 @@ public class RngFight extends com.badlogic.gdx.Game {
                 Gdx.input.setInputProcessor(mainScreen);
                 break;
             case 4:
+
                 craftingScreen.refreshChosenItems();
                 setScreen(craftingScreen);
                 Gdx.input.setInputProcessor(craftingScreen);
@@ -128,9 +117,9 @@ public class RngFight extends com.badlogic.gdx.Game {
         gameScreen.reload();
         viewerAndStats.reload();
         dressingScreen = new DressingScreen(this, gameScreen.a2);
-        craftingScreen.reset();
         Inventory.reset();
-
+        player = gameScreen.a2;
+        craftingScreen.reset();
         switchScreens(currentscreen);
 
     }
@@ -142,9 +131,56 @@ public class RngFight extends com.badlogic.gdx.Game {
 
     //this is where we will control the render speed
 
+    private void loadShit(){
+        final RngFight f = this;
+        Gdx.app.postRunnable(new Runnable(){
+            @Override
+            public void run(){
+                try {
+                    sg = new SaveGame(f);
+                    sg.readGameSave();
+                    if(SaveGame.unclocks != null)
+                        Assets.unclocks = SaveGame.unclocks;
+                    if(SaveGame.weapon_unlocks != null)
+                        Assets.weaponUnlocks = SaveGame.weapon_unlocks;
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    e.printStackTrace();
+                    Gdx.app.error("Load Game error: ", e.getMessage(), e);
+                }
+                mainScreen = new MainScreen(f);
+                gameScreen = new BattleScreen(f);
+                viewerAndStats = new StatsScreen(f);
+                player = gameScreen.a2;
+                dressingScreen = new DressingScreen(f, gameScreen.a2);
+                settingsScreen = new SettingScreen(f);
+                craftingScreen = new CraftingScreen(f);
+
+                 switchScreens(5);
+            }
+        });
+
+    }
 
     @Override
     public void render() {
+        if(assets.managerUpdate() && (assets.state == Assets.STATE.LOADINGTEXTUREATLASES)){
+            assets.setSuitsAndWeapons();
+            assets.loadOtherAssets();
+            System.out.println("loading shit");
+        }else if (assets.managerUpdate() && (assets.state == Assets.STATE.LOADINGOTHERTEXTURES)){
+            assets.setOtherAssets();
+            System.out.println("Settingshit");
+        }else if (assets.state == Assets.STATE.ALLDONE){
+            System.out.println("Switch screen");
+            assets.state = Assets.STATE.DONESKI;
+            loadShit();
+        }
+
+
+
+
+
         renderstart = System.currentTimeMillis();
         super.render();
         if(System.currentTimeMillis() - renderstart < MS_PER_RENDER)

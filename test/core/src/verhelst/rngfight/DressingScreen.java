@@ -159,15 +159,11 @@ public class DressingScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
-
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         RngFight.batch.begin();
         mainT.draw(RngFight.batch, 1);
         if(dragme != null) {
             dragme.draw(RngFight.batch, 1);
-
-            System.out.println("DM: x " + dragme.getX() + " y " + dragme.getY() + " w " + dragme.getWidth() + " h " + dragme.getHeight() + " v " + dragme.isVisible());
-
         }
         RngFight.batch.end();
     }
