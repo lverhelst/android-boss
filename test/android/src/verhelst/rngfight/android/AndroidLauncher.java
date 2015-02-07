@@ -229,8 +229,8 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent intent) {
         if (requestCode == RC_SIGN_IN) {
-                mSignInClicked = false;
-                mResolvingConnectionFailure = false;
+            mSignInClicked = false;
+            mResolvingConnectionFailure = false;
             if (resultCode == RESULT_OK) {
                 mGoogleApiClient.connect();
             } else {
@@ -241,8 +241,10 @@ public class AndroidLauncher extends AndroidApplication implements ActionResolve
                 // could not be signed in, such as "Unable to sign in."
                 BaseGameUtils.showActivityResultError(this,
                         requestCode, resultCode, R.string.signin_failure);
+
             }
         }
+        saveAutoSignOn();
        // showTextView();
 
     }
