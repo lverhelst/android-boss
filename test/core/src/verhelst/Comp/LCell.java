@@ -69,6 +69,7 @@ public class LCell extends Actor {
     public void draw(Batch batch, float parentAlpha) {
 
         if (glow) {
+            batch.setColor(Color.WHITE);
             if (glow_type == 1)
                 batch.draw(Assets.glow_ylw, getX(), getY(), getWidth(), getHeight());
             if (glow_type == 2)
