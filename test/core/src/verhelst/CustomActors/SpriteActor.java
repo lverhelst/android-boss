@@ -1,5 +1,6 @@
 package verhelst.CustomActors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -40,5 +41,11 @@ public class SpriteActor extends Actor {
         displaysprite.setPosition(x, y);
 
         super.setPosition(x, y);
+    }
+
+    @Override
+    public void setColor(Color color) {
+        displaysprite.setColor(color);
+        super.setColor(color);
     }
 }

@@ -26,6 +26,7 @@ public class Assets {
     public static Sprite weapon_data_icon;
     public static Sprite resting_face;
     public static Sprite dead_face;
+    public static Sprite craft_btn;
     public static Sprite[] arms, pants, shirts, shoulders, faces;
     public static BitmapFont wepNumFnt;
     public static BitmapFont dmgNumFnt;
@@ -148,6 +149,7 @@ public class Assets {
 
         landing_pad = new Sprite(new Texture(Gdx.files.internal("In Development\\repOG.png")));
         landing_pad_glow = new Sprite(new Texture(Gdx.files.internal("In Development\\repOG_hover.png")));
+        craft_btn = new Sprite(new Texture(Gdx.files.internal("In Development\\craft.png")));
         back_btn = new Sprite(new Texture(Gdx.files.internal("In Development\\repARW.png")));
         reset_closed = new Sprite(new Texture(Gdx.files.internal("In Development\\ResetButtonClosed.png")));
         reset_opened = new Sprite(new Texture(Gdx.files.internal("In Development\\ResetButtonOpen.png")));

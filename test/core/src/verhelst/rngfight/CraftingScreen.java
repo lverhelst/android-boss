@@ -3,6 +3,7 @@ package verhelst.rngfight;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -70,7 +71,7 @@ public class CraftingScreen implements Screen, InputProcessor {
         tableOfCounts = new LTable();
         tableOfChosenItems = new LTable();
 
-        craftButtonImage = new Image(Assets.butterBeaver);
+        craftButtonImage = new Image(Assets.craft_btn);
         backButtonImage = new Image(Assets.back_btn);
         mysteryImage = new Image(Assets.mystery_sprite);
 
@@ -79,7 +80,7 @@ public class CraftingScreen implements Screen, InputProcessor {
 
         for(int i = 0; i < 6; i++){
             SpriteActor chosenItem = new SpriteActor(Assets.mystery_sprite);
-            tableOfChosenItems.addActor(chosenItem);
+            tableOfChosenItems.addActor(chosenItem,true);
             if(i == 2)
                 tableOfChosenItems.addRow();
         }
@@ -343,6 +344,7 @@ public class CraftingScreen implements Screen, InputProcessor {
             outputCell = tableOfLeftSide.getLCellForActor(output.getActor());
             output =  new Mat("PLACEHOLDER", cTOKEN.BODYPART);
             outputCell.setActor(output.getActor());
+            outputCell.setKeep_aspect_ratio(true);
         }
 
 
@@ -449,13 +451,25 @@ public class CraftingScreen implements Screen, InputProcessor {
                 tableOfChosenItems.getLCells()[i].setActor(c.getActor());
             }
         }
+        if(chosenItems.size() < 2)
+            craftButtonImage.setColor(Color.DARK_GRAY);
+        else
+            craftButtonImage.setColor(Color.WHITE);
+
         refreshInventoryLabels();
     }
 
     private void refreshInventoryLabels(){
         int i = 0;
         for(LLabel l : inventoryLabels){
+            if(Inventory.getCount(i) == 0){
+                tableOfInventory.getLCells()[i].setColor(Color.DARK_GRAY);
+            }else{
+                tableOfInventory.getLCells()[i].setColor(Color.WHITE);
+            }
             l.setText(Inventory.getCount(i++) + " ");
+
+
         }
         resetCharacterWeapon();
     }
@@ -470,6 +484,6 @@ public class CraftingScreen implements Screen, InputProcessor {
         LCell lc = tableOfLeftSide.getLCellForActor(output.getActor());
         output =  new Mat("PLACEHOLDER", cTOKEN.BODYPART);
         lc.setActor(output.getActor());
-
+        lc.setKeep_aspect_ratio(true);
     }
 }

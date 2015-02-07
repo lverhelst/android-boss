@@ -168,4 +168,9 @@ public class LCell extends Actor {
     public void setGlow(boolean glow) {
         this.glow = glow;
     }
+
+    @Override
+    public void setColor(Color color){
+        this.actor.setColor(color);
+    }
 }
