@@ -36,12 +36,12 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if(System.currentTimeMillis() - curtime < 50){
+        if(System.currentTimeMillis() - curtime < 100){
+
 
         }else {
             curtime = System.currentTimeMillis();
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            RngFight.batch.begin();
+
             if (sprInd + 1 > 5) {
                 sprInd = 0;
             } else {
@@ -49,10 +49,12 @@ public class LoadingScreen implements Screen {
             }
 
             t.setActor(sprites[sprInd]);
-            ;
-            table.draw(RngFight.batch, 1.0f);
-            RngFight.batch.end();
         }
+
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        RngFight.batch.begin();
+        table.draw(RngFight.batch, 1.0f);
+        RngFight.batch.end();
     }
 
     @Override

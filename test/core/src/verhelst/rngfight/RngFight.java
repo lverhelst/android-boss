@@ -50,12 +50,6 @@ public class RngFight extends com.badlogic.gdx.Game {
         batch = new SpriteBatch();
         setScreen(new LoadingScreen());
         assets = new Assets();
-//        assets.loadTextureAtlases();
-
-
-
-
-
     }
 
     //TODO: Put loading of screens when needed here
@@ -69,17 +63,22 @@ public class RngFight extends com.badlogic.gdx.Game {
                 Gdx.input.setInputProcessor(gameScreen);
                 break;
             case 1:
-                // viewerAndStats = new StatsScreen(this);
+                if(viewerAndStats == null)
+                    viewerAndStats = new StatsScreen(this);
                 viewerAndStats.updateLabels(gameScreen.brh.max_hitcount, gameScreen.brh.min_hitcount, gameScreen.brh.player2wins, gameScreen.brh.player2losses, gameScreen.brh.draws, gameScreen.brh.games, gameScreen.brh.max_level_reached, gameScreen.brh.getMax_score());
                 setScreen(viewerAndStats);
                 Gdx.input.setInputProcessor(viewerAndStats.im);
                 break;
             case 2:
+                if(dressingScreen == null)
+                    dressingScreen = new DressingScreen(this, player);
                 dressingScreen.reload();
                 setScreen(dressingScreen);
                 Gdx.input.setInputProcessor(dressingScreen.getInputProcessor());
                 break;
             case 3:
+                if(settingsScreen == null)
+                    settingsScreen = new SettingScreen(this);
                 settingsScreen.setMax_level(gameScreen.brh.max_level_reached);
                 setScreen(settingsScreen);
                 Gdx.input.setInputProcessor(settingsScreen);
@@ -90,7 +89,8 @@ public class RngFight extends com.badlogic.gdx.Game {
                 Gdx.input.setInputProcessor(mainScreen);
                 break;
             case 4:
-
+                if(craftingScreen == null)
+                    craftingScreen = new CraftingScreen(this);
                 craftingScreen.refreshChosenItems();
                 setScreen(craftingScreen);
                 Gdx.input.setInputProcessor(craftingScreen);
@@ -115,11 +115,18 @@ public class RngFight extends com.badlogic.gdx.Game {
         //gameScreen = new BattleScreen(this);
         RngFight.lvl = 1;
         gameScreen.reload();
-        viewerAndStats.reload();
+        if(viewerAndStats == null)
+            viewerAndStats = new StatsScreen(this);
+        else
+            viewerAndStats.reload();
+
         dressingScreen = new DressingScreen(this, gameScreen.a2);
         Inventory.reset();
         player = gameScreen.a2;
-        craftingScreen.reset();
+        if(craftingScreen == null)
+            craftingScreen = new CraftingScreen(this);
+        else
+            craftingScreen.reset();
         switchScreens(currentscreen);
 
     }
@@ -150,12 +157,7 @@ public class RngFight extends com.badlogic.gdx.Game {
                 }
                 mainScreen = new MainScreen(f);
                 gameScreen = new BattleScreen(f);
-                viewerAndStats = new StatsScreen(f);
                 player = gameScreen.a2;
-                dressingScreen = new DressingScreen(f, gameScreen.a2);
-                settingsScreen = new SettingScreen(f);
-                craftingScreen = new CraftingScreen(f);
-
                  switchScreens(5);
             }
         });
